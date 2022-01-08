@@ -24,7 +24,6 @@
     <img src="https://img.shields.io/github/issues-pr-closed-raw/VRLabs/Avatars-3.0-Manager.svg?style=flat-square">
   </a>
   <br />
-  <br />
 </div>
 
 ## Credit
