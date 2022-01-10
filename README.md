@@ -52,7 +52,7 @@ You can grab the latest version of the Avatars 3.0 Manager in [Releases](https:/
 
 ## License
 
-Avatars 3.0 Manager is available as-is under MIT. For more information see [LICENSE](https://github.com/VRLabs/Avatars-3.0-Manager/blob/dev/LICENSE).
+Avatars 3.0 Manager is available as-is under MIT. For more information see [LICENSE](https://github.com/VRLabs/Avatars-3.0-Manager/blob/main/LICENSE).
 
 ## Contact us
 
