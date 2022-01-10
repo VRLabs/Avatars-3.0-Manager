@@ -26,12 +26,6 @@
   <br />
 </div>
 
-## Credit
-
-[Cibbi](https://github.com/Cibbi)
-
-[ksivl](https://github.com/ksivl)
-
 ## How to use
 
 This tool merges animator controllers to your avatar's playable layer controllers and syncs to your avatar's expression parameters.
@@ -45,6 +39,12 @@ Expand the playable layer to merge on and click "Add animator to merge". Place t
 A suffix is appended to a new parameter if it shares its name with an existing parameter. Modify or remove suffixes as needed.
 
 "Merge on current" merges on the avatar's controller, while "Merge on new" merges on a copy of it. Sync parameters as needed.
+
+## Credit
+
+[Cibbi](https://github.com/Cibbi)
+
+[ksivl](https://github.com/ksivl)
 
 ## Downloads
 
