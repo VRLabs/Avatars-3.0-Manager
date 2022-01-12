@@ -11,19 +11,6 @@
     <img src="https://img.shields.io/badge/Unity-2019.4-green.svg?style=flat-square">
   </a>
   <br />
-  <a href="https://github.com/VRLabs/Avatars-3.0-Manager/issues">
-    <img src="https://img.shields.io/github/issues-raw/VRLabs/Avatars-3.0-Manager.svg?style=flat-square">
-  </a>
-  <a href="https://github.com/VRLabs/Avatars-3.0-Manager/issues?q=is%3Aissue+is%3Aclosed">
-    <img src="https://img.shields.io/github/issues-closed-raw/VRLabs/Avatars-3.0-Manager.svg?style=flat-square">
-  </a>
-  <a href="https://github.com/VRLabs/Avatars-3.0-Manager/pull">
-    <img src="https://img.shields.io/github/issues-pr-raw/VRLabs/Avatars-3.0-Manager.svg?style=flat-square">
-  </a>
-  <a href="https://github.com/VRLabs/Avatars-3.0-Manager/pulls?q=is%3Apr+is%3Aclosed">
-    <img src="https://img.shields.io/github/issues-pr-closed-raw/VRLabs/Avatars-3.0-Manager.svg?style=flat-square">
-  </a>
-  <br />
 </div>
 
 ## How to use
