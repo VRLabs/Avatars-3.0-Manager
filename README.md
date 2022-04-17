@@ -1,17 +1,11 @@
-<div>
-  <h1>Avatars 3.0 Manager</h1>
-  <p>
-     A tool for managing playable layers and parameters for Avatars 3.0.
-  </p>
+# Avatars 3.0 Manager
+  
+[![Generic badge](https://img.shields.io/badge/Version-1.1-orange.svg)](https://github.com/VRLabs/Avatars-3.0-Manager/releases/latest)
+[![Generic badge](https://img.shields.io/badge/Unity-2019.4.31f1-informational.svg)](https://unity3d.com/unity/whats-new/2019.4.31)
+[![Generic badge](https://img.shields.io/badge/SDK-AvatarSDK3-informational.svg)](https://vrchat.com/home/download)
+[![Generic badge](https://img.shields.io/badge/License-MIT-informational.svg)](https://github.com/VRLabs/Avatars-3.0-Manager/blob/main/LICENSE)  
 
-  <a href="https://github.com/VRLabs/Avatars-3.0-Manager/releases/latest">
-    <img src="https://img.shields.io/github/v/release/VRLabs/Avatars-3.0-Manager.svg?style=flat-square">
-  </a>
-  <a href="https://github.com/VRLabs/Avatars-3.0-Manager/releases/latest">
-    <img src="https://img.shields.io/badge/Unity-2019.4-green.svg?style=flat-square">
-  </a>
-  <br />
-</div>
+A tool for managing playable layers and parameters for Avatars 3.0.
 
 ## How to use
 
