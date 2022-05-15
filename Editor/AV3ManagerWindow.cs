@@ -32,6 +32,7 @@ namespace VRLabs.AV3Manager
         public static readonly string[] VrcParameters =
         {
             "IsLocal",
+            "IsMirror",
             "Viseme",
             "GestureLeft",
             "GestureRight",
