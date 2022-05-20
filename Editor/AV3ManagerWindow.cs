@@ -325,10 +325,12 @@ namespace VRLabs.AV3Manager
         // Updates a layer value, need to do this cause the CustomAnimLayer is a struct and not a class.
         public void UpdateLayer(int index, VRCAvatarDescriptor.CustomAnimLayer layer)
         {
+            Undo.RegisterCompleteObjectUndo(_avatar, _avatar.name);
             if(index >= _avatar.baseAnimationLayers.Length)
                 _avatar.specialAnimationLayers[index - _avatar.baseAnimationLayers.Length] = layer;
             else
                 _avatar.baseAnimationLayers[index] = layer;
+            EditorUtility.SetDirty(_avatar);
         }
 
         // Check if the provided parameter is in the list.
