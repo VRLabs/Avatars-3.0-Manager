@@ -15,7 +15,7 @@ namespace VRLabs.AV3Manager
         public Motion Motion { get; set; }
 
         private bool _foldout;
-        
+
         public AnimationClipSwap[] TreeMotions { get; set; }
         public AnimationClipSwap(string layer, AnimatorState state, Motion motion)
         {
@@ -23,7 +23,7 @@ namespace VRLabs.AV3Manager
             State = state;
             Motion = motion;
             if (!(Motion is BlendTree tree)) return;
-            
+
             TreeMotions = new AnimationClipSwap[tree.children.Length];
             for (int i = 0; i < TreeMotions.Length; i++)
             {
@@ -40,21 +40,21 @@ namespace VRLabs.AV3Manager
             {
                 _foldout = EditorGUILayout.Foldout(_foldout, Motion.name + " (blendTree)");
                 if (!_foldout) return;
-                
+
                 EditorGUI.indentLevel++;
                 foreach (AnimationClipSwap treeMotion in TreeMotions)
                     treeMotion.DrawField();
-                
+
                 EditorGUI.indentLevel--;
                 return;
             }
-            Motion = (Motion) EditorGUILayout.ObjectField(State != null ? State.name : Layer, Motion, typeof(AnimationClip), false);
+            Motion = (Motion)EditorGUILayout.ObjectField(State != null ? State.name : Layer, Motion, typeof(AnimationClip), false);
         }
     }
 
     public class StateMissMatchException : Exception
     {
-        public StateMissMatchException(string message) : base(message){}
+        public StateMissMatchException(string message) : base(message) { }
     }
 
     public static class AnimationClipSwapExtensions
@@ -62,12 +62,12 @@ namespace VRLabs.AV3Manager
         public static AnimatorController SaveClipChanges(this List<AnimationClipSwap> swaps, AnimatorController controller, bool saveToNew = false)
         {
             if (controller == null) return null;
-            
+
             if (saveToNew)
             {
                 var assetPath = AssetDatabase.GetAssetPath(controller);
-                
-                Directory.CreateDirectory("Assets/VRLabs/GeneratedAssets");
+
+                Directory.CreateDirectory(AnimatorCloner.STANDARD_NEW_ANIMATOR_FOLDER);
                 string uniquePath = AssetDatabase.GenerateUniqueAssetPath(AnimatorCloner.STANDARD_NEW_ANIMATOR_FOLDER + Path.GetFileName(assetPath));
                 AssetDatabase.CopyAsset(assetPath, uniquePath);
                 AssetDatabase.SaveAssets();
@@ -75,14 +75,14 @@ namespace VRLabs.AV3Manager
                 assetPath = uniquePath;
                 controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(assetPath);
             }
-            
+
             foreach (var animationLayer in controller.layers)
                 ApplyLayerAnimationChanges(controller, saveToNew, animationLayer.stateMachine, swaps.Where(x => x.Layer.Equals(animationLayer.name)).ToArray());
 
             return controller;
 
         }
-        
+
         private static int ApplyLayerAnimationChanges(AnimatorController controller, bool saveToNew, AnimatorStateMachine stateMachine, AnimationClipSwap[] swaps, int index = 0)
         {
             foreach (var state in stateMachine.states.Select(t => t.state))
@@ -94,7 +94,7 @@ namespace VRLabs.AV3Manager
                         string assetPath = AssetDatabase.GetAssetPath(tree);
                         if (saveToNew && !assetPath.Equals(AssetDatabase.GetAssetPath(controller)))
                         {
-                            Directory.CreateDirectory("Assets/VRLabs/GeneratedAssets");
+                            Directory.CreateDirectory(AnimatorCloner.STANDARD_NEW_ANIMATOR_FOLDER);
                             string uniquePath = AssetDatabase.GenerateUniqueAssetPath(AnimatorCloner.STANDARD_NEW_ANIMATOR_FOLDER + Path.GetFileName(assetPath));
                             AssetDatabase.CopyAsset(assetPath, uniquePath);
                             AssetDatabase.SaveAssets();
@@ -114,11 +114,11 @@ namespace VRLabs.AV3Manager
                 }
             }
             foreach (ChildAnimatorStateMachine t in stateMachine.stateMachines)
-               index = ApplyLayerAnimationChanges(controller, saveToNew, t.stateMachine, swaps, index);
+                index = ApplyLayerAnimationChanges(controller, saveToNew, t.stateMachine, swaps, index);
 
             return index;
         }
-        
+
         private static void ApplyBlendTreeChanges(BlendTree tree, AnimationClipSwap[] treeMotions)
         {
             var newChildren = new ChildMotion[tree.children.Length];

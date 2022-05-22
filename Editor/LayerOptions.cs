@@ -119,7 +119,7 @@ namespace VRLabs.AV3Manager
                     {
                         Layer.isDefault = false;
                         
-                        Directory.CreateDirectory("Assets/VRLabs/GeneratedAssets");
+                        Directory.CreateDirectory(AnimatorCloner.STANDARD_NEW_ANIMATOR_FOLDER);
                         string uniquePath = AssetDatabase.GenerateUniqueAssetPath(AnimatorCloner.STANDARD_NEW_ANIMATOR_FOLDER + Path.GetFileName(_defaultControllersPath[Layer.type]));
                         AssetDatabase.CopyAsset(_defaultControllersPath[Layer.type], uniquePath);
                         AssetDatabase.SaveAssets();
