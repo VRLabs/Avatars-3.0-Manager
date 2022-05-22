@@ -15,6 +15,8 @@ namespace VRLabs.AV3Manager
     {
 
         public const string STANDARD_NEW_ANIMATOR_FOLDER = "Assets/VRLabs/GeneratedAssets/Animators/";
+        public const string STANDARD_NEW_PARAMASSET_FOLDER = "Assets/VRLabs/GeneratedAssets/ExpressionParameters/";
+        public const string STANDARD_NEW_MENUASSET_FOLDER = "Assets/VRLabs/GeneratedAssets/ExpressionMenu/";
         private static Dictionary<string, string> _parametersNewName;
         private static string _assetPath;
 
