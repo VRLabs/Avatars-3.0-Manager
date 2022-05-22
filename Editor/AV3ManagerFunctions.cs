@@ -335,7 +335,7 @@ namespace VRLabs.AV3Manager
                 return;
             }
             for (int i = 0; i < controller.layers.Length; i++)
-            {            
+            {      
                 SetInStateMachine(controller.layers[i].stateMachine, writeDefaults);
             }
             EditorUtility.SetDirty(controller);
