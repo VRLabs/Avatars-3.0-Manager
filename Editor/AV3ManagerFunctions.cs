@@ -335,7 +335,7 @@ namespace VRLabs.AV3Manager
                 return;
             }
             for (int i = 0; i < controller.layers.Length; i++)
-            {
+            {            
                 SetInStateMachine(controller.layers[i].stateMachine, writeDefaults);
             }
             EditorUtility.SetDirty(controller);
@@ -389,8 +389,15 @@ namespace VRLabs.AV3Manager
                     checkedFirst = true;
                     continue;
                 }
-                if (isOn != t.state.writeDefaultValues)
+                
+                if (isOn != t.state.writeDefaultValues){
+                    // Don't flag states with "(WD On)" or "(WD Off)" tags in the name
+                    if(t.state.name.Contains("(WD On)") || t.state.name.Contains("(WD Off)")) {
+                        return (true, isOn, false);
+                    }
                     return (true, isOn, true);
+                }
+            
             }
 
             bool isMixed;
@@ -406,8 +413,18 @@ namespace VRLabs.AV3Manager
         
         private static void SetInStateMachine (AnimatorStateMachine stateMachine, bool wd)
         {
-            foreach (ChildAnimatorState t in stateMachine.states)
-                t.state.writeDefaultValues = wd;
+            foreach (ChildAnimatorState t in stateMachine.states) {
+                // Force corresponding Write Defaults setting for states with "(WD On)" or "(WD Off)" tags
+                if(t.state.name.Contains("(WD On)")) {
+                    t.state.writeDefaultValues = true;
+                }
+                else if(t.state.name.Contains("(WD Off)")) {
+                    t.state.writeDefaultValues = false;
+                }
+                else {
+                    t.state.writeDefaultValues = wd;
+                }
+            }
             
             foreach (ChildAnimatorStateMachine t in stateMachine.stateMachines)
                 SetInStateMachine(t.stateMachine, wd);
