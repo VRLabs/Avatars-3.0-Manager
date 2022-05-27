@@ -379,7 +379,7 @@ namespace VRLabs.AV3Manager
                 : (type == AnimatorControllerParameterType.Bool ? ValueType.Bool : ValueType.Float);
         }
         
-        private static (bool, bool, bool) GetWdInStateMachine (AnimatorStateMachine stateMachine, bool checkedFirst, bool isOn)
+        private static (bool, bool, bool) GetWdInStateMachine(AnimatorStateMachine stateMachine, bool checkedFirst, bool isOn)
         {
             foreach (ChildAnimatorState t in stateMachine.states)
             {
@@ -389,15 +389,8 @@ namespace VRLabs.AV3Manager
                     checkedFirst = true;
                     continue;
                 }
-                
-                if (isOn != t.state.writeDefaultValues){
-                    // Don't flag states with "(WD On)" or "(WD Off)" tags in the name
-                    if(t.state.name.Contains("(WD On)") || t.state.name.Contains("(WD Off)")) {
-                        return (true, isOn, false);
-                    }
+                if (isOn != t.state.writeDefaultValues && !(t.state.name.Contains("(WD On)") || t.state.name.Contains("(WD Off)")))
                     return (true, isOn, true);
-                }
-            
             }
 
             bool isMixed;
