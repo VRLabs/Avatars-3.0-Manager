@@ -347,7 +347,7 @@ namespace VRLabs.AV3Manager
                              x.type == AnimatorControllerParameterType.Float ||
                              x.type == AnimatorControllerParameterType.Bool))
                 {
-                    if (AV3ManagerNew.VrcParameters.Count(x => x.Equals(parameter.name)) > 0) continue;
+                    if (AV3Manager.VrcParameters.Count(x => x.Equals(parameter.name)) > 0) continue;
                     bool isSynced = _expressionParameters != null && _expressionParameters.FindParameter(parameter.name) != null;
                     Parameters.Add(new SyncedParameter { Parameter = parameter, IsSynced = isSynced });
                 }

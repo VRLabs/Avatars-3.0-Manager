@@ -58,12 +58,13 @@ namespace VRLabs.AV3Manager
 
         private VRCAvatarDescriptor _avatar;
 
-        [MenuItem("VRLabs/Avatars 3.0 Manager new")]
+        [MenuItem("VRLabs/Avatars 3.0 Manager")]
         private static void ShowWindow()
         {
-            var window = GetWindow<AV3ManagerNew>();
+            var window = GetWindow<AV3Manager>();
             window.titleContent = new GUIContent("AV3 Manager");
             window.titleContent.image = Resources.Load<Texture>("AV3M/logo");
+            window.minSize = new Vector2(400, 500);
             window.Show();
             
         }

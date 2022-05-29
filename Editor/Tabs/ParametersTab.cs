@@ -30,7 +30,7 @@ namespace VRLabs.AV3Manager
             TabContainer = new VisualElement();
             TabName = "Parameters";
 
-            TabIcon = Resources.Load<Texture2D>("AV3M/ParametersTabIcon" +(EditorGUIUtility.isProSkin ? "Dark" : "Light"));// EditorGUIUtility.IconContent("animationkeyframe").image as Texture2D;
+            TabIcon = Resources.Load<Texture2D>("AV3M/ParametersTabIcon" +(EditorGUIUtility.isProSkin ? "Dark" : "Light"));
             
             _expressionParametersField = FluentUIElements
                 .NewObjectField("Expression Parameters", typeof(VRCExpressionParameters))
@@ -217,7 +217,7 @@ namespace VRLabs.AV3Manager
                 if (!usedParameters.Contains(parameter.name))
                     new Label("This parameter is not used in any animator, remove it to save some parameter space").WithClass("warning-label").ChildOf(paramElement);
 
-                if (AV3ManagerNew.VrcParameters.Contains(parameter.name))
+                if (AV3Manager.VrcParameters.Contains(parameter.name))
                     new Label("This parameter doesn't need to be in the parameters asset, remove it to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
             }
 

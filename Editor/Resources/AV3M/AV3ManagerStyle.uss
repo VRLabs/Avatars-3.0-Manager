@@ -69,6 +69,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
     flex-grow: 1;
+    flex-shrink: 1;
 }
 
 .top-spaced
