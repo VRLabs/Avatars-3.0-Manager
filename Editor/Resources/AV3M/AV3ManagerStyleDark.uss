@@ -1,0 +1,53 @@
+.tabs-area
+{
+    background-color: #282828;
+
+}
+
+.selected-tab
+{
+    background-color: #383838;
+    border-color: #191919;
+}
+
+.tab-button
+{
+    background-color: #282828;
+    border-color: #191919;
+    border-left-color: #3a78ba;
+}
+
+.tab-button-selected
+{
+    background-color: #383838;
+}
+
+.warning-label
+{
+    color: orange;
+}
+
+.red-text
+{
+    color: red;
+}
+
+.green-text
+{
+    color: green;
+}
+
+.gray-text
+{
+    color: gray;
+}
+
+.layer-tab-arrow
+{
+    background-image: resource("builtin skins/darkskin/images/in foldout.png");
+}
+
+.layer-tab-arrow-on
+{
+    background-image: resource("builtin skins/darkskin/images/in foldout on.png");
+}
