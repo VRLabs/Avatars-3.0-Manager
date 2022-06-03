@@ -27,7 +27,7 @@ jobs:
       - name: Create UnityPackage
         env:
           SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
-        uses: VRLabs/extract-unity-package-action@v1
+        uses: VRLabs/extract-unity-package-action@v1.2.1
         with:
           outputPackagePath: 'Avatars_3.0_Manager_${{ env.SOURCE_TAG }}.unitypackage'
           unityProjectPath: '.'
