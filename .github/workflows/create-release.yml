@@ -20,7 +20,7 @@ jobs:
       - name: Prepare Folder For Packaging
         run: |
           mkdir -p "Assets/VRLabs/Avatars 3.0 Manager"
-          ls | grep -v "Assets" | xargs mv -t "Assets/VRLabs/Avatars 3.0 Manager"
+          ls | grep -v "Assets" | xargs -d '\n' mv -t "Assets/VRLabs/Avatars 3.0 Manager"
           echo -e "fileFormatVersion: 2\nguid: 652a1ba5b00554143bc9a76307dbc4e8\nfolderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: " > "Assets/VRLabs.meta"
           echo -e "fileFormatVersion: 2\nguid: 513a67139704dd249855ebe5f760cba5\nfolderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: " > "Assets/VRLabs/Avatars 3.0 Manager.meta"
 
