@@ -24,7 +24,7 @@ namespace VRLabs.AV3Manager
         {
             TabContainer = new VisualElement();
             TabName = "Write Defaults";
-            TabIcon = Resources.Load<Texture2D>("AV3M/ParametersTabIcon" +(EditorGUIUtility.isProSkin ? "Dark" : "Light"));
+            TabIcon = Resources.Load<Texture2D>("AV3M/WdTabIcon" +(EditorGUIUtility.isProSkin ? "Dark" : "Light"));
             bool forceWd = EditorPrefs.GetBool("AV3MForceWD", false);
 
             var forceToggle = FluentUIElements.NewToggle("Force all WD", forceWd)
