@@ -1,0 +1,170 @@
+﻿.top-area
+{
+      flex-direction: row;
+}
+
+.refresh-button
+{
+    background-image: resource("Refresh@2X");
+    background-color: transparent;
+    border-width: 0;
+    margin: 10 6 10 3;
+    width: 18px;
+    height: 18px;
+}
+
+.selected-tab
+{
+    flex-grow: 1;
+    flex-basis: 1px;
+    border-left-width: 1;
+    border-top-width: 1;
+}
+
+.tab-button 
+{
+    width: 30px;
+    height: 30px;
+
+    border-width: 0;
+    
+    padding: 4 3 4 5;
+    
+    margin: 0 0 0 2;
+    border-radius: 5 0 0 5;
+}
+
+.tab-button-selected
+{
+    width: 31px;
+    height: 30px;
+
+    padding: 3 3 3 3;
+
+    border-width: 1 0 1 2;
+    
+    margin:0 -1 0 2;
+}
+
+.margin-normal
+{
+    margin: 5px;
+}
+
+.header-small
+{
+    -unity-font-style: bold;
+    font-size: 11px;
+    margin: 7px 0;
+}
+
+.header
+{
+    -unity-font-style: bold;
+    margin: 7px 0;
+}
+
+.avatar-field
+{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    flex-grow: 1;
+    flex-shrink: 1;
+}
+
+.top-spaced
+{
+    margin-top: 10px;
+}
+
+.bordered-container
+{
+    border-width: 2px;
+    border-color: rgba(128,128,128,0.2);
+    background-color: rgba(128,128,128,0.1);
+    margin-bottom: 4px;
+    padding: 2px;
+}
+
+.warning-label
+{
+    white-space: normal;
+}
+
+.grow-control
+{
+    flex-grow: 1;
+}
+
+.hidden
+{
+    display: none;
+}
+
+.centered-toggle>VisualElement
+{
+    justify-content: center;
+}
+
+AnimatorLayerTabElement
+{
+    margin-bottom: 10px;
+}
+
+.layer-tab-header
+{
+    margin: 5px;
+    height: 23px;
+    align-content: center;
+    border-width: 1px;
+    border-color: rgba(128,128,128,0.4);
+    background-color: rgba(128,128,128,0.3);
+    border-radius: 6px;
+}
+.layer-tab-arrow
+{
+    width: 13px;
+    height: 13px;
+    align-self: center;
+}
+
+.layer-tab-title
+{
+    margin-left: 4px;
+    -unity-font-style: bold;
+    align-self: center;
+}
+
+.layer-tab-content
+{
+    margin: 0 10px 10px 10px;
+}
+
+.delete-button
+{
+    background-image: resource("d_winbtn_win_close@2x");
+    background-color: transparent;
+    border-width: 0;
+    width: 18px;
+    height: 18px;
+    max-width: 18px;
+    max-height: 18px;
+}
+
+TextField>Label
+{
+    max-width: 150px;
+}
+
+.clips-container
+{
+    margin-left: 15px;
+}
+
+.clips-container>Foldout>Toggle
+{
+    margin-left: -12px;
+    margin-bottom: 1px;
+}
+
+

@@ -1,12 +1,14 @@
 ﻿#if VRC_SDK_VRCSDK3
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Avatars.ScriptableObjects;
+using static VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
 using ValueType = VRC.SDK3.Avatars.ScriptableObjects.VRCExpressionParameters.ValueType;
 
 namespace VRLabs.AV3Manager
@@ -40,6 +42,40 @@ namespace VRLabs.AV3Manager
     /// </summary>
     public static class AV3ManagerFunctions
     {
+        public static bool InitializeAnimatorsReferences()
+        {
+            string assetsPath = "";
+            string[] beaconPath = AssetDatabase.FindAssets("ManagerAnimatorBeacon t:AnimationClip", null);
+            if (beaconPath.Length > 0)
+            {
+                string[] pieces = AssetDatabase.GUIDToAssetPath(beaconPath[0]).Split('/');
+                ArrayUtility.RemoveAt(ref pieces, pieces.Length - 1);
+                assetsPath = string.Join("/", pieces);
+            }
+            
+            DefaultControllersPath = new Dictionary<AnimLayerType, string>
+            {
+                { AnimLayerType.Base , assetsPath + "/Base.controller"},
+                { AnimLayerType.Additive , assetsPath + "/Additive.controller"},
+                { AnimLayerType.Gesture , assetsPath + "/Gesture.controller"},
+                { AnimLayerType.Action , assetsPath + "/Action.controller"},
+                { AnimLayerType.FX , assetsPath + "/FX.controller"},
+                { AnimLayerType.Sitting , assetsPath + "/Sitting.controller"},
+                { AnimLayerType.TPose , assetsPath + "/TPose.controller"},
+                { AnimLayerType.IKPose , assetsPath + "/IKPose.controller"}
+            };
+
+            EmptyClip = AssetDatabase.LoadAssetAtPath<AnimationClip>(assetsPath + "/EmptyClip.anim");
+
+            return true;
+        }
+
+        public static Dictionary<AnimLayerType, string> DefaultControllersPath { get; set; }
+        public static AnimationClip EmptyClip { get; set; }
+        
+        private static bool _isStaticStuffLoaded = InitializeAnimatorsReferences();
+
+        private static string[] _clipPathSeparators = { "##" };
         private const string DEFAULT_DIRECTORY = "Assets/VRLabs/GeneratedAssets/";
         private static readonly string[] _defaultLayerPath = 
         {
@@ -283,6 +319,31 @@ namespace VRLabs.AV3Manager
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
+        
+        /// <summary>
+        /// Checks if the avatar descriptor has mixing "Write defaults" settings across its animators.
+        /// </summary>
+        /// <param name="descriptor">Avatar descriptor to check.</param>
+        /// <returns>True if the avatar animators contain mixed write defaults, false otherwise.</returns>
+        public static List<WDState> AnalyzeWDState(this VRCAvatarDescriptor descriptor)
+        {
+            var states = new List<WDState>();
+            foreach (var layer in descriptor.baseAnimationLayers)
+            {
+                if (!(layer.animatorController is AnimatorController controller) || controller == null) continue;
+                foreach (var animationLayer in controller.layers)
+                    AnalyzeWdStateMachine(animationLayer.stateMachine, states, layer.type.ToString());
+                
+            }
+            foreach (var layer in descriptor.specialAnimationLayers)
+            {
+                if (!(layer.animatorController is AnimatorController controller)) continue;
+                foreach (var animationLayer in controller.layers)
+                    AnalyzeWdStateMachine(animationLayer.stateMachine, states, layer.type.ToString());
+            }
+
+            return states;
+        }
 
         /// <summary>
         /// Checks if the avatar descriptor has mixing "Write defaults" settings across its animators.
@@ -318,8 +379,82 @@ namespace VRLabs.AV3Manager
             return false;
         }
         
+        /// <summary>
+        /// Checks if the avatar descriptor has mixing "Write defaults" settings across its animators.
+        /// </summary>
+        /// <param name="states">States to check.</param>
+        /// <returns>True if the avatar animators contain mixed write defaults, false otherwise.</returns>
+        public static bool HaveMixedWriteDefaults(this IEnumerable<WDState> states)
+        {
+            bool isOn = false;
+            bool checkedFirst = false;
+            foreach (var state in states)
+            {
+                if (state.HasDefault)
+                {
+                    if (state.IsOn ^ state.IsDefaultOn)
+                        return true;
+                    continue;   
+                }
+
+                if (!checkedFirst)
+                {
+                    checkedFirst = true;
+                    isOn = state.IsOn;
+                    continue;
+                }
+
+                if (state.IsOn != isOn)
+                    return true;
+            }
+
+            return false;
+        }
+        
+        /// <summary>
+        /// Checks if the avatar descriptor has mixing "Write defaults" settings across its animators.
+        /// </summary>
+        /// <param name="states">States to check.</param>
+        /// <returns>True if the avatar animators contain mixed write defaults, false otherwise.</returns>
+        public static bool HaveEmpyMotionsInStates(this IEnumerable<WDState> states)
+        {
+            foreach (var state in states)
+                if (!state.HasMotion)
+                    return true;
+
+            return false;
+        }
+        
+        /// <summary>
+        /// Sets the "Write Defaults" value of all the states in an entire animator controller to true or false.
+        /// Will modify the controller directly.
+        /// </summary>
+        /// <param name="avatar">The avatar to update controllers.</param>
+        /// <param name="writeDefaults">The value of "Write Defaults" to set the controller's states to. True if unspecified.</param>
+        /// <returns></returns>
+        public static void SetWriteDefaults(VRCAvatarDescriptor avatar, bool writeDefaults = true, bool force = false)
+        {
+            if (avatar == null)
+            {
+                Debug.LogError("Couldn't set Write Defaults value, the avatar is null!");
+                return;
+            }
+            for (int i = 0; i < avatar.baseAnimationLayers.Length; i++)
+            {
+                var controller = avatar.baseAnimationLayers[i].animatorController as AnimatorController;
+                if(controller != null)
+                    SetWriteDefaults(controller, writeDefaults, force);
+            }
+            for (int i = 0; i < avatar.specialAnimationLayers.Length; i++)
+            {
+                var controller = avatar.specialAnimationLayers[i].animatorController as AnimatorController;
+                if(controller != null)
+                    SetWriteDefaults(controller, writeDefaults, force);
+            }
+        }
         
         
+        // ReSharper disable Unity.PerformanceAnalysis
         /// <summary>
         /// Sets the "Write Defaults" value of all the states in an entire animator controller to true or false.
         /// Will modify the controller directly.
@@ -327,7 +462,7 @@ namespace VRLabs.AV3Manager
         /// <param name="controller">The controller to modify.</param>
         /// <param name="writeDefaults">The value of "Write Defaults" to set the controller's states to. True if unspecified.</param>
         /// <returns></returns>
-        public static void SetWriteDefaults(AnimatorController controller, bool writeDefaults = true)
+        public static void SetWriteDefaults(AnimatorController controller, bool writeDefaults = true, bool force = false)
         {
             if (controller == null)
             {
@@ -335,8 +470,8 @@ namespace VRLabs.AV3Manager
                 return;
             }
             for (int i = 0; i < controller.layers.Length; i++)
-            {      
-                SetInStateMachine(controller.layers[i].stateMachine, writeDefaults);
+            {
+                SetInStateMachine(controller.layers[i].stateMachine, writeDefaults, force);
             }
             EditorUtility.SetDirty(controller);
             AssetDatabase.SaveAssets();
@@ -366,6 +501,57 @@ namespace VRLabs.AV3Manager
         {
             return GetLayerStatesRecursive(layer.stateMachine);
         }
+        
+        /// <summary>
+        /// Get animation clip tree from an animator
+        /// </summary>
+        /// <param name="controller">Animator controller</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> of swappable clips</returns>
+        public static IEnumerable<ClipSwapItem> GetClipsToSwap(this AnimatorController controller)
+        {
+            foreach (AnimatorControllerLayer layer in controller.layers)
+            foreach (ClipSwapItem item in GetClipsToSwapRecursive(layer.stateMachine, layer.name))
+                yield return item;
+        }
+        
+        /// <summary>
+        /// Get animation clip tree from an animator layer
+        /// </summary>
+        /// <param name="layer">Animator layer</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> of swappable clips</returns>
+        public static IEnumerable<ClipSwapItem> GetClipsToSwap(this AnimatorControllerLayer layer)
+        {
+            return GetClipsToSwapRecursive(layer.stateMachine, layer.name);
+        }
+
+        /// <summary>
+        /// Swaps animations in a controller.
+        /// </summary>
+        /// <param name="controller">Controller to modify.</param>
+        /// <param name="items">Clips.</param>
+        /// <param name="saveToNew">If to save to a new controller.</param>
+        /// <returns>The controller edited (same one if did not save to new, a new one otherwise)</returns>
+        public static AnimatorController SwapAnimations(this AnimatorController controller, IEnumerable<ClipSwapItem> items, bool saveToNew = false)
+        {
+            if (controller == null) return null;
+
+            var assetPath = AssetDatabase.GetAssetPath(controller);
+
+            if (saveToNew)
+            {
+                Directory.CreateDirectory(AnimatorCloner.STANDARD_NEW_ANIMATOR_FOLDER);
+                string uniquePath = AssetDatabase.GenerateUniqueAssetPath(AnimatorCloner.STANDARD_NEW_ANIMATOR_FOLDER + Path.GetFileName(assetPath));
+                AssetDatabase.CopyAsset(assetPath, uniquePath);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+                assetPath = uniquePath;
+                controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(assetPath);
+            }
+            foreach (var clip in items)
+                SwapClip(controller, clip);
+
+            return controller;
+        }
 
         /// <summary>
         /// Return the VRC ValueType value based on the type of the animator parameter given.
@@ -379,6 +565,25 @@ namespace VRLabs.AV3Manager
                 : (type == AnimatorControllerParameterType.Bool ? ValueType.Bool : ValueType.Float);
         }
         
+        private static void AnalyzeWdStateMachine(AnimatorStateMachine stateMachine, List<WDState> states, string layerName)
+        {
+            foreach (ChildAnimatorState t in stateMachine.states)
+            {
+                states.Add(new WDState
+                {
+                    AvatarLayer = layerName,
+                    StateName = t.state.name,
+                    IsOn = t.state.writeDefaultValues,
+                    HasDefault = t.state.name.Contains("(WD On)") || t.state.name.Contains("(WD Off)"),
+                    IsDefaultOn = t.state.name.Contains("(WD On)"),
+                    HasMotion = t.state.motion != null
+                });
+            }
+
+            foreach (ChildAnimatorStateMachine t in stateMachine.stateMachines)
+                AnalyzeWdStateMachine(t.stateMachine, states, layerName);
+        }
+        
         private static (bool, bool, bool) GetWdInStateMachine(AnimatorStateMachine stateMachine, bool checkedFirst, bool isOn)
         {
             foreach (ChildAnimatorState t in stateMachine.states)
@@ -389,7 +594,14 @@ namespace VRLabs.AV3Manager
                     checkedFirst = true;
                     continue;
                 }
-                if (isOn != t.state.writeDefaultValues && !(t.state.name.Contains("(WD On)") || t.state.name.Contains("(WD Off)")))
+
+                if (t.state.name.Contains("(WD On)") || t.state.name.Contains("(WD Off)"))
+                {
+                    if (t.state.writeDefaultValues ^ t.state.name.Contains("(WD On)"))
+                        return (true, isOn, true);
+                    continue;
+                }
+                if (isOn != t.state.writeDefaultValues)
                     return (true, isOn, true);
             }
 
@@ -404,23 +616,25 @@ namespace VRLabs.AV3Manager
             return (checkedFirst, isOn, false);
         }
         
-        private static void SetInStateMachine (AnimatorStateMachine stateMachine, bool wd)
+        private static void SetInStateMachine(AnimatorStateMachine stateMachine, bool wd, bool force)
         {
             foreach (ChildAnimatorState t in stateMachine.states) {
+                t.state.writeDefaultValues = wd;
                 // Force corresponding Write Defaults setting for states with "(WD On)" or "(WD Off)" tags
-                if(t.state.name.Contains("(WD On)")) {
+                if(!force && t.state.name.Contains("(WD On)")) 
                     t.state.writeDefaultValues = true;
-                }
-                else if(t.state.name.Contains("(WD Off)")) {
+                else if(!force && t.state.name.Contains("(WD Off)"))
                     t.state.writeDefaultValues = false;
-                }
-                else {
+                else
                     t.state.writeDefaultValues = wd;
-                }
+
+                if (t.state.motion == null)
+                    t.state.motion = EmptyClip;
+
             }
             
             foreach (ChildAnimatorStateMachine t in stateMachine.stateMachines)
-                SetInStateMachine(t.stateMachine, wd);
+                SetInStateMachine(t.stateMachine, wd, force);
         }
         
         private static IEnumerable<AnimatorState> GetLayerStatesRecursive(AnimatorStateMachine stateMachine)
@@ -433,6 +647,155 @@ namespace VRLabs.AV3Manager
 
             return animatorStates;
         }
+        
+        private static IEnumerable<ClipSwapItem> GetClipsToSwapRecursive(AnimatorStateMachine stateMachine, string currentPath)
+        {
+            var items = new List<ClipSwapItem>();
+            var animatorStates = stateMachine.states
+                .Select(t => t.state)
+                .ToList();
+            foreach (var state in animatorStates)
+            {
+                // a switch here would be way more visual bloat ironically
+                if (state.motion is AnimationClip clip)
+                {
+                    var item = new ClipSwapItem
+                    {
+                        Name = state.name,
+                        StatePath = currentPath,
+                        Clip = clip
+                    };
+                    
+                    items.Add(item);
+                }
+                else if (state.motion is BlendTree tree)
+                {
+                    var item = new ClipSwapItem
+                    {
+                        IsTree = true,
+                        Name = state.name,
+                        StatePath = currentPath,
+                        Clip = null,
+                    };
+                    items.Add(item);
+                    GetClipsToSwapFromBlendTreeRecursive(tree, currentPath, item);
+                }
+                else if (state.motion == null)
+                {
+                    var item = new ClipSwapItem
+                    {
+                        Name = state.name,
+                        StatePath = currentPath,
+                        Clip = null
+                    };
+                    
+                    items.Add(item);
+                }
+            }
+            foreach (ChildAnimatorStateMachine t in stateMachine.stateMachines)
+                items.AddRange(GetClipsToSwapRecursive(t.stateMachine, $"{currentPath}##{t.stateMachine.name}"));
+
+            return items;
+        }
+
+        public static void SwapClip(AnimatorController controller, ClipSwapItem item)
+        {
+            var pathPieces = item.StatePath.Split(_clipPathSeparators, System.StringSplitOptions.RemoveEmptyEntries);
+            if (pathPieces.Length == 0) return;
+            var layer = controller.layers.FirstOrDefault(x => x.name.Equals(pathPieces[0]));
+            if (layer == null) return;
+
+            AnimatorStateMachine stateMachine = layer.stateMachine;
+            for (int i = 1; i < pathPieces.Length; i++)
+            {
+                stateMachine = stateMachine.stateMachines.Select(t => t.stateMachine).FirstOrDefault(x => x.name.Equals(pathPieces[i]));
+                if (stateMachine == null) return;
+            }
+            
+            var state = stateMachine.states.Select(t => t.state).FirstOrDefault(x => x.name.Equals(item.Name));
+
+            if (state == null) return;
+            
+            if (item.IsTree && state.motion is BlendTree tree)
+                SwapTree(tree, item.TreeChildren);
+            else if (!item.IsTree)
+                state.motion = item.Clip;
+        }
+
+        private static void SwapTree(BlendTree tree, List<ClipSwapItem> treeMotions)
+        {
+            var newChildren = new ChildMotion[tree.children.Length];
+            for (int i = 0; i < tree.children.Length; i++)
+            {
+                ChildMotion child = tree.children[i];
+                if (treeMotions[i].IsTree && child.motion is BlendTree childTree)
+                    SwapTree(childTree, treeMotions[i].TreeChildren);
+                else
+                    child.motion = treeMotions[i].Clip;
+
+                newChildren[i] = child;
+            }
+            tree.children = newChildren;
+        }
+        
+        private static void GetClipsToSwapFromBlendTreeRecursive(BlendTree tree, string statePath, ClipSwapItem parent)
+        {
+            foreach (var child in tree.children)
+            {
+                if (child.motion is AnimationClip clip)
+                {
+                    var item = new ClipSwapItem
+                    {
+                        Name = tree.blendType == BlendTreeType.Direct || tree.blendType == BlendTreeType.Simple1D
+                            ? $"threshold: {child.threshold}"
+                            : $"X: {child.position.x}, Y: {child.position.y}",
+                        StatePath = statePath,
+                        Clip = clip,
+                    };
+                    
+                    parent.TreeChildren.Add(item);
+                }
+                else if (child.motion is BlendTree childTree)
+                {
+                    var item = new ClipSwapItem
+                    {
+                        IsTree = true,
+                        Name = childTree.name,
+                        StatePath = statePath,
+                        Clip = null,
+                    };
+                    parent.TreeChildren.Add(item);
+
+                    GetClipsToSwapFromBlendTreeRecursive(childTree, statePath, item);
+                }
+            }
+        }
+    }
+    
+    public class ClipSwapItem
+    {
+        public bool IsTree { get; set; }
+        public string StatePath { get; set; }
+        public string Name { get; set; }
+        public AnimationClip Clip { get; set; }
+        
+        public List<ClipSwapItem> TreeChildren { get; set; }
+
+        public ClipSwapItem()
+        {
+            TreeChildren = new List<ClipSwapItem>();
+        }
+    }
+    
+    // ReSharper disable once InconsistentNaming
+    public struct WDState
+    {
+        public string AvatarLayer { get; set; }
+        public string StateName { get; set; }
+        public bool IsOn { get; set; }
+        public bool HasDefault { get; set; }
+        public bool IsDefaultOn { get; set; }
+        public bool HasMotion { get; set; }
     }
 }
 #endif
