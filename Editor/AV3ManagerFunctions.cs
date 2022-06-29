@@ -108,12 +108,12 @@ namespace VRLabs.AV3Manager
                 Debug.LogError("Couldn't add the parameter, the avatar descriptor is null!");
                 return;
             } 
-            else if ((parameter == null) || (parameter.name == null) )
+            if ((parameter == null) || (parameter.name == null) )
             {
                 Debug.LogError("Couldn't add the parameter, it or its name is null!");
                 return;
             }
-            else if ((directory == null) || (directory == ""))
+            if ((directory == null) || (directory == ""))
             {
                 Debug.Log("Directory was not specified, storing new parameters asset in " + DEFAULT_DIRECTORY);
                 directory = DEFAULT_DIRECTORY;
@@ -152,7 +152,7 @@ namespace VRLabs.AV3Manager
                 {
                     parameterArray[i] = parameters.GetParameter(i);
                 }
-                parameterArray[count] = parameter;
+                parameterArray[count] = parameter.GetCopy();
                 parameters.parameters = parameterArray;
             }
 
@@ -160,6 +160,92 @@ namespace VRLabs.AV3Manager
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             descriptor.expressionParameters = parameters;
+        }
+        
+        /// <summary>
+        /// Creates a copy of the avatar descriptor's parameter asset or creates one if it doesn't exist, adds a provided parameter,
+        /// assigns the new parameter asset, and stores it in the specified directory.
+        /// </summary>
+        /// <param name="descriptor">The avatar descriptor to add the parameters to.</param>
+        /// <param name="parameters">The parameters to add.</param>
+        /// <param name="directory">The unique directory to store the new parameter asset, ex. "Assets/MyCoolScript/GeneratedAssets/725638/".</param>
+        /// <param name="overwrite">Optionally, choose to not overwrite an asset of the same name in directory. See class for more info.</param>
+        public static void AddParameters(VRCAvatarDescriptor descriptor, IEnumerable<VRCExpressionParameters.Parameter> parameters, string directory, bool overwrite = true)
+        {
+            if (descriptor == null)
+            {
+                Debug.LogError("Couldn't add the parameters, the avatar descriptor is null!");
+                return;
+            } 
+            if (parameters == null)
+            {
+                Debug.LogError("Couldn't add the parameters, it is null!");
+                return;
+            }
+            if ((directory == null) || (directory == ""))
+            {
+                Debug.Log("Directory was not specified, storing new parameters asset in " + DEFAULT_DIRECTORY);
+                directory = DEFAULT_DIRECTORY;
+            }
+
+            descriptor.customExpressions = true;
+            VRCExpressionParameters newParameters = ScriptableObject.CreateInstance<VRCExpressionParameters>();
+            newParameters.parameters = new VRCExpressionParameters.Parameter[0];
+
+            if (descriptor.expressionParameters == null)
+            {
+                AssetDatabase.CreateAsset(newParameters, directory + "Parameters.asset");
+            }
+            else
+            {
+                if (descriptor.expressionParameters.CalcTotalCost() + parameters.GetCost(descriptor.expressionParameters.parameters) > VRCExpressionParameters.MAX_PARAMETER_COST)
+                {
+                    Debug.LogError("Couldn't add parameters, not enough memory free in the avatar's parameter asset!");
+                    return;
+                }
+
+                string path = (directory + descriptor.expressionParameters.name + ".asset");
+                path = (overwrite) ? path : AssetDatabase.GenerateUniqueAssetPath(path);
+                if ( AssetDatabase.GetAssetPath(descriptor.expressionParameters) != path) // if we have not made a copy yet
+                { // CopyAsset with two identical strings yields exception
+                    AssetDatabase.CopyAsset(AssetDatabase.GetAssetPath(descriptor.expressionParameters), path);
+                }
+                newParameters = AssetDatabase.LoadAssetAtPath(path, typeof(VRCExpressionParameters)) as VRCExpressionParameters;
+            }
+
+            var ParametersList = new List<VRCExpressionParameters.Parameter>(newParameters.parameters);
+
+            foreach (var prm in parameters)
+            {
+                if (newParameters.FindParameter(prm.name) == null)
+                {
+                    ParametersList.Add(prm.GetCopy());
+                }   
+            }
+            
+            newParameters.parameters = ParametersList.ToArray();
+
+            EditorUtility.SetDirty(newParameters);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            descriptor.expressionParameters = newParameters;
+        }
+
+        public static VRCExpressionParameters.Parameter GetCopy(this VRCExpressionParameters.Parameter parameter)
+        {
+            var newParam = new VRCExpressionParameters.Parameter();
+            newParam.name = parameter.name;
+            newParam.valueType = parameter.valueType;
+            newParam.defaultValue = parameter.defaultValue;
+            newParam.saved = parameter.saved;
+
+            return newParam;
+        }
+
+        public static int GetCost(this IEnumerable<VRCExpressionParameters.Parameter> parameters, IEnumerable<VRCExpressionParameters.Parameter> blackList = null)
+        {
+            return blackList == null ? parameters.Sum(parameter => VRCExpressionParameters.TypeCost(parameter.valueType)) 
+                : parameters.Where(x => !blackList.Any(y => y.name.Equals(x.name))).Sum(parameter => VRCExpressionParameters.TypeCost(parameter.valueType));
         }
 
         /// <summary>

@@ -19,6 +19,7 @@ namespace VRLabs.AV3Manager
         public Texture2D TabIcon { get; set; }
 
         private Label _label;
+        private Label _additionalCostLabel;
 
         private VisualElement _paramsListContainer;
         private ObjectField _expressionParametersField;
@@ -82,8 +83,13 @@ namespace VRLabs.AV3Manager
             var paramsToCopy = FluentUIElements
                 .NewObjectField("Parameters to copy", typeof(VRCExpressionParameters))
                 .ChildOf(TabContainer);
+            
+            _additionalCostLabel = new Label()
+                .WithClass("bordered-container", "margin-normal", "hidden")
+                .WithFontSize(10)
+                .ChildOf(TabContainer);
 
-            FluentUIElements.NewButton("Copy parameters", "Copies parameters into the current asset, if a parameter is already available the settings of it will be copied over",
+            var copyParametersButton = FluentUIElements.NewButton("Copy parameters", "Copies parameters into the current asset, if a parameter is already available the settings of it will be copied over",
                     () =>
                     {
                         if (_avatar == null || _avatar.expressionParameters == null) return;
@@ -93,11 +99,7 @@ namespace VRLabs.AV3Manager
                             VRCExpressionParameters.Parameter p = _avatar.expressionParameters.FindParameter(parameter.name);
                             if (p == null)
                             {
-                                var newParam = new VRCExpressionParameters.Parameter();
-                                newParam.name = parameter.name;
-                                newParam.valueType = parameter.valueType;
-                                newParam.defaultValue = parameter.defaultValue;
-                                newParam.saved = parameter.saved;  
+                                var newParam = parameter.GetCopy();
                                 int count =  _avatar.expressionParameters.parameters.Length;
                                 VRCExpressionParameters.Parameter[] parameterArray = new VRCExpressionParameters.Parameter[count + 1];
                                 for (int i = 0; i < count; i++)
@@ -123,6 +125,31 @@ namespace VRLabs.AV3Manager
                         UpdateParameters();
                     })
                 .ChildOf(TabContainer);
+            
+            paramsToCopy.RegisterValueChangedCallback(evt =>
+            {
+                if (!(paramsToCopy.value is VRCExpressionParameters paramsToCopyAsset))
+                {
+                    copyParametersButton.SetEnabled(false);
+                    _additionalCostLabel.AddToClassList("hidden");
+                    return;
+                }
+                int paramsCost = 0;
+                int totalCost = 0;
+                if (_avatar.expressionParameters != null)
+                {
+                    paramsCost = paramsToCopyAsset.parameters.GetCost(_avatar.expressionParameters.parameters);
+                    totalCost = paramsCost + _avatar.expressionParameters.CalcTotalCost();
+                }
+                else
+                {
+                    paramsCost = paramsToCopyAsset.CalcTotalCost();
+                    totalCost = paramsCost;
+                }
+
+                copyParametersButton.SetEnabled(totalCost <= VRCExpressionParameters.MAX_PARAMETER_COST);
+                UpdateAdditionalCostLabel(paramsCost, totalCost);
+            });
 
             _expressionParametersField.RegisterValueChangedCallback(evt =>
             {
@@ -229,6 +256,16 @@ namespace VRLabs.AV3Manager
             if (_label == null) return;
             _label.text = $"Parameters memory used: {currentCount}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
             _label.RemoveFromClassList("hidden");
+        }
+        
+        public void UpdateAdditionalCostLabel(int additionalCost, int totalCost)
+        {
+            if (_additionalCostLabel == null) return;
+            _additionalCostLabel.text = $"Additional cost: {additionalCost}";
+            _additionalCostLabel.text += $"\nTotal cost after update: {totalCost}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
+            if(totalCost > VRCExpressionParameters.MAX_PARAMETER_COST)
+                _additionalCostLabel.text += "\nCan't merge, the cost surpasses the maximum";
+            _additionalCostLabel.RemoveFromClassList("hidden");
         }
     }
 }
