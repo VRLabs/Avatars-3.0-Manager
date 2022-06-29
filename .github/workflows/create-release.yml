@@ -16,6 +16,12 @@ jobs:
           echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
           echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
           echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+
+      - name: Update version on json
+        run: |
+          node .github/update-version-json.js ${{ env.SOURCE_TAG }}
+        env:
+          SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
       
       - name: Prepare Folder For Packaging
         run: |
@@ -23,7 +29,10 @@ jobs:
           ls | grep -v "Assets" | xargs -d '\n' mv -t "Assets/VRLabs/Avatars 3.0 Manager"
           echo -e "fileFormatVersion: 2\nguid: 652a1ba5b00554143bc9a76307dbc4e8\nfolderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: " > "Assets/VRLabs.meta"
           echo -e "fileFormatVersion: 2\nguid: 513a67139704dd249855ebe5f760cba5\nfolderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: " > "Assets/VRLabs/Avatars 3.0 Manager.meta"
-          zip -r Avatars_3.0_Manager_${{ env.SOURCE_TAG }}.zip "Assets/VRLabs/Avatars 3.0 Manager"
+          cd "Assets/VRLabs/Avatars 3.0 Manager"
+          zip -r Avatars_3.0_Manager_${{ env.SOURCE_TAG }}.zip ./
+          mv Avatars_3.0_Manager_${{ env.SOURCE_TAG }}.zip ../../../
+          cd ../../../
         env:
           SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
 
