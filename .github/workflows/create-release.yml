@@ -23,7 +23,7 @@ jobs:
           ls | grep -v "Assets" | xargs -d '\n' mv -t "Assets/VRLabs/Avatars 3.0 Manager"
           echo -e "fileFormatVersion: 2\nguid: 652a1ba5b00554143bc9a76307dbc4e8\nfolderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: " > "Assets/VRLabs.meta"
           echo -e "fileFormatVersion: 2\nguid: 513a67139704dd249855ebe5f760cba5\nfolderAsset: yes\nDefaultImporter:\n  externalObjects: {}\n  userData: \n  assetBundleName: \n  assetBundleVariant: " > "Assets/VRLabs/Avatars 3.0 Manager.meta"
-          zip -r Avatars_3.0_Manager_${{ env.SOURCE_TAG }} "VRLabs/Avatars 3.0 Manager"
+          zip -r Avatars_3.0_Manager_${{ env.SOURCE_TAG }} "Assets/VRLabs/Avatars 3.0 Manager"
         env:
           SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
 
