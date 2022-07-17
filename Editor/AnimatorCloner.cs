@@ -416,7 +416,7 @@ namespace VRLabs.AV3Manager
                 foreach (var transition in oldStates[i].transitions)
                 {
                     AnimatorStateTransition newTransition = null;
-                    if (transition.isExit)
+                    if (transition.isExit && transition.destinationState == null && transition.destinationStateMachine == null)
                     {
                         newTransition = newStates[i].AddExitTransition();
                     }
