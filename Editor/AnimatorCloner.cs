@@ -310,10 +310,28 @@ namespace VRLabs.AV3Manager
                         var d = old as VRCAvatarParameterDriver;
                         l.debugString = d.debugString;
                         l.localOnly = d.localOnly;
+                        l.isLocalPlayer = d.isLocalPlayer;
+                        l.initialized = d.initialized;
                         l.parameters = d.parameters.ConvertAll(p =>
                         {
                             string name = GetNewParameterNameIfSwapped(p.name);
-                            return new VRC_AvatarParameterDriver.Parameter { name = name, value = p.value, chance = p.chance, valueMin = p.valueMin, valueMax = p.valueMax, type = p.type };
+                            return new VRC_AvatarParameterDriver.Parameter 
+                            { 
+                                name = name, 
+                                value = p.value, 
+                                chance = p.chance, 
+                                valueMin = p.valueMin, 
+                                valueMax = p.valueMax, 
+                                type = p.type, 
+                                source = p.source, 
+                                convertRange = p.convertRange, 
+                                destMax = p.destMax, 
+                                destMin = p.destMin, 
+                                destParam = p.destParam, 
+                                sourceMax = p.sourceMax, 
+                                sourceMin = p.sourceMin, 
+                                sourceParam = p.sourceParam
+                            };
                         });
                         break;
                     }
