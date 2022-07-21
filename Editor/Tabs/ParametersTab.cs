@@ -121,7 +121,7 @@ namespace VRLabs.AV3Manager
                                 p.saved = parameter.saved;   
                             }
                         }
-                        
+                        EditorUtility.SetDirty(_avatar.expressionParameters);
                         UpdateParameters();
                     })
                 .ChildOf(TabContainer);
