@@ -78,11 +78,11 @@ namespace VRLabs.AV3Manager
             var defaultLayerArea = new VisualElement()
                 .WithFlexDirection(FlexDirection.Row);
             var newLayerButton = FluentUIElements
-                .NewButton("Use Custom Animator Layer", "Use your own animator for this layer")
+                .NewButton("Use Custom Animator Layer", "Use your own animator for this layer.")
                 .WithClass("grow-control");
             defaultLayerArea.Add(newLayerButton);
             var copyFromDefaultLayer = FluentUIElements
-                .NewButton("Use Default Layer as custom", "Use a copy of the default layer for this layer")
+                .NewButton("Use Default Layer as custom", "Use a copy of the default layer for this layer.")
                 .WithClass("grow-control");
             defaultLayerArea.Add(copyFromDefaultLayer);
 
@@ -132,11 +132,11 @@ namespace VRLabs.AV3Manager
             var operationsArea = new VisualElement()
                 .WithFlexDirection(FlexDirection.Row);
             var animatorToMergeButton = FluentUIElements
-                .NewButton("Add animator to merge", "Select animator to merge to the current layer animator")
+                .NewButton("Add animator to merge", "Select animator to merge to the current layer animator.")
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
             var swapAnimationsButton = FluentUIElements
-                .NewButton("Swap Animations", "SwapAnimations in the current animator")
+                .NewButton("Swap Animations", "Swap animations in the current animator.")
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
 

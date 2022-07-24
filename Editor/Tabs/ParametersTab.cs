@@ -38,7 +38,7 @@ namespace VRLabs.AV3Manager
                 .WithClass("top-spaced")
                 .ChildOf(TabContainer);
 
-            FluentUIElements.NewButton("Open asset in inspector", "selects the asset and shows it in the inspector",
+            FluentUIElements.NewButton("Open asset in inspector", "Selects the asset and shows it in the inspector.",
                     () =>
                     {
                         if (_avatar == null || _avatar.expressionParameters == null) return;
@@ -89,7 +89,7 @@ namespace VRLabs.AV3Manager
                 .WithFontSize(10)
                 .ChildOf(TabContainer);
 
-            var copyParametersButton = FluentUIElements.NewButton("Copy parameters", "Copies parameters into the current asset, if a parameter is already available the settings of it will be copied over",
+            var copyParametersButton = FluentUIElements.NewButton("Copy parameters", "Copies parameters into the current asset. The settings of it will be copied over if a parameter is already listed.",
                     () =>
                     {
                         if (_avatar == null || _avatar.expressionParameters == null) return;
@@ -242,7 +242,7 @@ namespace VRLabs.AV3Manager
                 
 
                 if (!usedParameters.Contains(parameter.name))
-                    new Label("This parameter is not used in any animator, remove it to save some parameter space").WithClass("warning-label").ChildOf(paramElement);
+                    new Label("This parameter is not used in any animator, remove it to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
 
                 if (AV3Manager.VrcParameters.Contains(parameter.name))
                     new Label("This parameter doesn't need to be in the parameters asset, remove it to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
@@ -264,7 +264,7 @@ namespace VRLabs.AV3Manager
             _additionalCostLabel.text = $"Additional cost: {additionalCost}";
             _additionalCostLabel.text += $"\nTotal cost after update: {totalCost}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
             if(totalCost > VRCExpressionParameters.MAX_PARAMETER_COST)
-                _additionalCostLabel.text += "\nCan't merge, the cost surpasses the maximum";
+                _additionalCostLabel.text += "\nCan't merge, the cost surpasses the maximum.";
             _additionalCostLabel.RemoveFromClassList("hidden");
         }
     }

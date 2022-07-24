@@ -31,7 +31,7 @@ namespace VRLabs.AV3Manager
                 .WithMargin(0, 10, 0, 4)
                 .ChildOf(TabContainer);
             
-            Label wdWarningLabel = new Label("Forcing the Write Defaults state even on states that explicitly request a specific state is not advisable.")
+            Label wdWarningLabel = new Label("Forcing the Write Defaults settings on states that explicitly request a specific setting is not advisable.")
                 .WithClass("warning-label", "bordered-container")
                 .WithMargin(5, 0)
                 .ChildOf(TabContainer);
@@ -53,7 +53,7 @@ namespace VRLabs.AV3Manager
                 .WithFlexDirection(FlexDirection.Row)
                 .ChildOf(TabContainer);
             
-            _wdOnButton = FluentUIElements.NewButton("Set WD Off", "Set Write Defaults to off",
+            _wdOnButton = FluentUIElements.NewButton("Set WD Off", "Set Write Defaults to off.",
                     () =>
                     {
                         if (_avatar == null) return;
@@ -62,7 +62,7 @@ namespace VRLabs.AV3Manager
                     })
                 .WithClass("grow-control")
                 .ChildOf(buttonsContainer);
-            _wdOffButton = FluentUIElements.NewButton("Set WD On", "Set Write Defaults to on",
+            _wdOffButton = FluentUIElements.NewButton("Set WD On", "Set Write Defaults to on.",
                     () =>
                     {
                         if (_avatar == null) return;
@@ -72,12 +72,12 @@ namespace VRLabs.AV3Manager
                 .WithClass("grow-control")
                 .ChildOf(buttonsContainer);
             
-            _mixedWdLabel = new Label("You have mixed write defaults in your layers, you may experience weird interactions ingame")
+            _mixedWdLabel = new Label("You have mixed write defaults in your layers, you may experience weird interactions in-game.")
                 .WithClass("warning-label", "bordered-container", "hidden")
                 .WithMargin(5, 0)
                 .ChildOf(TabContainer);
             
-            _emptyMotions = new Label("Some states have no motions, this can be an issue when using WD Off. upon setting an unified WD state empty motions will be filled in those states.")
+            _emptyMotions = new Label("Some states have no motions, this can be an issue when using WD Off. Upon setting a unified WD state, an empty motion clip will fill those states.")
                 .WithClass("warning-label", "bordered-container", "hidden")
                 .WithMargin(5, 0)
                 .ChildOf(TabContainer);
