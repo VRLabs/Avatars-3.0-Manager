@@ -323,7 +323,7 @@ namespace VRLabs.AV3Manager
                                 valueMin = p.valueMin, 
                                 valueMax = p.valueMax, 
                                 type = p.type, 
-                                source = p.source, 
+                                source = GetNewParameterNameIfSwapped(p.source), 
                                 convertRange = p.convertRange, 
                                 destMax = p.destMax, 
                                 destMin = p.destMin, 
