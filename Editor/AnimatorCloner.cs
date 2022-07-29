@@ -398,7 +398,7 @@ namespace VRLabs.AV3Manager
                 gcsm.AddRange(GetStateMachinesRecursive(child, newAnimatorsByChildren));
             }
 
-            childrenSm.AddRange(gcsm);
+            childrenSm.Insert(0, sm);
             return childrenSm;
         }
 
