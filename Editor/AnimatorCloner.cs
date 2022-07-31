@@ -455,10 +455,7 @@ namespace VRLabs.AV3Manager
                         ApplyTransitionSettings(transition, newTransition);
                 }
             }
-
-            // Generate AnyState transitiosn
-            GenerateStateMachineBaseTransitions(old, n, oldStates, newStates, oldStateMachines, newStateMachines);
-
+            
             for (int i = 0; i < oldStateMachines.Count; i++)
             {
                 if(oldAnimatorsByChildren.ContainsKey(oldStateMachines[i]) && newAnimatorsByChildren.ContainsKey(newStateMachines[i]))
@@ -466,7 +463,7 @@ namespace VRLabs.AV3Manager
                     foreach (var transition in oldAnimatorsByChildren[oldStateMachines[i]].GetStateMachineTransitions(oldStateMachines[i]))
                     {
                         AnimatorTransition newTransition = null;
-                        if (transition.isExit)
+                        if (transition.isExit && transition.destinationState == null && transition.destinationStateMachine == null)
                         {
                             newTransition = newAnimatorsByChildren[newStateMachines[i]].AddStateMachineExitTransition(newStateMachines[i]);
                         }
@@ -486,8 +483,8 @@ namespace VRLabs.AV3Manager
                         if (newTransition != null)
                             ApplyTransitionSettings(transition, newTransition);
                     }
-                    
                 }
+                // Generate AnyState transitions
                 GenerateStateMachineBaseTransitions(oldStateMachines[i], newStateMachines[i], oldStates, newStates, oldStateMachines, newStateMachines);
             }
         }
