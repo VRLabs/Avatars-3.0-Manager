@@ -392,14 +392,14 @@ namespace VRLabs.AV3Manager
             List<AnimatorStateMachine> childrenSm = sm.stateMachines.Select(x => x.stateMachine).ToList();
 
             List<AnimatorStateMachine> gcsm = new List<AnimatorStateMachine>();
+            gcsm.Add(sm);
             foreach (var child in childrenSm)
             {
                 newAnimatorsByChildren?.Add(child, sm);
                 gcsm.AddRange(GetStateMachinesRecursive(child, newAnimatorsByChildren));
             }
-
-            childrenSm.Insert(0, sm);
-            return childrenSm;
+            
+            return gcsm;
         }
 
         private static AnimatorState FindMatchingState(List<AnimatorState> old, List<AnimatorState> n, AnimatorTransitionBase transition)
