@@ -78,7 +78,7 @@ namespace VRLabs.AV3Manager
         }
 
         private static string GetNewParameterNameIfSwapped(string parameterName) => 
-            _parametersNewName.ContainsKey(parameterName) ? _parametersNewName[parameterName] : parameterName;
+            !string.IsNullOrWhiteSpace(parameterName) && _parametersNewName.ContainsKey(parameterName) ? _parametersNewName[parameterName] : parameterName;
 
         private static string MakeLayerNameUnique(string name, AnimatorController controller)
         {
