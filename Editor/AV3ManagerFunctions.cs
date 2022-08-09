@@ -337,7 +337,8 @@ namespace VRLabs.AV3Manager
         /// <param name="playable">The playable layer to merge to.</param>
         /// <param name="directory">The unique directory to store the new merged controller, ex. "Assets/MyCoolScript/GeneratedAssets/725638/".</param>
         /// <param name="overwrite">Optionally, choose to not overwrite an asset of the same name in directory. See class for more info.</param>
-        public static void MergeToLayer(VRCAvatarDescriptor descriptor, AnimatorController controllerToAdd, PlayableLayer playable, string directory, bool overwrite = true)
+        /// <param name="change">Optionally, choose to not change the descriptor controller after merging.</param>
+        public static void MergeToLayer(VRCAvatarDescriptor descriptor, AnimatorController controllerToAdd, PlayableLayer playable, string directory, bool overwrite = true, bool change = true)
         {
             int layer = (int)playable;
 
@@ -401,7 +402,9 @@ namespace VRLabs.AV3Manager
             AnimatorController controllerOriginal = AssetDatabase.LoadAssetAtPath(path, typeof(AnimatorController)) as AnimatorController;
             AnimatorController mergedController = AnimatorCloner.MergeControllers(controllerOriginal, controllerToAdd, null, false);
 
-            descriptor.baseAnimationLayers[layer].animatorController = mergedController;
+            if (change) {
+                descriptor.baseAnimationLayers[layer].animatorController = mergedController;
+            }
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
