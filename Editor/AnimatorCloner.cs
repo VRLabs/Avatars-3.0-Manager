@@ -311,7 +311,7 @@ namespace VRLabs.AV3Manager
                         l.debugString = d.debugString;
                         l.localOnly = d.localOnly;
                         l.isLocalPlayer = d.isLocalPlayer;
-                        l.initialized = d.initialized;
+                        l.hasInitialized = d.hasInitialized;
                         l.parameters = d.parameters.ConvertAll(p =>
                         {
                             string name = GetNewParameterNameIfSwapped(p.name);
