@@ -46,7 +46,7 @@ namespace VRLabs.AV3Manager
         public static void InitializeAnimatorsReferences()
         {
             string assetsPath = "";
-            var animator = Resources.Load<Animator>("AV3M/DefaultAnimators/Base");
+            var animator = Resources.Load<AnimatorController>("AV3M/DefaultAnimators/Base");
             if (animator != null)
             {
                 string[] pieces = AssetDatabase.GetAssetPath(animator).Split('/');
