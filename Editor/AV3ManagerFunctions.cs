@@ -241,14 +241,15 @@ namespace VRLabs.AV3Manager
             newParam.valueType = parameter.valueType;
             newParam.defaultValue = parameter.defaultValue;
             newParam.saved = parameter.saved;
+            newParam.networkSynced = parameter.networkSynced;
 
             return newParam;
         }
 
         public static int GetCost(this IEnumerable<VRCExpressionParameters.Parameter> parameters, IEnumerable<VRCExpressionParameters.Parameter> blackList = null)
         {
-            return blackList == null ? parameters.Sum(parameter => VRCExpressionParameters.TypeCost(parameter.valueType)) 
-                : parameters.Where(x => !blackList.Any(y => y.name.Equals(x.name))).Sum(parameter => VRCExpressionParameters.TypeCost(parameter.valueType));
+            return blackList == null ? parameters.Where(parameter => parameter.networkSynced).Sum(parameter => VRCExpressionParameters.TypeCost(parameter.valueType)) 
+                : parameters.Where(x => !blackList.Any(y => y.name.Equals(x.name)) && x.networkSynced).Sum(parameter => VRCExpressionParameters.TypeCost(parameter.valueType));
         }
 
         /// <summary>
