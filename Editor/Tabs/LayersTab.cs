@@ -296,7 +296,7 @@ namespace VRLabs.AV3Manager
             var index = Parameters.IndexOf(parameter);
 
             parameter.IsExpression = isExpression;
-            parameter.IsSynced = synced;
+            parameter.IsSynced = isExpression ? synced : false;
             Parameters[index] = parameter;
             
             var expParam =_expressionParameters.FindParameter(parameter.Parameter.name);
