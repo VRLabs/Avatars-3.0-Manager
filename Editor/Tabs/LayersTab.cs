@@ -304,7 +304,7 @@ namespace VRLabs.AV3Manager
             var paramType = AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(parameter.Parameter.type);
             
             if (parameter.IsExpression && 
-                _expressionParameters.CalcTotalCost() + VRCExpressionParameters.TypeCost(paramType) <= VRCExpressionParameters.MAX_PARAMETER_COST)
+                _expressionParameters.CalcTotalCost() + VRCExpressionParameters.TypeCost(paramType) <= VRCExpressionParameters.MAX_PARAMETER_COST || !parameter.IsSynced)
             {
                 // Add parameter if it doesnt exist.
                 if (expParam == null)
