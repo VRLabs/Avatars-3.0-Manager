@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -126,7 +126,7 @@ namespace VRLabs.AV3Manager
                         tab.UpdateLabel(layer.ExpressionParametersCost);
                     });
 
-                    syncedCheckbox.SetEnabled(parameter.IsExpression && canExpressionAndSync);
+                    syncedCheckbox.SetEnabled(parameter.IsExpression && (canExpressionAndSync || parameter.IsSynced));
                     syncedCheckbox.RegisterValueChangedCallback(x =>
                     {
                         layer.ToggleParameterSync(parameter, parameter.IsExpression, x.newValue);
@@ -330,7 +330,11 @@ namespace VRLabs.AV3Manager
                 }
                 else
                 {
+                    var parameterArray = _expressionParameters.parameters;
+                    int ind = Array.IndexOf(parameterArray, expParam);
                     expParam.networkSynced = parameter.IsSynced;
+                    parameterArray[ind] = expParam;
+                    _expressionParameters.parameters = parameterArray;
                 }
             }
             else if (!parameter.IsExpression && expParam != null)
@@ -375,7 +379,7 @@ namespace VRLabs.AV3Manager
                     bool isExpression = _expressionParameters != null && _expressionParameters.FindParameter(parameter.name) != null;
                     bool isSynced = isExpression
                         ? _expressionParameters.FindParameter(parameter.name).networkSynced
-                        : true;
+                        : false;
                     Parameters.Add(new SyncedParameter { Parameter = parameter, IsExpression = isExpression, IsSynced = isSynced});
                 }
             }
