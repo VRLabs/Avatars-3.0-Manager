@@ -59,7 +59,7 @@ namespace VRLabs.AV3Manager
 
             new Label("Name")
                 .WithClass("header-small")
-                .WithFlex(3, 0, 1)
+                .WithFlex(2.5f, 0, 1)
                 .ChildOf(paramHeader);
             new Label("Type")
                 .WithClass("header-small")
@@ -202,7 +202,7 @@ namespace VRLabs.AV3Manager
                     .WithFlexDirection(FlexDirection.Row)
                     .ChildOf(paramElement);
 
-                new Label(parameter.name).WithAlignSelf(Align.Center).WithFlex(3, 0, 1).ChildOf(row);
+                new Label(parameter.name).WithAlignSelf(Align.Center).WithFlex(2.5f, 0, 1).ChildOf(row);
                 new EnumField(parameter.valueType).WithFlex(1, 0, 1).WithEnabledState(false).ChildOf(row);
                 switch (parameter.valueType)
                 {
@@ -246,10 +246,10 @@ namespace VRLabs.AV3Manager
                 
 
                 if (!usedParameters.Contains(parameter.name))
-                    new Label("This parameter is not used in any animator, remove it to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
+                    new Label("This parameter is not used in any animator, remove it or make it local only to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
 
                 if (AV3Manager.VrcParameters.Contains(parameter.name))
-                    new Label("This parameter doesn't need to be in the parameters asset, remove it to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
+                    new Label("This parameter doesn't need to be in the parameters asset, remove it or make it local only to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
             }
 
             UpdateLabel(_avatar.expressionParameters.CalcTotalCost());
