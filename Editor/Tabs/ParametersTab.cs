@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.Animations;
@@ -59,11 +59,11 @@ namespace VRLabs.AV3Manager
 
             new Label("Name")
                 .WithClass("header-small")
-                .WithFlex(5, 0, 1)
+                .WithFlex(2.5f, 0, 1)
                 .ChildOf(paramHeader);
             new Label("Type")
                 .WithClass("header-small")
-                .WithFlex(2, 0, 1)
+                .WithFlex(1, 0, 1)
                 .ChildOf(paramHeader);
             new Label("Default")
                 .WithClass("header-small")
@@ -73,6 +73,11 @@ namespace VRLabs.AV3Manager
             new Label("Saved")
                 .WithClass("header-small")
                 .WithFlex(1, 0, 1)
+                .WithUnityTextAlign(TextAnchor.UpperCenter)
+                .ChildOf(paramHeader);
+            new Label("NetworkSynced")
+                .WithClass("header-small")
+                .WithFlex(1.5f, 0, 1)
                 .WithUnityTextAlign(TextAnchor.UpperCenter)
                 .ChildOf(paramHeader);
             new VisualElement().WithWidth(26).ChildOf(paramHeader);
@@ -99,26 +104,21 @@ namespace VRLabs.AV3Manager
                             VRCExpressionParameters.Parameter p = _avatar.expressionParameters.FindParameter(parameter.name);
                             if (p == null)
                             {
-                                var newParam = parameter.GetCopy();
                                 int count =  _avatar.expressionParameters.parameters.Length;
                                 VRCExpressionParameters.Parameter[] parameterArray = new VRCExpressionParameters.Parameter[count + 1];
                                 for (int i = 0; i < count; i++)
                                 {
                                     parameterArray[i] =  _avatar.expressionParameters.GetParameter(i);
                                 }
-                                parameterArray[count] = new VRCExpressionParameters.Parameter
-                                {
-                                    name = parameter.name,
-                                    valueType = parameter.valueType,
-                                    defaultValue = parameter.defaultValue,
-                                    saved = parameter.saved
-                                };
+
+                                parameterArray[count] = parameter.GetCopy();
                                 _avatar.expressionParameters.parameters = parameterArray;
                             }
                             else
                             {
                                 p.defaultValue = parameter.defaultValue;
-                                p.saved = parameter.saved;   
+                                p.saved = parameter.saved;
+                                p.networkSynced = parameter.networkSynced;
                             }
                         }
                         EditorUtility.SetDirty(_avatar.expressionParameters);
@@ -202,8 +202,8 @@ namespace VRLabs.AV3Manager
                     .WithFlexDirection(FlexDirection.Row)
                     .ChildOf(paramElement);
 
-                new Label(parameter.name).WithAlignSelf(Align.Center).WithFlex(5, 0, 1).ChildOf(row);
-                new EnumField(parameter.valueType).WithFlex(2, 0, 1).WithEnabledState(false).ChildOf(row);
+                new Label(parameter.name).WithAlignSelf(Align.Center).WithFlex(2.5f, 0, 1).ChildOf(row);
+                new EnumField(parameter.valueType).WithFlex(1, 0, 1).WithEnabledState(false).ChildOf(row);
                 switch (parameter.valueType)
                 {
                     case ValueType.Int:
@@ -227,6 +227,10 @@ namespace VRLabs.AV3Manager
                     .WithFlex(1, 0, 1).ChildOf(row);
                 saved.RegisterValueChangedCallback(evt => parameter.saved = evt.newValue);
                 
+                var networkSynced = FluentUIElements.NewToggle(parameter.networkSynced).WithClass("centered-toggle")
+                    .WithFlex(1.5f, 0, 1).ChildOf(row);
+                networkSynced.RegisterValueChangedCallback(evt => parameter.networkSynced = evt.newValue);
+                
                 FluentUIElements.NewButton( () =>
                     {
                         List<VRCExpressionParameters.Parameter> list = new List<VRCExpressionParameters.Parameter>();
@@ -242,10 +246,10 @@ namespace VRLabs.AV3Manager
                 
 
                 if (!usedParameters.Contains(parameter.name))
-                    new Label("This parameter is not used in any animator, remove it to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
+                    new Label("This parameter is not used in any animator, remove it or make it local only to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
 
                 if (AV3Manager.VrcParameters.Contains(parameter.name))
-                    new Label("This parameter doesn't need to be in the parameters asset, remove it to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
+                    new Label("This parameter doesn't need to be in the parameters asset, remove it or make it local only to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
             }
 
             UpdateLabel(_avatar.expressionParameters.CalcTotalCost());

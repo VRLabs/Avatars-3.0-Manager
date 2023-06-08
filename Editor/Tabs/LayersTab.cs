@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -95,13 +95,12 @@ namespace VRLabs.AV3Manager
 
             var paramHeader = new VisualElement()
                 .WithFlexDirection(FlexDirection.Row);
-            var labelHeader = new Label("Parameters").WithClass("header-small");
-            var sp = new VisualElement();
-            sp.style.flexGrow = 1;
-            var checkboxHeader = new Label("Synced").WithClass("header-small");
+            var labelHeader = new Label("Parameters").WithClass("header-small").WithFlex(2, 0, 2);
+            var expressionCheckboxHeader = new Label("Expression Parameter").WithClass("header-small").WithFlex(2, 0, 2).WithUnityTextAlign(TextAnchor.MiddleCenter);
+            var syncedCheckboxHeader = new Label("Synced").WithClass("header-small").WithFlex(1, 0, 1).WithUnityTextAlign(TextAnchor.MiddleCenter);;
             paramHeader.Add(labelHeader);
-            paramHeader.Add(sp);
-            paramHeader.Add(checkboxHeader);
+            paramHeader.Add(expressionCheckboxHeader);
+            paramHeader.Add(syncedCheckboxHeader);
             
             var parametersArea = new VisualElement();
 
@@ -111,17 +110,30 @@ namespace VRLabs.AV3Manager
                 foreach (var parameter in layer.Parameters)
                 {
                     var param = new VisualElement().ChildOf(parametersArea).WithFlexDirection(FlexDirection.Row);
-                    new Label(parameter.Parameter.name).ChildOf(param);
-                    new VisualElement().ChildOf(param).WithFlexGrow(1);
-                    var checkbox = FluentUIElements.NewToggle(parameter.IsSynced).ChildOf(param);
-                    int totalCostIfEnabled = layer.ExpressionParametersCost + VRCExpressionParameters.TypeCost(AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(parameter.Parameter.type));
-                    checkbox.SetEnabled( totalCostIfEnabled <= VRCExpressionParameters.MAX_PARAMETER_COST || parameter.IsSynced);
-                    checkbox.RegisterValueChangedCallback(x =>
+                    var label = new Label(parameter.Parameter.name).ChildOf(param).WithFlex(2, 0, 2);
+                    label.style.overflow = Overflow.Hidden;
+                    var expressionCheckboxDiv = new VisualElement().ChildOf(param).WithFlex(2, 0, 2).WithAlignItems(Align.Center);
+                    var expressionCheckbox = FluentUIElements.NewToggle(parameter.IsExpression).ChildOf(expressionCheckboxDiv);
+                    var syncedCheckboxDiv = new VisualElement().ChildOf(param).WithFlex(1, 0, 1).WithAlignItems(Align.Center);
+                    var syncedCheckbox = FluentUIElements.NewToggle(parameter.IsSynced).ChildOf(syncedCheckboxDiv);
+                    int totalCostIfExpressionAndSynced = layer.ExpressionParametersCost + VRCExpressionParameters.TypeCost(AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(parameter.Parameter.type));
+                    
+                    bool canExpressionAndSync = totalCostIfExpressionAndSynced <= VRCExpressionParameters.MAX_PARAMETER_COST;
+                    expressionCheckbox.RegisterValueChangedCallback(x =>
                     {
-                        layer.ToggleParameterSync(parameter, x.newValue);
+                        layer.ToggleParameterSync(parameter, x.newValue, parameter.IsSynced);
                         UpdateParams();
                         tab.UpdateLabel(layer.ExpressionParametersCost);
                     });
+
+                    syncedCheckbox.SetEnabled(parameter.IsExpression && (canExpressionAndSync || parameter.IsSynced));
+                    syncedCheckbox.RegisterValueChangedCallback(x =>
+                    {
+                        layer.ToggleParameterSync(parameter, parameter.IsExpression, x.newValue);
+                        UpdateParams();
+                        tab.UpdateLabel(layer.ExpressionParametersCost);
+                    });
+
                 }
             }
 
@@ -277,39 +289,62 @@ namespace VRLabs.AV3Manager
             }
         }
 
+        [Obsolete("ToggleParameterSync(SyncedParameter, bool) is deprecated and will be removed in the future. Please move to using the ToggleParameterSync(SyncedParameter, bool, bool) method instead.")]
         public void ToggleParameterSync(SyncedParameter parameter, bool toggle)
+        {
+            ToggleParameterSync(parameter, toggle, toggle);    
+        }
+
+
+        public void ToggleParameterSync(SyncedParameter parameter, bool isExpression, bool synced)
         {
             if (_expressionParameters == null) return;
 
             var index = Parameters.IndexOf(parameter);
 
-            parameter.IsSynced = toggle;
+            parameter.IsExpression = isExpression;
+            parameter.IsSynced = isExpression ? synced : false;
             Parameters[index] = parameter;
-            
             
             var expParam =_expressionParameters.FindParameter(parameter.Parameter.name);
 
             var paramType = AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(parameter.Parameter.type);
             
-            if (parameter.IsSynced && expParam == null && 
-                _expressionParameters.CalcTotalCost() + VRCExpressionParameters.TypeCost(paramType) <= VRCExpressionParameters.MAX_PARAMETER_COST)
+            if (parameter.IsExpression && 
+                _expressionParameters.CalcTotalCost() + VRCExpressionParameters.TypeCost(paramType) <= VRCExpressionParameters.MAX_PARAMETER_COST || !parameter.IsSynced)
             {
-                int count = _expressionParameters.parameters.Length;
-                VRCExpressionParameters.Parameter[] parameterArray = new VRCExpressionParameters.Parameter[count + 1];
-                for (int i = 0; i < count; i++)
+                // Add parameter if it doesnt exist.
+                if (expParam == null)
                 {
-                    parameterArray[i] = _expressionParameters.GetParameter(i);
+
+                    int count = _expressionParameters.parameters.Length;
+                    VRCExpressionParameters.Parameter[] parameterArray =
+                        new VRCExpressionParameters.Parameter[count + 1];
+                    for (int i = 0; i < count; i++)
+                    {
+                        parameterArray[i] = _expressionParameters.GetParameter(i);
+                    }
+
+                    parameterArray[count] = new VRCExpressionParameters.Parameter
+                    {
+                        name = parameter.Parameter.name,
+                        valueType = paramType,
+                        networkSynced = parameter.IsSynced,
+                        defaultValue = 0,
+                        saved = false
+                    };
+                    _expressionParameters.parameters = parameterArray;
                 }
-                parameterArray[count] = new VRCExpressionParameters.Parameter
+                else
                 {
-                    name = parameter.Parameter.name,
-                    valueType = paramType,
-                    defaultValue = 0,
-                    saved = false
-                };
-                _expressionParameters.parameters = parameterArray;
+                    var parameterArray = _expressionParameters.parameters;
+                    int ind = Array.IndexOf(parameterArray, expParam);
+                    expParam.networkSynced = parameter.IsSynced;
+                    parameterArray[ind] = expParam;
+                    _expressionParameters.parameters = parameterArray;
+                }
             }
-            else if (!parameter.IsSynced && expParam != null)
+            else if (!parameter.IsExpression && expParam != null)
             {
                 List<VRCExpressionParameters.Parameter> list = new List<VRCExpressionParameters.Parameter>();
                 foreach (VRCExpressionParameters.Parameter x in _expressionParameters.parameters)
@@ -348,8 +383,11 @@ namespace VRLabs.AV3Manager
                              x.type == AnimatorControllerParameterType.Bool))
                 {
                     if (AV3Manager.VrcParameters.Count(x => x.Equals(parameter.name)) > 0) continue;
-                    bool isSynced = _expressionParameters != null && _expressionParameters.FindParameter(parameter.name) != null;
-                    Parameters.Add(new SyncedParameter { Parameter = parameter, IsSynced = isSynced });
+                    bool isExpression = _expressionParameters != null && _expressionParameters.FindParameter(parameter.name) != null;
+                    bool isSynced = isExpression
+                        ? _expressionParameters.FindParameter(parameter.name).networkSynced
+                        : false;
+                    Parameters.Add(new SyncedParameter { Parameter = parameter, IsExpression = isExpression, IsSynced = isSynced});
                 }
             }
         }
@@ -359,6 +397,7 @@ namespace VRLabs.AV3Manager
     {
         public AnimatorControllerParameter Parameter;
         public bool IsSynced;
+        public bool IsExpression;
     }
     
 }
