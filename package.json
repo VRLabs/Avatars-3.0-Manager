@@ -10,7 +10,7 @@
     "url" : "https://github.vrlabs.dev"
   },
   "vpmDependencies" : {
-    "com.vrchat.avatars" : ">=3.1.2"
+    "com.vrchat.avatars" : "~3.1.12"
   },
   "url" : "https://github.com/VRLabs/Avatars-3.0-Manager/releases/download/master/Avatars_3.0_Manager_master.zip",
   "legacyFolders" : {
