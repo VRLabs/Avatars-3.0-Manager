@@ -289,6 +289,13 @@ namespace VRLabs.AV3Manager
             }
         }
 
+        [Obsolete("ToggleParameterSync(SyncedParameter, bool) is deprecated and will be removed in the future. Please move to using the ToggleParameterSync(SyncedParameter, bool, bool) method instead.")]
+        public void ToggleParameterSync(SyncedParameter parameter, bool toggle)
+        {
+            ToggleParameterSync(parameter, toggle, toggle);    
+        }
+
+
         public void ToggleParameterSync(SyncedParameter parameter, bool isExpression, bool synced)
         {
             if (_expressionParameters == null) return;
