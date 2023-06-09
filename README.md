@@ -13,7 +13,7 @@ A tool for managing playable layers and parameters for Avatars 3.0.
 
 This tool merges animator controllers to your avatar's playable layer controllers and syncs to your avatar's expression parameters.
 
-VRCSDK3 version 2022.06.03.00.04 or later is required.
+VRCSDK3 version 3.2.0 or later is required.
 
 Open VRLabs > Avatars 3.0 Manager from the menu bar. Place your avatar in the "Avatar" field within the opened window.
 
