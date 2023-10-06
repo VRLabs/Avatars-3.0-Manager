@@ -58,7 +58,7 @@ namespace VRLabs.AV3Manager
 
         private VRCAvatarDescriptor _avatar;
 
-        [MenuItem("VRLabs/Avatars 3.0 Manager")]
+        [MenuItem("Tools/VRLabs/Avatars 3.0 Manager")]
         private static void ShowWindow()
         {
             var window = GetWindow<AV3Manager>();
