@@ -73,7 +73,7 @@ namespace VRLabs.AV3Manager
                     var suffixField = new TextField(p.Name).ChildOf(itemContainer);
                     suffixField.tooltip = p.Name;
                     
-                    if (AV3Manager.VrcParameters.Any(x => x.Contains(param.name)))
+                    if (AV3Manager.VrcParameters.Any(x => x == param.name))
                     {
                         new Label("Parameter is a default one, by default it will be added to the parameters, but not listed in the synced parameters, you should not add any affix unless you know what you're doing")
                             .WithClass("warning-label")
