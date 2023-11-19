@@ -57,7 +57,8 @@ namespace VRLabs.AV3Manager
             "EyeHeightAsPercent",
             
             //VRLabs Defaults
-            //Change to "MirrorDetection/IsMirror" when cleanup is merged into main
+            //IsMirror is legacy, MirrorDetection/IsMirror is current
+            "MirrorDetection/IsMirror",
             "IsMirror"
         };
         
