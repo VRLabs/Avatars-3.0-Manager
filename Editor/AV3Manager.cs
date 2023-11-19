@@ -29,6 +29,7 @@ namespace VRLabs.AV3Manager
             //VRC Defaults
             "IsLocal",
             "Viseme",
+            "Voice",
             "GestureLeft",
             "GestureRight",
             "GestureLeftWeight",
@@ -37,6 +38,7 @@ namespace VRLabs.AV3Manager
             "VelocityX",
             "VelocityY",
             "VelocityZ",
+            "VelocityMagnitude",
             "Upright",
             "Grounded",
             "Seated",
@@ -45,10 +47,17 @@ namespace VRLabs.AV3Manager
             "VRMode",
             "MuteSelf",
             "InStation",
+            "Earmuffs",
             "Supine",
             "GroundProximity",
+            "ScaleModified",
+            "ScaleFactor",
+            "ScaleFactorInverse",
+            "EyeHeightAsMeters",
+            "EyeHeightAsPercent",
             
             //VRLabs Defaults
+            //Change to "MirrorDetection/IsMirror" when cleanup is merged into main
             "IsMirror"
         };
         
