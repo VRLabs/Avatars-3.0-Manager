@@ -1,8 +1,0 @@
-package-name: Avatars_3.0_Manager
-visual-name: Avatars 3.0 Manager
-destination-folder: Assets/VRLabs/Avatars 3.0 Manager
-extra-generated-meta:
-  - path: Assets/VRLabs
-    guid: 652a1ba5b00554143bc9a76307dbc4e8
-  - path: Assets/VRLabs/Avatars 3.0 Manager
-    guid: 513a67139704dd249855ebe5f760cba5

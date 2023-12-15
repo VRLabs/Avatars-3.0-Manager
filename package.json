@@ -1,19 +1,26 @@
 {
-  "name" : "dev.vrlabs.av3manager",
-  "displayName" : "Avatars 3.0 Manager",
-  "version" : "master",
-  "unity" : "2019.4",
-  "description" : "A tool for managing playable layers and parameters for Avatars 3.0.",
-  "author" : {
-    "name" : "VRLabs",
-    "email" : "mail@vrlabs.dev",
-    "url" : "https://github.vrlabs.dev"
-  },
-  "vpmDependencies" : {
-    "com.vrchat.avatars" : ">=3.2.0 < 3.6.0"
-  },
-  "url" : "https://github.com/VRLabs/Avatars-3.0-Manager/releases/download/master/Avatars_3.0_Manager_master.zip",
-  "legacyFolders" : {
-    "Assets\\VRLabs\\Avatars 3.0 Manager" : "513a67139704dd249855ebe5f760cba5"
-  }
+    "name": "dev.vrlabs.av3manager",
+    "displayName": "Avatars 3.0 Manager",
+    "version": "2.0.999",
+    "license": "MIT",
+    "unity": "2019.4",
+    "description": "A tool for managing playable layers and parameters for Avatars 3.0.",
+    "author": {
+        "name": "VRLabs",
+        "email": "mail@vrlabs.dev",
+        "url": "https://vrlabs.dev"
+    },
+    "siteUrl": "https://github.com/VRLabs/Avatars-3.0-Manager",
+    "vpmDependencies": {
+        "com.vrchat.avatars": "3.2 - 3.5"
+    },
+    "legacyFolders": {
+        "Assets\\VRLabs\\Avatars 3.0 Manager": "513a67139704dd249855ebe5f760cba5"
+    },
+    "unityPackageDestinationFolder": "Assets/VRLabs/15 Bits Position Rotation Networking",
+    "unitypackageDestinationFolderMetas": {
+        "Assets/VRLabs": "652a1ba5b00554143bc9a76307dbc4e8",
+        "Assets/VRLabs/Avatars 3.0 Manager": "513a67139704dd249855ebe5f760cba5"
+    },
+    "vccRepoCategory": "essentials"
 }
