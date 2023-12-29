@@ -214,6 +214,14 @@ namespace VRLabs.AV3Manager
             pastedTree.minThreshold = oldTree.minThreshold;
             pastedTree.maxThreshold = oldTree.maxThreshold;
             pastedTree.useAutomaticThresholds = oldTree.useAutomaticThresholds;
+            using (var oldSo = new SerializedObject(oldTree))
+            {
+                using (var pastedSo = new SerializedObject(pastedTree))
+                {
+                    pastedSo.FindProperty("m_NormalizedBlendValues").boolValue = oldSo.FindProperty("m_NormalizedBlendValues").boolValue;
+                    pastedSo.ApplyModifiedProperties();
+                }
+            }
 
             // Recursively duplicate the tree structure
             // Motions can be directly added as references while trees must be recursively to avoid accidental sharing
