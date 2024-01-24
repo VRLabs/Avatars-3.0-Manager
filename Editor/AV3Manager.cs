@@ -55,6 +55,8 @@ namespace VRLabs.AV3Manager
             "ScaleFactorInverse",
             "EyeHeightAsMeters",
             "EyeHeightAsPercent",
+            "IsOnFriendsList",
+            "AvatarVersion",
             
             //VRLabs Defaults
             //IsMirror is legacy, MirrorDetection/IsMirror is current
