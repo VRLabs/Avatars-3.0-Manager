@@ -1,5 +1,4 @@
-﻿#if VRC_SDK_VRCSDK3
-
+﻿
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -954,4 +953,3 @@ namespace VRLabs.AV3Manager
         public bool HasMotion { get; set; }
     }
 }
-#endif
