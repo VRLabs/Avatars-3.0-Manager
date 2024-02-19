@@ -22,5 +22,9 @@
         "Assets/VRLabs": "652a1ba5b00554143bc9a76307dbc4e8",
         "Assets/VRLabs/Avatars 3.0 Manager": "513a67139704dd249855ebe5f760cba5"
     },
-    "vccRepoCategory": "essentials"
+    "vccRepoCategory": "essentials",
+    "media": {
+        "previewImage": "https://raw.githubusercontent.com/VRLabs/Avatars-3.0-Manager/main/Media/Web/Preview.webp",
+        "previewGif": "https://raw.githubusercontent.com/VRLabs/Avatars-3.0-Manager/main/Media/Web/Preview.webp"
+  },
 }
