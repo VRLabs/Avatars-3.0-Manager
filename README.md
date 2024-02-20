@@ -1,13 +1,27 @@
-# Avatars 3.0 Manager
-  
-[![Generic badge](https://img.shields.io/badge/Unity-2019.4.31f1-informational.svg)](https://unity3d.com/unity/whats-new/2019.4.31)
-[![Generic badge](https://img.shields.io/badge/SDK-AvatarSDK3-informational.svg)](https://vrchat.com/home/download)
-[![Generic badge](https://img.shields.io/github/release/VRLabs/Avatars-3.0-Manager?display_name=tag&label=Release)](https://github.com/VRLabs/Avatars-3.0-Manager/releases/latest)
-[![Generic badge](https://img.shields.io/badge/License-MIT-informational.svg)](https://github.com/VRLabs/Avatars-3.0-Manager/blob/main/LICENSE) 
-[![Generic badge](https://img.shields.io/github/downloads/VRLabs/Avatars-3.0-Manager/total?label=Downloads)](https://github.com/VRLabs/Avatars-3.0-Manager/releases/latest)
+<div align="center">
 
+# Avatars 3.0 Manager
+
+[![Generic badge](https://img.shields.io/github/downloads/VRLabs/Avatars-3.0-Manager/total?label=Downloads)](https://github.com/VRLabs/Follower/releases/latest)
+[![Generic badge](https://img.shields.io/badge/License-MIT-informational.svg)](https://github.com/VRLabs/Avatars-3.0-Manager/blob/main/LICENSE)
+[![Generic badge](https://img.shields.io/badge/Unity-2019.4.31f1-lightblue.svg)](https://unity3d.com/unity/whats-new/2019.4.31)
+[![Generic badge](https://img.shields.io/badge/SDK-AvatarSDK3-lightblue.svg)](https://vrchat.com/home/download)
+
+[![Generic badge](https://img.shields.io/discord/706913824607043605?color=%237289da&label=DISCORD&logo=Discord&style=for-the-badge)](https://discord.vrlabs.dev/)
+[![Generic badge](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dvrlabs%26type%3Dpatrons&style=for-the-badge)](https://patreon.vrlabs.dev/)
 
 A tool for managing playable layers and parameters for Avatars 3.0.
+
+![Manager](https://github.com/VRLabs/Avatars-3.0-Manager/assets/101019309/db3769b4-2782-4fe6-8e83-b34e7fdd2fa6)
+
+### ⬇️ [Download Latest Version](https://github.com/VRLabs/Avatars-3.0-Manager/releases/latest)
+
+<!-- 
+### 📦 [Add to VRChat Creator Companion]() -->
+
+</div>
+
+---
 
 ## How to use
 
@@ -23,20 +37,26 @@ A suffix is appended to a new parameter if it shares its name with an existing p
 
 "Merge on current" merges on the avatar's controller, while "Merge on new" merges on a copy of it. Sync parameters as needed.
 
-## Credit
+## Contributors
 
 [Cibbi](https://github.com/Cibbi)
 
-[ksivl](https://github.com/ksivl)
-
-## Downloads
-
-You can grab the latest version of the Avatars 3.0 Manager in [Releases](https://github.com/VRLabs/Avatars-3.0-Manager/releases/latest).
+[Ksivl](https://github.com/ksivl)
 
 ## License
 
 Avatars 3.0 Manager is available as-is under MIT. For more information see [LICENSE](https://github.com/VRLabs/Avatars-3.0-Manager/blob/main/LICENSE).
 
-## Contact us
+​
 
-If you need help, our support channel is on [Discord](https://discord.vrlabs.dev).
+<div align="center">
+
+[<img src="https://github.com/VRLabs/Resources/raw/main/Icons/VRLabs.png" width="50" height="50">](https://vrlabs.dev "VRLabs")
+<img src="https://github.com/VRLabs/Resources/raw/main/Icons/Empty.png" width="10">
+[<img src="https://github.com/VRLabs/Resources/raw/main/Icons/Discord.png" width="50" height="50">](https://discord.vrlabs.dev/ "VRLabs")
+<img src="https://github.com/VRLabs/Resources/raw/main/Icons/Empty.png" width="10">
+[<img src="https://github.com/VRLabs/Resources/raw/main/Icons/Patreon.png" width="50" height="50">](https://patreon.vrlabs.dev/ "VRLabs")
+<img src="https://github.com/VRLabs/Resources/raw/main/Icons/Empty.png" width="10">
+[<img src="https://github.com/VRLabs/Resources/raw/main/Icons/Twitter.png" width="50" height="50">](https://twitter.com/vrlabsdev "VRLabs")
+
+</div>
