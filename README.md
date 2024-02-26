@@ -16,8 +16,8 @@ A tool for managing playable layers and parameters for Avatars 3.0.
 
 ### ⬇️ [Download Latest Version](https://github.com/VRLabs/Avatars-3.0-Manager/releases/latest)
 
-<!-- 
-### 📦 [Add to VRChat Creator Companion]() -->
+
+### 📦 [Add to VRChat Creator Companion](https://vrlabs.dev/packages?package=dev.vrlabs.av3manager)
 
 </div>
 
