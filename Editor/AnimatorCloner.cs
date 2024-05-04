@@ -353,6 +353,36 @@ namespace VRLabs.AV3Manager
                         l.outputParamHash = o.outputParamHash;
                         break;
                     }
+                default:
+                    if (n.GetType() ==
+                        Type.GetType(
+                            "VRC.SDK3.Avatars.Components.VRCAnimatorPlayAudio, VRCSDK3A, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null"))
+                    {
+                        dynamic a = n;
+                        dynamic o = old;
+                        a.ClipsApplySettings = o.ClipsApplySettings;
+                        a.LoopApplySettings = o.LoopApplySettings;
+                        a.PitchApplySettings = o.PitchApplySettings;
+                        a.VolumeApplySettings = o.VolumeApplySettings;
+                        a.Clips = o.Clips;
+                        a.destParam = o.destParam;
+                        a.Loop = o.Loop;
+                        a.Pitch = o.Pitch;
+                        a.playbackIndex = o.playbackIndex;
+                        a.Source = o.Source;
+                        a.Volume = o.Volume;
+                        a.EnterState = o.EnterState;
+                        a.ExitState = o.ExitState;
+                        a.ParameterName = o.ParameterName;
+                        a.PlaybackOrder = o.PlaybackOrder;
+                        a.SourcePath = o.SourcePath;
+                        a.DelayInSeconds = o.DelayInSeconds;
+                        a.PlayOnEnter = o.PlayOnEnter;
+                        a.PlayOnExit = o.PlayOnExit;
+                        a.StopOnEnter = o.StopOnEnter;
+                        a.StopOnExit = o.StopOnExit;
+                    }
+                    break;
             }
         }
 
