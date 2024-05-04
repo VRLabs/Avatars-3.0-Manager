@@ -163,7 +163,12 @@ namespace VRLabs.AV3Manager
                 var iconElement = new VisualElement();
                 iconElement.style.backgroundImage = new StyleBackground(tab?.TabIcon);
                 iconElement.style.flexGrow = 1;
-                iconElement.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+                
+                iconElement.style.backgroundPositionX = new BackgroundPosition(BackgroundPositionKeyword.Center);
+                iconElement.style.backgroundPositionY = new BackgroundPosition(BackgroundPositionKeyword.Center);
+                iconElement.style.backgroundRepeat = new BackgroundRepeat(Repeat.NoRepeat, Repeat.NoRepeat);
+                iconElement.style.backgroundSize = new BackgroundSize(BackgroundSizeType.Contain);
+                
                 tabButton.Add(iconElement);
                 tabButton.AddToClassList("tab-button");
                 
