@@ -90,12 +90,12 @@ namespace VRLabs.AV3Manager
                     
                     if (allParameters.Any(x => x.nameHash == param.nameHash && x.type != param.type))
                     {
-                        new Label("Target controller contains a parameter with a different type than the base controller. These controllers cannot be merged.")
-                            .WithClass("red-text")
-                            .ChildOf(parametersListContainer);
                         allowMerge = false;
+                        new Label("Target controller contains this parameter with a different type than the base controller. These controllers cannot be merged.")
+                            .WithClass("red-text")
+                            .ChildOf(itemContainer);
                     } 
-                    else if (AV3Manager.VrcParameters.Any(x => x == param.name))
+                    if (AV3Manager.VrcParameters.Any(x => x == param.name))
                     {
                         new Label("Parameter is a default one, by default it will be added to the parameters, but not listed in the synced parameters, you should not add any affix unless you know what you're doing")
                             .WithClass("warning-label")
@@ -130,6 +130,13 @@ namespace VRLabs.AV3Manager
                     });
 
                     _parametersToMerge.Add(p);
+                }
+
+                if (!allowMerge)
+                {
+                    new Label("Target controller contains a parameter with a different type than the base controller. These controllers cannot be merged.")
+                        .WithClass("red-text")
+                        .ChildOf(parametersListContainer);
                 }
                 
                 mergeOnCurrent.SetEnabled(allowMerge);
