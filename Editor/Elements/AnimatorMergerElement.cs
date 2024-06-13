@@ -62,6 +62,17 @@ namespace VRLabs.AV3Manager
                 parametersListContainer.Clear();
                 _parametersToMerge.Clear();
 
+
+                if (newController == layer.Controller)
+                {
+                    new Label("Cannot merge controller onto itself.")
+                        .WithClass("red-text")
+                        .ChildOf(parametersListContainer);
+                    mergeOnCurrent.SetEnabled(false);
+                    mergeOnNew.SetEnabled(false);
+                    return;
+                }
+                
                 if (newController == null) return;
 
                 foreach (var param in newController.parameters)
