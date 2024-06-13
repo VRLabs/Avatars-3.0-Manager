@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.Animations;
@@ -51,9 +51,13 @@ namespace VRLabs.AV3Manager
             var layerParameters = layer.Parameters.Select(x => x.Parameter).ToArray();
             var allParameters = layer.AvatarParameters.Where(x => !layerParameters.Contains(x)).ToArray();
 
+            Button mergeOnCurrent = null;
+            Button mergeOnNew = null;
+            
             controller.RegisterValueChangedCallback(evt =>
             {
                 var newController = evt.newValue as AnimatorController;
+                bool allowMerge = true;
                 
                 parametersListContainer.Clear();
                 _parametersToMerge.Clear();
@@ -73,7 +77,14 @@ namespace VRLabs.AV3Manager
                     var suffixField = new TextField(p.Name).ChildOf(itemContainer);
                     suffixField.tooltip = p.Name;
                     
-                    if (AV3Manager.VrcParameters.Any(x => x == param.name))
+                    if (allParameters.Any(x => x.nameHash == param.nameHash && x.type != param.type && AV3Manager.VrcParameters.Any(x => x == param.name)))
+                    {
+                        new Label("Target controller contains a built-in parameter with a different type than the base controller. These controllers cannot be merged.")
+                            .WithClass("red-text")
+                            .ChildOf(parametersListContainer);
+                        allowMerge = false;
+                    } 
+                    else if (AV3Manager.VrcParameters.Any(x => x == param.name))
                     {
                         new Label("Parameter is a default one, by default it will be added to the parameters, but not listed in the synced parameters, you should not add any affix unless you know what you're doing")
                             .WithClass("warning-label")
@@ -109,18 +120,20 @@ namespace VRLabs.AV3Manager
 
                     _parametersToMerge.Add(p);
                 }
-
+                
+                mergeOnCurrent.SetEnabled(allowMerge);
+                mergeOnNew.SetEnabled(allowMerge);
             });
 
             var operationsArea = new VisualElement()
                 .WithClass("top-spaced")
                 .WithFlexDirection(FlexDirection.Row)
                 .ChildOf(this);
-            var mergeOnCurrent = FluentUIElements
+            mergeOnCurrent = FluentUIElements
                 .NewButton("Merge on current", "Merge this animator on the current layer animator")
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
-            var mergeOnNew = FluentUIElements
+            mergeOnNew = FluentUIElements
                 .NewButton("Merge on new", "Create a copy of the layer animator and merge this animator on that")
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
