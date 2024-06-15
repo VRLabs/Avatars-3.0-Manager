@@ -88,7 +88,7 @@ namespace VRLabs.AV3Manager
                     var suffixField = new TextField(p.Name).ChildOf(itemContainer);
                     suffixField.tooltip = p.Name;
                     
-                    if (allParameters.Any(x => x.nameHash == param.nameHash && x.type != param.type))
+                    if (layerParameters.Any(x => x.nameHash == param.nameHash && x.type != param.type))
                     {
                         allowMerge = false;
                         new Label("Target controller contains this parameter with a different type than the base controller. These controllers cannot be merged.")
