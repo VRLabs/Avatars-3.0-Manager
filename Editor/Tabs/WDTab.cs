@@ -19,6 +19,8 @@ namespace VRLabs.AV3Manager
         private readonly Button _wdOnButton;
         private readonly Button _wdOffButton;
         private readonly Label _emptyMotions;
+        private readonly Label _dbtWarningLabel;
+        private readonly Toggle _dbtToggle;
 
         public WDTab()
         {
@@ -26,9 +28,11 @@ namespace VRLabs.AV3Manager
             TabName = "Write Defaults";
             TabIcon = Resources.Load<Texture2D>("AV3M/WdTabIcon" +(EditorGUIUtility.isProSkin ? "Dark" : "Light"));
             bool forceWd = EditorPrefs.GetBool("AV3MForceWD", false);
+            bool ignoreDbts = EditorPrefs.GetBool("AV3MIgnoreDBTs", true);
+
 
             var forceToggle = FluentUIElements.NewToggle("Force all WD", forceWd)
-                .WithMargin(0, 10, 0, 4)
+                .WithMargin(5, 10, 0, 4)
                 .ChildOf(TabContainer);
             
             Label wdWarningLabel = new Label("Forcing the Write Defaults settings on states that explicitly request a specific setting is not advisable.")
@@ -49,6 +53,22 @@ namespace VRLabs.AV3Manager
                     wdWarningLabel.AddToClassList("hidden");
             });
             
+            _dbtWarningLabel = new Label("Direct Blend Tree without explicit WD setting found. These should probably be kept in the same state as they are now.")
+                .WithClass("warning-label", "bordered-container")
+                .WithMargin(5, 0)
+                .ChildOf(TabContainer);
+            
+            _dbtToggle = FluentUIElements.NewToggle("Ignore Direct Blend Trees", ignoreDbts)
+                .WithMargin(5, 10, 0, 4)
+                .ChildOf(TabContainer);
+
+            _dbtToggle.RegisterValueChangedCallback(evt =>
+            {
+                ignoreDbts = evt.newValue;
+                EditorPrefs.SetBool("AV3MForceDBT", ignoreDbts);
+            });
+
+            
             var buttonsContainer = new VisualElement()
                 .WithFlexDirection(FlexDirection.Row)
                 .ChildOf(TabContainer);
@@ -57,7 +77,7 @@ namespace VRLabs.AV3Manager
                     () =>
                     {
                         if (_avatar == null) return;
-                        AV3ManagerFunctions.SetWriteDefaults(_avatar, false, forceWd);
+                        AV3ManagerFunctions.SetWriteDefaults(_avatar, false, forceWd, ignoreDbts);
                         UpdateWDList();
                     })
                 .WithClass("grow-control")
@@ -66,7 +86,7 @@ namespace VRLabs.AV3Manager
                     () =>
                     {
                         if (_avatar == null) return;
-                        AV3ManagerFunctions.SetWriteDefaults(_avatar,  true, forceWd);
+                        AV3ManagerFunctions.SetWriteDefaults(_avatar,  true, forceWd, ignoreDbts);
                         UpdateWDList();
                     })
                 .WithClass("grow-control")
@@ -84,6 +104,7 @@ namespace VRLabs.AV3Manager
 
             new Label("WD List")
                 .WithClass("header")
+                .WithMargin(5, 0)
                 .ChildOf(TabContainer);
             
             _statesListContainer = new VisualElement().WithMargin(5, 0).ChildOf(TabContainer);
@@ -122,6 +143,18 @@ namespace VRLabs.AV3Manager
                 _emptyMotions.RemoveFromClassList("hidden");
             else
                 _emptyMotions.AddToClassList("hidden");
+            
+            bool hasUnspecifiedDirectBlendTrees = states.HaveUnspecifiedDirectBlendTrees();
+            if (hasUnspecifiedDirectBlendTrees)
+            {
+                _dbtWarningLabel.RemoveFromClassList("hidden");
+                _dbtToggle.RemoveFromClassList("hidden");
+            }
+            else
+            {
+                _dbtWarningLabel.AddToClassList("hidden");
+                _dbtToggle.AddToClassList("hidden");
+            }
             
             string oldName = "";
             VisualElement group = null;
