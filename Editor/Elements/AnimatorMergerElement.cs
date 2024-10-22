@@ -24,11 +24,48 @@ namespace VRLabs.AV3Manager
         public Action OnClose { get; set; }
 
         private List<ParameterToMerge> _parametersToMerge;
+        private Label warningLabel;
+        private List<Label> _parameterWarningLabels;
+        private VrcAnimationLayer _layer;
+        private AnimatorController _controller;
+        private Button mergeOnCurrent;
+        private Button mergeOnNew;
 
+        public void UpdateWarningLabels()
+        {
+            bool allowMerge = true;
+            var layerParameters = _layer.Parameters.Select(x => x.Parameter).ToArray();
+            for (var i = 0; i < _controller.parameters.Length; i++)
+            {
+                var param = _controller.parameters[i];
+                if (layerParameters.Any(x => x.nameHash == param.nameHash && x.type != param.type && _parametersToMerge[i].Suffix == ""))
+                {
+                    _parameterWarningLabels[i].RemoveFromClassList("hidden");
+                    allowMerge = false;
+                }
+                else
+                {
+                    _parameterWarningLabels[i].AddToClassList("hidden");
+                }
+            }
+
+            if (allowMerge)
+            {
+                warningLabel.AddToClassList("hidden");
+            }
+            else
+            {
+                warningLabel.RemoveFromClassList("hidden");
+            }
+            mergeOnCurrent.SetEnabled(allowMerge);
+            mergeOnNew.SetEnabled(allowMerge);
+        }
+        
         public AnimatorMergerElement(VrcAnimationLayer layer)
         {
+            _layer = layer;
             _parametersToMerge = new List<ParameterToMerge>();
-            
+            _parameterWarningLabels = new List<Label>();
             new Label("Merge Animator Mode")
                 .WithClass("header")
                 .ChildOf(this);
@@ -51,18 +88,16 @@ namespace VRLabs.AV3Manager
             var layerParameters = layer.Parameters.Select(x => x.Parameter).ToArray();
             var allParameters = layer.AvatarParameters.Where(x => !layerParameters.Contains(x)).ToArray();
 
-            Button mergeOnCurrent = null;
-            Button mergeOnNew = null;
+            mergeOnCurrent = null;
+            mergeOnNew = null;
             
             controller.RegisterValueChangedCallback(evt =>
             {
                 var newController = evt.newValue as AnimatorController;
-                bool allowMerge = true;
                 
                 parametersListContainer.Clear();
                 _parametersToMerge.Clear();
-
-
+                
                 if (newController == layer.Controller)
                 {
                     new Label("Cannot merge controller onto itself.")
@@ -74,6 +109,8 @@ namespace VRLabs.AV3Manager
                 }
                 
                 if (newController == null) return;
+                
+                _controller = newController;
 
                 foreach (var param in newController.parameters)
                 {
@@ -88,13 +125,12 @@ namespace VRLabs.AV3Manager
                     var suffixField = new TextField(p.Name).ChildOf(itemContainer);
                     suffixField.tooltip = p.Name;
                     
-                    if (layerParameters.Any(x => x.nameHash == param.nameHash && x.type != param.type))
-                    {
-                        allowMerge = false;
-                        new Label("Target controller contains this parameter with a different type than the base controller. These controllers cannot be merged.")
-                            .WithClass("red-text")
-                            .ChildOf(itemContainer);
-                    } 
+                    var warningLabel = new Label("Target controller contains this parameter with a different type than the base controller. These controllers cannot be merged.")
+                        .WithClass("red-text")
+                        .ChildOf(itemContainer);
+
+                    _parameterWarningLabels.Add(warningLabel);
+                    
                     if (AV3Manager.VrcParameters.Any(x => x == param.name))
                     {
                         new Label("Parameter is a default one, by default it will be added to the parameters, but not listed in the synced parameters, you should not add any affix unless you know what you're doing")
@@ -127,20 +163,17 @@ namespace VRLabs.AV3Manager
                     suffixField.RegisterValueChangedCallback(e =>
                     {
                         p.Suffix = e.newValue;
+                        UpdateWarningLabels();
                     });
 
                     _parametersToMerge.Add(p);
                 }
-
-                if (!allowMerge)
-                {
-                    new Label("Target controller contains a parameter with a different type than the base controller. These controllers cannot be merged.")
-                        .WithClass("red-text")
-                        .ChildOf(parametersListContainer);
-                }
                 
-                mergeOnCurrent.SetEnabled(allowMerge);
-                mergeOnNew.SetEnabled(allowMerge);
+                warningLabel = new Label("Target controller contains a parameter with a different type than the base controller. These controllers cannot be merged.")
+                    .WithClass("red-text")
+                    .ChildOf(parametersListContainer);
+                UpdateWarningLabels();
+
             });
 
             var operationsArea = new VisualElement()
