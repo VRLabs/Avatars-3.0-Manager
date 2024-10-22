@@ -183,7 +183,8 @@ namespace VRLabs.AV3Manager
                         .WithFlexDirection(FlexDirection.Row)
                         .ChildOf(group);
 
-                    new Label("State").WithClass("header-small").WithFlex(7, 0, 1).ChildOf(headerRow);
+                    new Label("State").WithClass("header-small").WithFlex(6, 0, 1).ChildOf(headerRow);
+                    new Label("Motion").WithClass("header-small").WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
                     new Label("WD On").WithClass("header-small").WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
                     new Label("Default").WithClass("header-small").WithFlex(1, 0, 1).ChildOf(headerRow);
                     new Label("View State").WithClass("header-small").WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
@@ -195,9 +196,17 @@ namespace VRLabs.AV3Manager
 
                 new Label(state.StateName)
                     .WithAlignSelf(Align.Center)
-                    .WithFlex(7, 0, 1)
+                    .WithFlex(6, 0, 1)
                     .ChildOf(row);
 
+                new Label(state.State.motion == null ? "None" : state.State.motion.name)
+                    .WithClass($"{(state.State.motion == null  ? "yellow" : "white")}-text")
+                    .WithAlignSelf(Align.Center)
+                    .WithUnityTextAlign(TextAnchor.UpperCenter)
+                    .WithClass("text-overflow-elipsis")
+                    .WithFlex(1, 0, 1)
+                    .ChildOf(row);
+                
                 FluentUIElements.NewToggle(state.IsOn)
                     .WithEnabledState(false)
                     .WithClass("centered-toggle")
