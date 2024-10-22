@@ -203,6 +203,7 @@ namespace VRLabs.AV3Manager
                     .WithClass($"{(state.State.motion == null  ? "yellow" : "white")}-text")
                     .WithAlignSelf(Align.Center)
                     .WithUnityTextAlign(TextAnchor.UpperCenter)
+                    .WithClass("text-overflow-elipsis")
                     .WithFlex(1, 0, 1)
                     .ChildOf(row);
                 
