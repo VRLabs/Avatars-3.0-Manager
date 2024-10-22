@@ -249,9 +249,16 @@ namespace VRLabs.AV3Manager
                     {
                         BindingFlags BF_ALL = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance |
                                               BindingFlags.Static;
+                        // Get Editor Window
                         var act = EditorWindow.GetWindow( typeof(Node).Assembly.GetType("UnityEditor.Graphs.AnimatorControllerTool"), false, "Animator", false);
+                        
+                        // Set Controller as current viewed controller
+                        act.GetType().GetProperty("animatorController", BF_ALL).SetValue(act, state.Controller);
+
+                        
                         GraphGUI gui = act.GetType().GetProperty("activeGraphGUI", BF_ALL).GetValue(act) as GraphGUI;
                         
+                        // Set active breadcrumbs and Repaint
                         var crumbs = act.GetType().GetField("m_BreadCrumbs", BF_ALL).GetValue(act);
                         crumbs.GetType().GetMethod("Clear", BF_ALL).Invoke(crumbs, null);
                         var add_breadcrumb = act.GetType().GetMethod("AddBreadCrumb");
@@ -260,9 +267,9 @@ namespace VRLabs.AV3Manager
                         add_breadcrumb.Invoke(act, new object[] { stateBreadCrumbs.Last(), true });
                         act.GetType().GetMethod("Repaint").Invoke(act, null);
                         
+                        // Set the required state node as selected
                         var state_node_lookup = gui.graph.GetType().GetField("m_StateNodeLookup", BF_ALL).GetValue(gui.graph);
                         var state_node = state_node_lookup.GetType().GetMethod("get_Item", BF_ALL).Invoke(state_node_lookup, new object[] { state.State });
-                        
                         gui.selection = new List<Node> { state_node as Node };
                         gui.GetType().GetMethod("UpdateUnitySelection", BF_ALL).Invoke(gui, Array.Empty<object>());
                     }
