@@ -215,67 +215,70 @@ namespace VRLabs.AV3Manager
                     .WithAlignSelf(Align.Center)
                     .WithFlex(1, 0, 1)
                     .ChildOf(row);
-                Button button = new Button(() =>
-                {
-                    List<Object> FindStateBreadcrumbs(AnimatorController ctrl, List<Object> currentPath, AnimatorStateMachine stateMachine, AnimatorState target) {
-                        foreach (var state in stateMachine.states) {
-                            if (state.state == target)
-                            {
-                                return currentPath;
-                            }
-                        }
-                        foreach (var child in stateMachine.stateMachines) {
-                            if (child.stateMachine == null) {
-                                continue;
-                            }
-                            currentPath.Add(child.stateMachine);
-                            List<Object> found = FindStateBreadcrumbs(ctrl, currentPath, child.stateMachine, target);
-                            if(found != null)
-                            {
-                                return found;
-                            }
-                            currentPath.RemoveAt(currentPath.Count - 1);
-                        }
-
-                        return null;
-                    }
-
-                    List<Object> stateBreadCrumbs = FindStateBreadcrumbs(state.Controller, new List<Object>{state.Layer.stateMachine}, state.Layer.stateMachine, state.State);
-                    
-                    if ((bool)typeof(EditorWindow).GetMethod("HasOpenInstances")
-                            .MakeGenericMethod(
-                                typeof(Node).Assembly.GetType("UnityEditor.Graphs.AnimatorControllerTool"))
-                            .Invoke(null, null))
-                    {
-                        BindingFlags BF_ALL = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance |
-                                              BindingFlags.Static;
-                        // Get Editor Window
-                        var act = EditorWindow.GetWindow( typeof(Node).Assembly.GetType("UnityEditor.Graphs.AnimatorControllerTool"), false, "Animator", false);
-                        
-                        // Set Controller as current viewed controller
-                        act.GetType().GetProperty("animatorController", BF_ALL).SetValue(act, state.Controller);
-
-                        
-                        GraphGUI gui = act.GetType().GetProperty("activeGraphGUI", BF_ALL).GetValue(act) as GraphGUI;
-                        
-                        // Set active breadcrumbs and Repaint
-                        var crumbs = act.GetType().GetField("m_BreadCrumbs", BF_ALL).GetValue(act);
-                        crumbs.GetType().GetMethod("Clear", BF_ALL).Invoke(crumbs, null);
-                        var add_breadcrumb = act.GetType().GetMethod("AddBreadCrumb");
-                        for (var i = 0; i < stateBreadCrumbs.Count - 1; ++i)
-                            add_breadcrumb.Invoke(act, new object[] { stateBreadCrumbs[i], false });
-                        add_breadcrumb.Invoke(act, new object[] { stateBreadCrumbs.Last(), true });
-                        act.GetType().GetMethod("Repaint").Invoke(act, null);
-                        
-                        // Set the required state node as selected
-                        var state_node_lookup = gui.graph.GetType().GetField("m_StateNodeLookup", BF_ALL).GetValue(gui.graph);
-                        var state_node = state_node_lookup.GetType().GetMethod("get_Item", BF_ALL).Invoke(state_node_lookup, new object[] { state.State });
-                        gui.selection = new List<Node> { state_node as Node };
-                        gui.GetType().GetMethod("UpdateUnitySelection", BF_ALL).Invoke(gui, Array.Empty<object>());
-                    }
-                }).ChildOf(buttonContainer);  
+                Button button = new Button(() => ViewState(state)).ChildOf(buttonContainer);  
                 Label label = new Label("View").ChildOf(button);
             }
+        }
+
+        private void ViewState(WDState state)
+        {
+            List<Object> FindStateBreadcrumbs(List<Object> currentPath, AnimatorStateMachine stateMachine, AnimatorState target) {
+                foreach (var state in stateMachine.states) {
+                    if (state.state == target)
+                    {
+                        return currentPath;
+                    }
+                }
+                foreach (var child in stateMachine.stateMachines) {
+                    if (child.stateMachine == null) {
+                        continue;
+                    }
+                    currentPath.Add(child.stateMachine);
+                    List<Object> found = FindStateBreadcrumbs(currentPath, child.stateMachine, target);
+                    if(found != null)
+                    {
+                        return found;
+                    }
+                    currentPath.RemoveAt(currentPath.Count - 1);
+                }
+
+                return null;
+            }
+
+            List<Object> stateBreadCrumbs = FindStateBreadcrumbs(new List<Object>{state.Layer.stateMachine}, state.Layer.stateMachine, state.State);
+            
+            if ((bool)typeof(EditorWindow).GetMethod("HasOpenInstances")
+                    .MakeGenericMethod(
+                        typeof(Node).Assembly.GetType("UnityEditor.Graphs.AnimatorControllerTool"))
+                    .Invoke(null, null))
+            {
+                BindingFlags BF_ALL = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance |
+                                      BindingFlags.Static;
+                // Get Editor Window
+                var act = EditorWindow.GetWindow( typeof(Node).Assembly.GetType("UnityEditor.Graphs.AnimatorControllerTool"), false, "Animator", false);
+                
+                // Set Controller as current viewed controller
+                act.GetType().GetProperty("animatorController", BF_ALL).SetValue(act, state.Controller);
+
+                
+                GraphGUI gui = act.GetType().GetProperty("activeGraphGUI", BF_ALL).GetValue(act) as GraphGUI;
+                
+                // Set active breadcrumbs and Repaint
+                var crumbs = act.GetType().GetField("m_BreadCrumbs", BF_ALL).GetValue(act);
+                crumbs.GetType().GetMethod("Clear", BF_ALL).Invoke(crumbs, null);
+                var add_breadcrumb = act.GetType().GetMethod("AddBreadCrumb");
+                for (var i = 0; i < stateBreadCrumbs.Count - 1; ++i)
+                    add_breadcrumb.Invoke(act, new object[] { stateBreadCrumbs[i], false });
+                add_breadcrumb.Invoke(act, new object[] { stateBreadCrumbs.Last(), true });
+                act.GetType().GetMethod("Repaint").Invoke(act, null);
+                
+                // Set the required state node as selected
+                var state_node_lookup = gui.graph.GetType().GetField("m_StateNodeLookup", BF_ALL).GetValue(gui.graph);
+                var state_node = state_node_lookup.GetType().GetMethod("get_Item", BF_ALL).Invoke(state_node_lookup, new object[] { state.State });
+                gui.selection = new List<Node> { state_node as Node };
+                gui.GetType().GetMethod("UpdateUnitySelection", BF_ALL).Invoke(gui, Array.Empty<object>());
+            }
+            
         }
     }
 }
