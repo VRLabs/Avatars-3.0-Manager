@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -485,14 +485,14 @@ namespace VRLabs.AV3Manager
             {
                 if (!(layer.animatorController is AnimatorController controller) || controller == null) continue;
                 foreach (var animationLayer in controller.layers)
-                    AnalyzeWdStateMachine(animationLayer.stateMachine, states, layer.type.ToString());
+                    AnalyzeWdStateMachine(animationLayer.stateMachine, states, layer.type.ToString(), controller, animationLayer);
                 
             }
             foreach (var layer in descriptor.specialAnimationLayers)
             {
                 if (!(layer.animatorController is AnimatorController controller)) continue;
                 foreach (var animationLayer in controller.layers)
-                    AnalyzeWdStateMachine(animationLayer.stateMachine, states, layer.type.ToString());
+                    AnalyzeWdStateMachine(animationLayer.stateMachine, states, layer.type.ToString(), controller, animationLayer);
             }
 
             return states;
@@ -740,7 +740,7 @@ namespace VRLabs.AV3Manager
                 : (type == AnimatorControllerParameterType.Bool ? ValueType.Bool : ValueType.Float);
         }
 
-        private static void AnalyzeWdStateMachine(AnimatorStateMachine stateMachine, List<WDState> states, string layerName)
+        private static void AnalyzeWdStateMachine(AnimatorStateMachine stateMachine, List<WDState> states, string layerName, AnimatorController controller, AnimatorControllerLayer layer)
         {
             foreach (ChildAnimatorState t in stateMachine.states)
             {
@@ -752,12 +752,15 @@ namespace VRLabs.AV3Manager
                     HasDefault = t.state.name.Contains("(WD On)") || t.state.name.Contains("(WD Off)"),
                     IsDefaultOn = t.state.name.Contains("(WD On)"),
                     HasMotion = t.state.motion != null,
+                    State = t.state,
+                    Layer = layer,
+                    Controller = controller,
                     HasDirectBlendTree = t.state.motion is BlendTree tree && tree.blendType == BlendTreeType.Direct
                 });
             }
 
             foreach (ChildAnimatorStateMachine t in stateMachine.stateMachines)
-                AnalyzeWdStateMachine(t.stateMachine, states, layerName);
+                AnalyzeWdStateMachine(t.stateMachine, states, layerName, controller, layer);
         }
         
         private static (bool, bool, bool) GetWdInStateMachine(AnimatorStateMachine stateMachine, bool checkedFirst, bool isOn)
@@ -976,5 +979,8 @@ namespace VRLabs.AV3Manager
         public bool IsDefaultOn { get; set; }
         public bool HasMotion { get; set; }
         public bool HasDirectBlendTree { get; set; }
+        public AnimatorState State { get; set; }
+        public AnimatorControllerLayer Layer { get; set; }
+        public AnimatorController Controller { get; set; }
     }
 }
