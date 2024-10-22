@@ -24,6 +24,7 @@ namespace VRLabs.AV3Manager
         public Action OnClose { get; set; }
 
         private List<ParameterToMerge> _parametersToMerge;
+        private Button suffixClearButton;
         private Label warningLabel;
         private List<Label> _parameterWarningLabels;
         private VrcAnimationLayer _layer;
@@ -31,7 +32,7 @@ namespace VRLabs.AV3Manager
         private Button mergeOnCurrent;
         private Button mergeOnNew;
 
-        public void UpdateWarningLabels()
+        public void UpdateUI()
         {
             bool allowMerge = true;
             var layerParameters = _layer.Parameters.Select(x => x.Parameter).ToArray();
@@ -59,6 +60,15 @@ namespace VRLabs.AV3Manager
             }
             mergeOnCurrent.SetEnabled(allowMerge);
             mergeOnNew.SetEnabled(allowMerge);
+
+            if (_parametersToMerge.Any(x => x.Suffix != ""))
+            {
+                suffixClearButton.RemoveFromClassList("hidden");
+            }
+            else
+            {
+                suffixClearButton.AddToClassList("hidden");
+            }
         }
         
         public AnimatorMergerElement(VrcAnimationLayer layer)
@@ -112,6 +122,7 @@ namespace VRLabs.AV3Manager
                 
                 _controller = newController;
 
+                List<TextField> suffixFields = new List<TextField>();
                 foreach (var param in newController.parameters)
                 {
                     var itemContainer = new VisualElement()
@@ -163,16 +174,31 @@ namespace VRLabs.AV3Manager
                     suffixField.RegisterValueChangedCallback(e =>
                     {
                         p.Suffix = e.newValue;
-                        UpdateWarningLabels();
+                        UpdateUI();
                     });
+                    
+                    suffixFields.Add(suffixField);
 
                     _parametersToMerge.Add(p);
                 }
                 
+                
+                suffixClearButton = FluentUIElements
+                    .NewButton("Clear all suffixes", "Remove all suffixes, which will use the same parameters for newly merged parameters",
+                        () =>
+                        {
+                            foreach (var suffixField in suffixFields)
+                            {
+                                suffixField.value = "";
+                            }
+                        })
+                    .WithClass("grow-control")
+                    .ChildOf(parametersListContainer);
+                
                 warningLabel = new Label("Target controller contains a parameter with a different type than the base controller. These controllers cannot be merged.")
                     .WithClass("red-text")
                     .ChildOf(parametersListContainer);
-                UpdateWarningLabels();
+                UpdateUI();
 
             });
 
