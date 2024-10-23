@@ -231,6 +231,7 @@ namespace VRLabs.AV3Manager
 
         private void ViewState(WDState state)
         {
+            if (state.Controller == null || state.Layer == null || state.Layer.stateMachine == null || state.State == null) return;
             List<Object> FindStateBreadcrumbs(List<Object> currentPath, AnimatorStateMachine stateMachine, AnimatorState target) {
                 foreach (var state in stateMachine.states) {
                     if (state.state == target)
