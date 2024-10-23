@@ -203,7 +203,7 @@ namespace VRLabs.AV3Manager
                     new Label("Motion").WithClass("header-small").WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
                     new Label("WD On").WithClass("header-small").WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
                     var tooltipLabel = new Label("Default").WithClass("header-small").WithFlex(1, 0, 1).ChildOf(headerRow);
-                    tooltipLabel.tooltip = "Whether the state name contains \"(WD On)\" or \"(WD Off)\", which overrides the changing of Write Defaults.";
+                    tooltipLabel.tooltip = "Whether the state name contains \"(WD On)\" or \"(WD Off)\", which stops the AV3 Manager from changing the Write Defaults (unless forced).";
                     new Label("View State").WithClass("header-small").WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
                 }
 
