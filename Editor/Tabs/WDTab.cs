@@ -88,13 +88,11 @@ namespace VRLabs.AV3Manager
                         if (_avatar == null) return;
                         if (forceWd && hasWDDefaultOn)
                         {
-                            bool shouldForce = EditorUtility.DisplayDialog("Force WDS", "Some states are requesting to keep WD On, but you're attempting to override this by setting WD to Off with the force option.\nDo you want to proceed with this override, or would you prefer to only adjust the other states?", "Force", "Just set");
-                            AV3ManagerFunctions.SetWriteDefaults(_avatar, false, shouldForce, ignoreDbts);
+                            bool cancel = !EditorUtility.DisplayDialog("Force WDS", "Some states are requesting to keep WD On, but you're attempting to override this by setting WD to Off with the force option.\nDo you want to proceed with this override?",
+                                "Proceed", "Cancel");
+                            if (cancel) return;
                         }
-                        else
-                        {
-                            AV3ManagerFunctions.SetWriteDefaults(_avatar, false, forceWd, ignoreDbts);
-                        }
+                        AV3ManagerFunctions.SetWriteDefaults(_avatar, false, forceWd, ignoreDbts);
                         UpdateWDList();
                     })
                 .WithClass("grow-control")
@@ -103,15 +101,13 @@ namespace VRLabs.AV3Manager
                     () =>
                     {
                         if (_avatar == null) return;
-                        if (forceWd && hasWDDefaultOn)
+                        if (forceWd && hasWDDefaultOff)
                         {
-                            bool shouldForce = EditorUtility.DisplayDialog("Force WDS", "Some states are requesting to keep WD Off, but you're attempting to override this by setting WD to On with the force option.\nDo you want to proceed with this override, or would you prefer to only adjust the other states?", "Force", "Just set");
-                            AV3ManagerFunctions.SetWriteDefaults(_avatar, true, shouldForce, ignoreDbts);
+                            bool cancel = !EditorUtility.DisplayDialog("Force WDS", "Some states are requesting to keep WD Off, but you're attempting to override this by setting WD to On with the force option.\nDo you want to proceed with this override?",
+                                "Proceed", "Cancel");
+                            if (cancel) return;
                         }
-                        else
-                        {
-                            AV3ManagerFunctions.SetWriteDefaults(_avatar, true, forceWd, ignoreDbts);
-                        }
+                        AV3ManagerFunctions.SetWriteDefaults(_avatar, true, forceWd, ignoreDbts);
                         UpdateWDList();
                     })
                 .WithClass("grow-control")
