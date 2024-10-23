@@ -1,7 +1,14 @@
-﻿using UnityEditor;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using UnityEditor;
+using UnityEditor.Animations;
+using UnityEditor.Graphs;
 using UnityEngine;
 using UnityEngine.UIElements;
 using VRC.SDK3.Avatars.Components;
+using Object = UnityEngine.Object;
 
 namespace VRLabs.AV3Manager
 {
@@ -19,6 +26,10 @@ namespace VRLabs.AV3Manager
         private readonly Button _wdOnButton;
         private readonly Button _wdOffButton;
         private readonly Label _emptyMotions;
+        private readonly Label _dbtWarningLabel;
+        private readonly Toggle _dbtToggle;
+        private bool hasWDDefaultOn;
+        private bool hasWDDefaultOff;
 
         public WDTab()
         {
@@ -26,9 +37,11 @@ namespace VRLabs.AV3Manager
             TabName = "Write Defaults";
             TabIcon = Resources.Load<Texture2D>("AV3M/WdTabIcon" +(EditorGUIUtility.isProSkin ? "Dark" : "Light"));
             bool forceWd = EditorPrefs.GetBool("AV3MForceWD", false);
+            bool ignoreDbts = EditorPrefs.GetBool("AV3MIgnoreDBTs", true);
+
 
             var forceToggle = FluentUIElements.NewToggle("Force all WD", forceWd)
-                .WithMargin(0, 10, 0, 4)
+                .WithMargin(5, 10, 0, 4)
                 .ChildOf(TabContainer);
             
             Label wdWarningLabel = new Label("Forcing the Write Defaults settings on states that explicitly request a specific setting is not advisable.")
@@ -49,6 +62,22 @@ namespace VRLabs.AV3Manager
                     wdWarningLabel.AddToClassList("hidden");
             });
             
+            _dbtWarningLabel = new Label("Direct Blend Tree without explicit WD setting found. These should probably be kept in the same state as they are now.")
+                .WithClass("warning-label", "bordered-container")
+                .WithMargin(5, 0)
+                .ChildOf(TabContainer);
+            
+            _dbtToggle = FluentUIElements.NewToggle("Ignore Direct Blend Trees", ignoreDbts)
+                .WithMargin(5, 10, 0, 4)
+                .ChildOf(TabContainer);
+
+            _dbtToggle.RegisterValueChangedCallback(evt =>
+            {
+                ignoreDbts = evt.newValue;
+                EditorPrefs.SetBool("AV3MIgnoreDBTs", ignoreDbts);
+            });
+
+            
             var buttonsContainer = new VisualElement()
                 .WithFlexDirection(FlexDirection.Row)
                 .ChildOf(TabContainer);
@@ -57,7 +86,13 @@ namespace VRLabs.AV3Manager
                     () =>
                     {
                         if (_avatar == null) return;
-                        AV3ManagerFunctions.SetWriteDefaults(_avatar, false, forceWd);
+                        if (forceWd && hasWDDefaultOn)
+                        {
+                            bool cancel = !EditorUtility.DisplayDialog("Force WDS", "Some states are requesting to keep WD On, but you're attempting to override this by setting WD to Off with the force option.\nDo you want to proceed with this override?",
+                                "Proceed", "Cancel");
+                            if (cancel) return;
+                        }
+                        AV3ManagerFunctions.SetWriteDefaults(_avatar, false, forceWd, ignoreDbts);
                         UpdateWDList();
                     })
                 .WithClass("grow-control")
@@ -66,7 +101,13 @@ namespace VRLabs.AV3Manager
                     () =>
                     {
                         if (_avatar == null) return;
-                        AV3ManagerFunctions.SetWriteDefaults(_avatar,  true, forceWd);
+                        if (forceWd && hasWDDefaultOff)
+                        {
+                            bool cancel = !EditorUtility.DisplayDialog("Force WDS", "Some states are requesting to keep WD Off, but you're attempting to override this by setting WD to On with the force option.\nDo you want to proceed with this override?",
+                                "Proceed", "Cancel");
+                            if (cancel) return;
+                        }
+                        AV3ManagerFunctions.SetWriteDefaults(_avatar, true, forceWd, ignoreDbts);
                         UpdateWDList();
                     })
                 .WithClass("grow-control")
@@ -84,6 +125,7 @@ namespace VRLabs.AV3Manager
 
             new Label("WD List")
                 .WithClass("header")
+                .WithMargin(5, 0)
                 .ChildOf(TabContainer);
             
             _statesListContainer = new VisualElement().WithMargin(5, 0).ChildOf(TabContainer);
@@ -109,8 +151,10 @@ namespace VRLabs.AV3Manager
         private void UpdateWDList()
         {
             _statesListContainer.Clear();
+            
             var states = _avatar.AnalyzeWDState();
-
+            hasWDDefaultOff = states.HaveWDDefaults(false);
+            hasWDDefaultOn = states.HaveWDDefaults(true);
             bool isMixed = states.HaveMixedWriteDefaults();
             if(isMixed)
                 _mixedWdLabel.RemoveFromClassList("hidden");
@@ -122,6 +166,18 @@ namespace VRLabs.AV3Manager
                 _emptyMotions.RemoveFromClassList("hidden");
             else
                 _emptyMotions.AddToClassList("hidden");
+            
+            bool hasUnspecifiedDirectBlendTrees = states.HaveUnspecifiedDirectBlendTrees();
+            if (hasUnspecifiedDirectBlendTrees)
+            {
+                _dbtWarningLabel.RemoveFromClassList("hidden");
+                _dbtToggle.RemoveFromClassList("hidden");
+            }
+            else
+            {
+                _dbtWarningLabel.AddToClassList("hidden");
+                _dbtToggle.AddToClassList("hidden");
+            }
             
             string oldName = "";
             VisualElement group = null;
@@ -143,9 +199,12 @@ namespace VRLabs.AV3Manager
                         .WithFlexDirection(FlexDirection.Row)
                         .ChildOf(group);
 
-                    new Label("State").WithClass("header-small").WithFlex(7, 0, 1).ChildOf(headerRow);
+                    new Label("State").WithClass("header-small").WithFlex(6, 0, 1).ChildOf(headerRow);
+                    new Label("Motion").WithClass("header-small").WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
                     new Label("WD On").WithClass("header-small").WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
-                    new Label("Default").WithClass("header-small").WithFlex(1, 0, 1).ChildOf(headerRow);
+                    var tooltipLabel = new Label("Default").WithClass("header-small").WithFlex(1, 0, 1).ChildOf(headerRow);
+                    tooltipLabel.tooltip = "Whether the state name contains \"(WD On)\" or \"(WD Off)\", which stops the AV3 Manager from changing the Write Defaults (unless forced).";
+                    new Label("View State").WithClass("header-small").WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
                 }
 
                 var row = new VisualElement()
@@ -154,9 +213,17 @@ namespace VRLabs.AV3Manager
 
                 new Label(state.StateName)
                     .WithAlignSelf(Align.Center)
-                    .WithFlex(7, 0, 1)
+                    .WithFlex(6, 0, 1)
                     .ChildOf(row);
 
+                new Label(state.State.motion == null ? "None" : state.State.motion.name)
+                    .WithClass($"{(state.State.motion == null  ? "yellow" : "white")}-text")
+                    .WithAlignSelf(Align.Center)
+                    .WithUnityTextAlign(TextAnchor.UpperCenter)
+                    .WithClass("text-overflow-elipsis")
+                    .WithFlex(1, 0, 1)
+                    .ChildOf(row);
+                
                 FluentUIElements.NewToggle(state.IsOn)
                     .WithEnabledState(false)
                     .WithClass("centered-toggle")
@@ -169,7 +236,76 @@ namespace VRLabs.AV3Manager
                     .WithAlignSelf(Align.Center)
                     .WithFlex(1, 0, 1)
                     .ChildOf(row);
+
+                VisualElement buttonContainer = new VisualElement()
+                    .WithAlignSelf(Align.Center)
+                    .WithFlex(1, 0, 1)
+                    .ChildOf(row);
+                Button button = new Button(() => ViewState(state)).ChildOf(buttonContainer);  
+                Label label = new Label("View").ChildOf(button);
             }
+        }
+
+        private void ViewState(WDState state)
+        {
+            if (state.Controller == null || state.Layer == null || state.Layer.stateMachine == null || state.State == null) return;
+            List<Object> FindStateBreadcrumbs(List<Object> currentPath, AnimatorStateMachine stateMachine, AnimatorState target) {
+                foreach (var state in stateMachine.states) {
+                    if (state.state == target)
+                    {
+                        return currentPath;
+                    }
+                }
+                foreach (var child in stateMachine.stateMachines) {
+                    if (child.stateMachine == null) {
+                        continue;
+                    }
+                    currentPath.Add(child.stateMachine);
+                    List<Object> found = FindStateBreadcrumbs(currentPath, child.stateMachine, target);
+                    if(found != null)
+                    {
+                        return found;
+                    }
+                    currentPath.RemoveAt(currentPath.Count - 1);
+                }
+
+                return null;
+            }
+
+            List<Object> stateBreadCrumbs = FindStateBreadcrumbs(new List<Object>{state.Layer.stateMachine}, state.Layer.stateMachine, state.State);
+            
+            if ((bool)typeof(EditorWindow).GetMethod("HasOpenInstances")
+                    .MakeGenericMethod(
+                        typeof(Node).Assembly.GetType("UnityEditor.Graphs.AnimatorControllerTool"))
+                    .Invoke(null, null))
+            {
+                BindingFlags BF_ALL = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance |
+                                      BindingFlags.Static;
+                // Get Editor Window
+                var act = EditorWindow.GetWindow( typeof(Node).Assembly.GetType("UnityEditor.Graphs.AnimatorControllerTool"), false, "Animator", false);
+                
+                // Set Controller as current viewed controller
+                act.GetType().GetProperty("animatorController", BF_ALL).SetValue(act, state.Controller);
+
+                
+                GraphGUI gui = act.GetType().GetProperty("activeGraphGUI", BF_ALL).GetValue(act) as GraphGUI;
+                
+                // Set active breadcrumbs and Repaint
+                var crumbs = act.GetType().GetField("m_BreadCrumbs", BF_ALL).GetValue(act);
+                crumbs.GetType().GetMethod("Clear", BF_ALL).Invoke(crumbs, null);
+                var add_breadcrumb = act.GetType().GetMethod("AddBreadCrumb");
+                for (var i = 0; i < stateBreadCrumbs.Count - 1; ++i)
+                    add_breadcrumb.Invoke(act, new object[] { stateBreadCrumbs[i], false });
+                add_breadcrumb.Invoke(act, new object[] { stateBreadCrumbs.Last(), true });
+                act.GetType().GetMethod("Repaint").Invoke(act, null);
+                
+                // Set the required state node as selected
+                var state_node_lookup = gui.graph.GetType().GetField("m_StateNodeLookup", BF_ALL).GetValue(gui.graph);
+                var state_node = state_node_lookup.GetType().GetMethod("get_Item", BF_ALL).Invoke(state_node_lookup, new object[] { state.State });
+                gui.selection = new List<Node> { state_node as Node };
+                gui.GetType().GetMethod("UpdateUnitySelection", BF_ALL).Invoke(gui, Array.Empty<object>());
+            }
+            
         }
     }
 }

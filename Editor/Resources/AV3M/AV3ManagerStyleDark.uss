@@ -32,6 +32,11 @@
     color: red;
 }
 
+.yellow-text
+{
+    color: orange;
+}
+
 .green-text
 {
     color: green;
