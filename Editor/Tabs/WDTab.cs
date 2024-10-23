@@ -28,6 +28,8 @@ namespace VRLabs.AV3Manager
         private readonly Label _emptyMotions;
         private readonly Label _dbtWarningLabel;
         private readonly Toggle _dbtToggle;
+        private bool hasWDDefaultOn;
+        private bool hasWDDefaultOff;
 
         public WDTab()
         {
@@ -72,7 +74,7 @@ namespace VRLabs.AV3Manager
             _dbtToggle.RegisterValueChangedCallback(evt =>
             {
                 ignoreDbts = evt.newValue;
-                EditorPrefs.SetBool("AV3MForceDBT", ignoreDbts);
+                EditorPrefs.SetBool("AV3MIgnoreDBTs", ignoreDbts);
             });
 
             
@@ -84,7 +86,15 @@ namespace VRLabs.AV3Manager
                     () =>
                     {
                         if (_avatar == null) return;
-                        AV3ManagerFunctions.SetWriteDefaults(_avatar, false, forceWd, ignoreDbts);
+                        if (forceWd && hasWDDefaultOn)
+                        {
+                            bool shouldForce = EditorUtility.DisplayDialog("Force WDS", "Some states are requesting to keep WD On, but you're attempting to override this by setting WD to Off with the force option.\nDo you want to proceed with this override, or would you prefer to only adjust the other states?", "Force", "Just set");
+                            AV3ManagerFunctions.SetWriteDefaults(_avatar, false, shouldForce, ignoreDbts);
+                        }
+                        else
+                        {
+                            AV3ManagerFunctions.SetWriteDefaults(_avatar, false, forceWd, ignoreDbts);
+                        }
                         UpdateWDList();
                     })
                 .WithClass("grow-control")
@@ -93,7 +103,15 @@ namespace VRLabs.AV3Manager
                     () =>
                     {
                         if (_avatar == null) return;
-                        AV3ManagerFunctions.SetWriteDefaults(_avatar,  true, forceWd, ignoreDbts);
+                        if (forceWd && hasWDDefaultOn)
+                        {
+                            bool shouldForce = EditorUtility.DisplayDialog("Force WDS", "Some states are requesting to keep WD Off, but you're attempting to override this by setting WD to On with the force option.\nDo you want to proceed with this override, or would you prefer to only adjust the other states?", "Force", "Just set");
+                            AV3ManagerFunctions.SetWriteDefaults(_avatar, true, shouldForce, ignoreDbts);
+                        }
+                        else
+                        {
+                            AV3ManagerFunctions.SetWriteDefaults(_avatar, true, forceWd, ignoreDbts);
+                        }
                         UpdateWDList();
                     })
                 .WithClass("grow-control")
@@ -137,8 +155,10 @@ namespace VRLabs.AV3Manager
         private void UpdateWDList()
         {
             _statesListContainer.Clear();
+            
             var states = _avatar.AnalyzeWDState();
-
+            hasWDDefaultOff = states.HaveWDDefaults(false);
+            hasWDDefaultOn = states.HaveWDDefaults(true);
             bool isMixed = states.HaveMixedWriteDefaults();
             if(isMixed)
                 _mixedWdLabel.RemoveFromClassList("hidden");
@@ -186,7 +206,8 @@ namespace VRLabs.AV3Manager
                     new Label("State").WithClass("header-small").WithFlex(6, 0, 1).ChildOf(headerRow);
                     new Label("Motion").WithClass("header-small").WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
                     new Label("WD On").WithClass("header-small").WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
-                    new Label("Default").WithClass("header-small").WithFlex(1, 0, 1).ChildOf(headerRow);
+                    var tooltipLabel = new Label("Default").WithClass("header-small").WithFlex(1, 0, 1).ChildOf(headerRow);
+                    tooltipLabel.tooltip = "Whether the state name contains \"(WD On)\" or \"(WD Off)\", which overrides the changing of Write Defaults.";
                     new Label("View State").WithClass("header-small").WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
                 }
 

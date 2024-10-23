@@ -565,6 +565,17 @@ namespace VRLabs.AV3Manager
         }
         
         /// <summary>
+        /// Checks if the avatar descriptor has default "Write defaults" settings across its animators.
+        /// </summary>
+        /// <param name="states">States to check.</param>
+        /// <param name="on">Whether to check for default on or off.</param>
+        /// <returns>True if the avatar animators contain default write defaults, false otherwise.</returns>
+        public static bool HaveWDDefaults(this IEnumerable<WDState> states, bool isOn)
+        {
+            return states.Any(state => state.HasDefault && ((isOn && state.IsDefaultOn) || (!isOn && !state.IsDefaultOn)));
+        }
+        
+        /// <summary>
         /// Checks if the avatar descriptor has a Direct Blend Tree without "Write defaults" explicitly set.
         /// </summary>
         /// <param name="states">States to check.</param>
