@@ -91,6 +91,11 @@
     white-space: normal;
 }
 
+.white-space-normal
+{
+    white-space: normal;
+}
+
 .text-overflow-elipsis
 {
     text-overflow: ellipsis;

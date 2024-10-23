@@ -112,6 +112,7 @@ namespace VRLabs.AV3Manager
                 {
                     new Label("Cannot merge controller onto itself.")
                         .WithClass("red-text")
+                        .WithClass("white-space-normal")
                         .ChildOf(parametersListContainer);
                     mergeOnCurrent.SetEnabled(false);
                     mergeOnNew.SetEnabled(false);
@@ -138,6 +139,7 @@ namespace VRLabs.AV3Manager
                     
                     var warningLabel = new Label("Target controller contains this parameter with a different type than the base controller. These controllers cannot be merged.")
                         .WithClass("red-text")
+                        .WithClass("white-space-normal")
                         .ChildOf(itemContainer);
 
                     _parameterWarningLabels.Add(warningLabel);
@@ -197,6 +199,7 @@ namespace VRLabs.AV3Manager
                 
                 warningLabel = new Label("Target controller contains a parameter with a different type than the base controller. These controllers cannot be merged.")
                     .WithClass("red-text")
+                    .WithClass("white-space-normal")
                     .ChildOf(parametersListContainer);
                 UpdateUI();
 
