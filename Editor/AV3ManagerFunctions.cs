@@ -749,8 +749,8 @@ namespace VRLabs.AV3Manager
                     AvatarLayer = layerName,
                     StateName = t.state.name,
                     IsOn = t.state.writeDefaultValues,
-                    HasDefault = t.state.name.Contains("(WD On)") || t.state.name.Contains("(WD Off)"),
-                    IsDefaultOn = t.state.name.Contains("(WD On)"),
+                    HasDefault = t.state.name.ToLower().Contains("(WD On)".ToLower()) || t.state.name.ToLower().Contains("(WD Off)".ToLower()),
+                    IsDefaultOn = t.state.name.ToLower().Contains("(WD On)".ToLower()),
                     HasMotion = t.state.motion != null,
                     State = t.state,
                     Layer = layer,
@@ -774,9 +774,9 @@ namespace VRLabs.AV3Manager
                     continue;
                 }
 
-                if (t.state.name.Contains("(WD On)") || t.state.name.Contains("(WD Off)"))
+                if (t.state.name.ToLower().Contains("(WD On)".ToLower()) || t.state.name.ToLower().Contains("(WD Off)".ToLower()))
                 {
-                    if (t.state.writeDefaultValues ^ t.state.name.Contains("(WD On)"))
+                    if (t.state.writeDefaultValues ^ t.state.name.ToLower().Contains("(WD On)".ToLower()))
                         return (true, isOn, true);
                     continue;
                 }
@@ -803,9 +803,9 @@ namespace VRLabs.AV3Manager
                 t.state.writeDefaultValues = wd;
                 
                 // Force corresponding Write Defaults setting for states with "(WD On)" or "(WD Off)" tags
-                if(!force && t.state.name.Contains("(WD On)")) 
+                if(!force && t.state.name.ToLower().Contains("(WD On)".ToLower())) 
                     t.state.writeDefaultValues = true;
-                else if(!force && t.state.name.Contains("(WD Off)"))
+                else if(!force && t.state.name.ToLower().Contains("(WD Off)".ToLower()))
                     t.state.writeDefaultValues = false;
                 else
                     t.state.writeDefaultValues = wd;
