@@ -161,6 +161,7 @@ namespace VRLabs.AV3Manager
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             descriptor.expressionParameters = parameters;
+            descriptor.customExpressions = true;
         }
         
         /// <summary>
