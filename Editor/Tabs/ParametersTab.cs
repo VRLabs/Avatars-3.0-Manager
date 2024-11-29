@@ -25,6 +25,7 @@ namespace VRLabs.AV3Manager
         private ObjectField _expressionParametersField;
 
         private VRCAvatarDescriptor _avatar;
+        private VRCExpressionParameters _paramsToCopyAsset;
 
         public ParametersTab()
         {
@@ -134,6 +135,8 @@ namespace VRLabs.AV3Manager
                     _additionalCostLabel.AddToClassList("hidden");
                     return;
                 }
+                
+                _paramsToCopyAsset = paramsToCopyAsset;
                 int paramsCost = 0;
                 int totalCost = 0;
                 if (_avatar.expressionParameters != null)
@@ -148,7 +151,7 @@ namespace VRLabs.AV3Manager
                 }
 
                 copyParametersButton.SetEnabled(totalCost <= VRCExpressionParameters.MAX_PARAMETER_COST);
-                UpdateAdditionalCostLabel(paramsCost, totalCost);
+                UpdateAdditionalCostLabel(paramsToCopyAsset);
             });
 
             _expressionParametersField.RegisterValueChangedCallback(evt =>
@@ -253,6 +256,7 @@ namespace VRLabs.AV3Manager
             }
 
             UpdateLabel(_avatar.expressionParameters.CalcTotalCost());
+            UpdateAdditionalCostLabel(_paramsToCopyAsset);
         }
 
         public void UpdateLabel(int currentCount)
@@ -262,9 +266,22 @@ namespace VRLabs.AV3Manager
             _label.RemoveFromClassList("hidden");
         }
         
-        public void UpdateAdditionalCostLabel(int additionalCost, int totalCost)
+        public void UpdateAdditionalCostLabel(VRCExpressionParameters paramsToCopyAsset)
         {
             if (_additionalCostLabel == null) return;
+            
+            int additionalCost = 0;
+            int totalCost = 0;
+            if (_avatar.expressionParameters != null)
+            {
+                additionalCost = paramsToCopyAsset == null ? 0 : paramsToCopyAsset.parameters.GetCost(_avatar.expressionParameters.parameters);
+                totalCost = additionalCost + _avatar.expressionParameters.CalcTotalCost();
+            }
+            else
+            {
+                additionalCost = paramsToCopyAsset == null ? 0 : paramsToCopyAsset.CalcTotalCost();
+                totalCost = additionalCost;
+            }
             _additionalCostLabel.text = $"Additional cost: {additionalCost}";
             _additionalCostLabel.text += $"\nTotal cost after update: {totalCost}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
             if(totalCost > VRCExpressionParameters.MAX_PARAMETER_COST)

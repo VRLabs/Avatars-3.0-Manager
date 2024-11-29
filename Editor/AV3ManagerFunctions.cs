@@ -1,4 +1,4 @@
-﻿
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -161,6 +161,7 @@ namespace VRLabs.AV3Manager
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             descriptor.expressionParameters = parameters;
+            descriptor.customExpressions = true;
         }
         
         /// <summary>
@@ -485,14 +486,14 @@ namespace VRLabs.AV3Manager
             {
                 if (!(layer.animatorController is AnimatorController controller) || controller == null) continue;
                 foreach (var animationLayer in controller.layers)
-                    AnalyzeWdStateMachine(animationLayer.stateMachine, states, layer.type.ToString());
+                    AnalyzeWdStateMachine(animationLayer.stateMachine, states, layer.type.ToString(), controller, animationLayer);
                 
             }
             foreach (var layer in descriptor.specialAnimationLayers)
             {
                 if (!(layer.animatorController is AnimatorController controller)) continue;
                 foreach (var animationLayer in controller.layers)
-                    AnalyzeWdStateMachine(animationLayer.stateMachine, states, layer.type.ToString());
+                    AnalyzeWdStateMachine(animationLayer.stateMachine, states, layer.type.ToString(), controller, animationLayer);
             }
 
             return states;
@@ -565,6 +566,35 @@ namespace VRLabs.AV3Manager
         }
         
         /// <summary>
+        /// Checks if the avatar descriptor has default "Write defaults" settings across its animators.
+        /// </summary>
+        /// <param name="states">States to check.</param>
+        /// <param name="on">Whether to check for default on or off.</param>
+        /// <returns>True if the avatar animators contain default write defaults, false otherwise.</returns>
+        public static bool HaveWDDefaults(this IEnumerable<WDState> states, bool isOn)
+        {
+            return states.Any(state => state.HasDefault && ((isOn && state.IsDefaultOn) || (!isOn && !state.IsDefaultOn)));
+        }
+        
+        /// <summary>
+        /// Checks if the avatar descriptor has a Direct Blend Tree without "Write defaults" explicitly set.
+        /// </summary>
+        /// <param name="states">States to check.</param>
+        /// <returns>True if the avatar animators contain a Direct Blend Tree without "Write defaults" explicitly set, false otherwise.</returns>
+        public static bool HaveUnspecifiedDirectBlendTrees(this IEnumerable<WDState> states)
+        {
+            foreach (var state in states)
+            {
+                if (!state.HasDefault && state.HasDirectBlendTree)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        
+        /// <summary>
         /// Checks if the avatar descriptor has mixing "Write defaults" settings across its animators.
         /// </summary>
         /// <param name="states">States to check.</param>
@@ -585,8 +615,9 @@ namespace VRLabs.AV3Manager
         /// <param name="avatar">The avatar to update controllers.</param>
         /// <param name="writeDefaults">The value of "Write Defaults" to set the controller's states to. True if unspecified.</param>
         /// <param name="force">If true, disregard the state preference declared by the state name ("(WD Off)" and "(WD On)")</param>
+        /// <param name="ignoreDbts">If true, will ignore Direct Blend Trees without "Write Defaults" explicitly set</param>
         /// <returns></returns>
-        public static void SetWriteDefaults(VRCAvatarDescriptor avatar, bool writeDefaults = true, bool force = false)
+        public static void SetWriteDefaults(VRCAvatarDescriptor avatar, bool writeDefaults = true, bool force = false, bool ignoreDbts = false)
         {
             if (avatar == null)
             {
@@ -597,13 +628,13 @@ namespace VRLabs.AV3Manager
             {
                 var controller = avatar.baseAnimationLayers[i].animatorController as AnimatorController;
                 if(controller != null)
-                    SetWriteDefaults(controller, writeDefaults, force);
+                    SetWriteDefaults(controller, writeDefaults, force, ignoreDbts);
             }
             for (int i = 0; i < avatar.specialAnimationLayers.Length; i++)
             {
                 var controller = avatar.specialAnimationLayers[i].animatorController as AnimatorController;
                 if(controller != null)
-                    SetWriteDefaults(controller, writeDefaults, force);
+                    SetWriteDefaults(controller, writeDefaults, force, ignoreDbts);
             }
         }
         
@@ -616,8 +647,9 @@ namespace VRLabs.AV3Manager
         /// <param name="controller">The controller to modify.</param>
         /// <param name="writeDefaults">The value of "Write Defaults" to set the controller's states to. True if unspecified.</param>
         /// /// <param name="force">If true, disregard the state preference declared by the state name ("(WD Off)" and "(WD On)")</param>
+        /// /// <param name="ignoreDbts">If true, will ignore Direct Blend Trees without "Write Defaults" explicitly set</param>
         /// <returns></returns>
-        public static void SetWriteDefaults(AnimatorController controller, bool writeDefaults = true, bool force = false)
+        public static void SetWriteDefaults(AnimatorController controller, bool writeDefaults = true, bool force = false, bool ignoreDbts = true)
         {
             if (controller == null)
             {
@@ -626,7 +658,7 @@ namespace VRLabs.AV3Manager
             }
             for (int i = 0; i < controller.layers.Length; i++)
             {
-                SetInStateMachine(controller.layers[i].stateMachine, writeDefaults, force);
+                SetInStateMachine(controller.layers[i].stateMachine, writeDefaults, force, ignoreDbts);
             }
             EditorUtility.SetDirty(controller);
             AssetDatabase.SaveAssets();
@@ -720,7 +752,7 @@ namespace VRLabs.AV3Manager
                 : (type == AnimatorControllerParameterType.Bool ? ValueType.Bool : ValueType.Float);
         }
 
-        private static void AnalyzeWdStateMachine(AnimatorStateMachine stateMachine, List<WDState> states, string layerName)
+        private static void AnalyzeWdStateMachine(AnimatorStateMachine stateMachine, List<WDState> states, string layerName, AnimatorController controller, AnimatorControllerLayer layer)
         {
             foreach (ChildAnimatorState t in stateMachine.states)
             {
@@ -729,14 +761,18 @@ namespace VRLabs.AV3Manager
                     AvatarLayer = layerName,
                     StateName = t.state.name,
                     IsOn = t.state.writeDefaultValues,
-                    HasDefault = t.state.name.Contains("(WD On)") || t.state.name.Contains("(WD Off)"),
-                    IsDefaultOn = t.state.name.Contains("(WD On)"),
-                    HasMotion = t.state.motion != null
+                    HasDefault = t.state.name.ToLower().Contains("(WD On)".ToLower()) || t.state.name.ToLower().Contains("(WD Off)".ToLower()),
+                    IsDefaultOn = t.state.name.ToLower().Contains("(WD On)".ToLower()),
+                    HasMotion = t.state.motion != null,
+                    State = t.state,
+                    Layer = layer,
+                    Controller = controller,
+                    HasDirectBlendTree = t.state.motion is BlendTree tree && tree.blendType == BlendTreeType.Direct
                 });
             }
 
             foreach (ChildAnimatorStateMachine t in stateMachine.stateMachines)
-                AnalyzeWdStateMachine(t.stateMachine, states, layerName);
+                AnalyzeWdStateMachine(t.stateMachine, states, layerName, controller, layer);
         }
         
         private static (bool, bool, bool) GetWdInStateMachine(AnimatorStateMachine stateMachine, bool checkedFirst, bool isOn)
@@ -750,9 +786,9 @@ namespace VRLabs.AV3Manager
                     continue;
                 }
 
-                if (t.state.name.Contains("(WD On)") || t.state.name.Contains("(WD Off)"))
+                if (t.state.name.ToLower().Contains("(WD On)".ToLower()) || t.state.name.ToLower().Contains("(WD Off)".ToLower()))
                 {
-                    if (t.state.writeDefaultValues ^ t.state.name.Contains("(WD On)"))
+                    if (t.state.writeDefaultValues ^ t.state.name.ToLower().Contains("(WD On)".ToLower()))
                         return (true, isOn, true);
                     continue;
                 }
@@ -771,14 +807,17 @@ namespace VRLabs.AV3Manager
             return (checkedFirst, isOn, false);
         }
         
-        private static void SetInStateMachine(AnimatorStateMachine stateMachine, bool wd, bool force)
+        private static void SetInStateMachine(AnimatorStateMachine stateMachine, bool wd, bool force, bool ignoreDbts)
         {
             foreach (ChildAnimatorState t in stateMachine.states) {
+                if(ignoreDbts && t.state.motion is BlendTree tree && tree.blendType == BlendTreeType.Direct) continue;
+
                 t.state.writeDefaultValues = wd;
+                
                 // Force corresponding Write Defaults setting for states with "(WD On)" or "(WD Off)" tags
-                if(!force && t.state.name.Contains("(WD On)")) 
+                if(!force && t.state.name.ToLower().Contains("(WD On)".ToLower())) 
                     t.state.writeDefaultValues = true;
-                else if(!force && t.state.name.Contains("(WD Off)"))
+                else if(!force && t.state.name.ToLower().Contains("(WD Off)".ToLower()))
                     t.state.writeDefaultValues = false;
                 else
                     t.state.writeDefaultValues = wd;
@@ -789,7 +828,7 @@ namespace VRLabs.AV3Manager
             }
             
             foreach (ChildAnimatorStateMachine t in stateMachine.stateMachines)
-                SetInStateMachine(t.stateMachine, wd, force);
+                SetInStateMachine(t.stateMachine, wd, force, ignoreDbts);
         }
         
         private static IEnumerable<AnimatorState> GetLayerStatesRecursive(AnimatorStateMachine stateMachine)
@@ -951,5 +990,9 @@ namespace VRLabs.AV3Manager
         public bool HasDefault { get; set; }
         public bool IsDefaultOn { get; set; }
         public bool HasMotion { get; set; }
+        public bool HasDirectBlendTree { get; set; }
+        public AnimatorState State { get; set; }
+        public AnimatorControllerLayer Layer { get; set; }
+        public AnimatorController Controller { get; set; }
     }
 }
