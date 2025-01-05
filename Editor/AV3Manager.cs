@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,12 +10,13 @@ using UnityEngine.UIElements;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Avatars.ScriptableObjects;
 using static VRC.SDK3.Avatars.ScriptableObjects.VRCExpressionParameters;
+using static VRLabs.AV3Manager.AV3ManagerLocalization;
 
 namespace VRLabs.AV3Manager
 {
     // ReSharper disable once InconsistentNaming
     public interface IAV3ManagerTab
-    { 
+    {
         VisualElement TabContainer { get; set; }
         string TabName { get; set; }
         Texture2D TabIcon { get; set; }
@@ -80,7 +81,7 @@ namespace VRLabs.AV3Manager
             "EyeHeightAsPercent",
             "IsOnFriendsList",
             "AvatarVersion",
-            
+
             //VRLabs Defaults
             //IsMirror is legacy, MirrorDetection/IsMirror is current
             "MirrorDetection/IsMirror",
@@ -102,7 +103,6 @@ namespace VRLabs.AV3Manager
             window.titleContent.image = Resources.Load<Texture>("AV3M/logo");
             window.minSize = new Vector2(400, 20);
             window.Show();
-            
         }
 
         private void CreateGUI()
@@ -112,7 +112,9 @@ namespace VRLabs.AV3Manager
                 VisualElement root = rootVisualElement;
                 var styleSheet = Resources.Load<StyleSheet>("AV3M/AV3ManagerStyle");
                 root.styleSheets.Add(styleSheet);
-                styleSheet = Resources.Load<StyleSheet>("AV3M/AV3ManagerStyle" + (EditorGUIUtility.isProSkin ? "Dark" : "Light"));
+                styleSheet =
+                    Resources.Load<StyleSheet>("AV3M/AV3ManagerStyle" +
+                                               (EditorGUIUtility.isProSkin ? "Dark" : "Light"));
                 root.styleSheets.Add(styleSheet);
 
                 VisualElement topArea = new VisualElement().WithClass("top-area").ChildOf(root);
@@ -120,9 +122,7 @@ namespace VRLabs.AV3Manager
                     .WithFlexDirection(FlexDirection.RowReverse)
                     .WithFlexGrow(1)
                     .ChildOf(root);
-            
-                
-                
+
                 _selectedTabArea = new ScrollView().WithClass("selected-tab").ChildOf(mainBody);
                 
                 VisualElement tabsContainer = new VisualElement().ChildOf(mainBody);
@@ -149,6 +149,7 @@ namespace VRLabs.AV3Manager
             catch (Exception e)
             {
                 new Label(e.ToString()).WithWhiteSpace(WhiteSpace.Normal).ChildOf(rootVisualElement);
+                Debug.LogException(e);
             }
         }
 
@@ -163,8 +164,9 @@ namespace VRLabs.AV3Manager
             {
                 tab.UpdateTab(_avatar);
             }
+
             _selectedTabArea.Clear();
-            _selectedTabArea.Add(_selectedTab?.TabContainer); 
+            _selectedTabArea.Add(_selectedTab?.TabContainer);
         }
 
         private void LoadTopArea(VisualElement topArea)
@@ -180,7 +182,7 @@ namespace VRLabs.AV3Manager
             avatar.RegisterValueChangedCallback(e =>
             {
                 _avatar = (VRCAvatarDescriptor)e.newValue;
-                
+
                 UpdateTabs();
             });
         }
@@ -258,11 +260,13 @@ namespace VRLabs.AV3Manager
                 lastTab[lastTab.childCount - 1].WithClass("tab-button-bottom");
             }
         }
-        
+
         private void GenerateNewExpressionParametersAsset()
         {
             Directory.CreateDirectory(AnimatorCloner.STANDARD_NEW_PARAMASSET_FOLDER);
-            string uniquePath = AssetDatabase.GenerateUniqueAssetPath(AnimatorCloner.STANDARD_NEW_PARAMASSET_FOLDER + "Parameters.asset");
+            string uniquePath =
+                AssetDatabase.GenerateUniqueAssetPath(
+                    AnimatorCloner.STANDARD_NEW_PARAMASSET_FOLDER + "Parameters.asset");
             _avatar.expressionParameters = CreateInstance<VRCExpressionParameters>();
             // Initialize vrc parameters array
             _avatar.expressionParameters.parameters = new Parameter[3];

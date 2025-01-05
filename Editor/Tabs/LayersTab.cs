@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using DreadScripts.Localization;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -21,6 +22,8 @@ namespace VRLabs.AV3Manager
 
         private Label _label;
         
+        private readonly LocalizationHandler<AV3ManagerLocalization> _m = new LocalizationHandler<AV3ManagerLocalization>();
+        
         public LayersTab()
         {
             TabContainer = new VisualElement();
@@ -30,6 +33,7 @@ namespace VRLabs.AV3Manager
         }
         public void UpdateTab(VRCAvatarDescriptor avatar)
         {
+            
             TabContainer = null;
             if (avatar == null) return;
             
