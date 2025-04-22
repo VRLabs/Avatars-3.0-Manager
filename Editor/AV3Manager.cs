@@ -10,7 +10,6 @@ using UnityEngine.UIElements;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Avatars.ScriptableObjects;
 using static VRC.SDK3.Avatars.ScriptableObjects.VRCExpressionParameters;
-using static VRLabs.AV3Manager.AV3ManagerLocalization;
 
 namespace VRLabs.AV3Manager
 {

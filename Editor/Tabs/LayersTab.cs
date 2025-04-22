@@ -10,6 +10,7 @@ using UnityEngine.UIElements;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Avatars.ScriptableObjects;
 using static VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
+using static VRLabs.AV3Manager.AV3ManagerLocalization.Keys;
 
 namespace VRLabs.AV3Manager
 {
@@ -21,24 +22,26 @@ namespace VRLabs.AV3Manager
         public Texture2D TabIcon { get; set; }
 
         private Label _label;
-        
-        private readonly LocalizationHandler<AV3ManagerLocalization> _m = new LocalizationHandler<AV3ManagerLocalization>();
-        
+
+
+        private readonly LocalizationHandler<AV3ManagerLocalization> _m =
+            new LocalizationHandler<AV3ManagerLocalization>();
+
         public LayersTab()
         {
             TabContainer = new VisualElement();
-            TabName = "Layers";
+            TabName = _m.Get(Layers_Layers).text;
 
             TabIcon = EditorGUIUtility.IconContent("AnimatorController Icon").image as Texture2D;
         }
+
         public void UpdateTab(VRCAvatarDescriptor avatar)
         {
-            
             TabContainer = null;
             if (avatar == null) return;
-            
+
             TabContainer = new VisualElement();
-            
+
             _label = new Label()
                 .WithClass("bordered-container", "margin-normal")
                 .WithFontSize(10)
@@ -46,31 +49,36 @@ namespace VRLabs.AV3Manager
 
             for (int i = 0; i < avatar.baseAnimationLayers.Length; i++)
                 TabContainer.Add(new AnimatorLayerTabElement(new VrcAnimationLayer(avatar, i), this));
-                
+
             for (int i = 0; i < avatar.specialAnimationLayers.Length; i++)
                 TabContainer.Add(new AnimatorLayerTabElement(new VrcAnimationLayer(avatar, i, true), this));
-            
+
             UpdateLabel(avatar.expressionParameters.CalcTotalCost());
         }
-        
+
         public void UpdateLabel(int currentCount)
         {
             if (_label == null) return;
-            _label.text = $"Parameters memory used: {currentCount}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
+            _label.text =
+                $"{_m.Get(Layers_UsedParamMemory).text}: {currentCount}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
         }
     }
-    
+
 
     public class AnimatorLayerTabElement : VisualElement
     {
         private Action _onAvatarAnimatorChange;
-        
+
+        private readonly LocalizationHandler<AV3ManagerLocalization> _m =
+            new LocalizationHandler<AV3ManagerLocalization>();
+
         private bool _isTabOpen;
+
         public AnimatorLayerTabElement(VrcAnimationLayer layer, LayersTab tab)
         {
             var titleTab = new Button().WithClass("layer-tab-header");
             titleTab.style.flexDirection = FlexDirection.Row;
-            
+
             var arrow = new VisualElement().WithClass("layer-tab-arrow");
             titleTab.Add(arrow);
             var title = new Label(layer.Layer.type.ToString()).WithClass("layer-tab-title");
@@ -83,30 +91,34 @@ namespace VRLabs.AV3Manager
             var defaultLayerArea = new VisualElement()
                 .WithFlexDirection(FlexDirection.Row);
             var newLayerButton = FluentUIElements
-                .NewButton("Use Custom Animator Layer", "Use your own animator for this layer.")
+                .NewButton(_m.Get(Layers_UseCustomLayer).text, _m.Get(Layers_UseCustomLayer).tooltip)
                 .WithClass("grow-control");
             defaultLayerArea.Add(newLayerButton);
             var copyFromDefaultLayer = FluentUIElements
-                .NewButton("Use Default Layer as custom", "Use a copy of the default layer for this layer.")
+                .NewButton(_m.Get(Layers_UseDefaultLayer).text, _m.Get(Layers_UseDefaultLayer).tooltip)
                 .WithClass("grow-control");
             defaultLayerArea.Add(copyFromDefaultLayer);
 
             var animatorArea = new VisualElement();
             var useDefaultLayer = FluentUIElements
-                .NewButton("Use Default VRC Layer", "DefaultLayerButton");
+                .NewButton(_m.Get(Layers_UseDefaulVRCLayer).text, _m.Get(Layers_UseDefaulVRCLayer).tooltip);
             var layerAnimator = FluentUIElements
-                .NewObjectField("Controller", typeof(AnimatorController), layer.Layer.animatorController)
+                .NewObjectField(_m.Get(Layers_Controller).text, typeof(AnimatorController),
+                    layer.Layer.animatorController)
                 .WithClass("top-spaced");
 
             var paramHeader = new VisualElement()
                 .WithFlexDirection(FlexDirection.Row);
-            var labelHeader = new Label("Parameters").WithClass("header-small").WithFlex(2, 0, 2);
-            var expressionCheckboxHeader = new Label("Expression Parameter").WithClass("header-small").WithFlex(2, 0, 2).WithUnityTextAlign(TextAnchor.MiddleCenter);
-            var syncedCheckboxHeader = new Label("Synced").WithClass("header-small").WithFlex(1, 0, 1).WithUnityTextAlign(TextAnchor.MiddleCenter);;
+            var labelHeader = new Label(_m.Get(Layers_Params).text).WithClass("header-small").WithFlex(2, 0, 2);
+            var expressionCheckboxHeader = new Label(_m.Get(Layers_ExprParams).text).WithClass("header-small")
+                .WithFlex(2, 0, 2).WithUnityTextAlign(TextAnchor.MiddleCenter);
+            var syncedCheckboxHeader = new Label(_m.Get(Layers_Synced).text).WithClass("header-small").WithFlex(1, 0, 1)
+                .WithUnityTextAlign(TextAnchor.MiddleCenter);
+            ;
             paramHeader.Add(labelHeader);
             paramHeader.Add(expressionCheckboxHeader);
             paramHeader.Add(syncedCheckboxHeader);
-            
+
             var parametersArea = new VisualElement();
 
             void UpdateParams()
@@ -117,13 +129,20 @@ namespace VRLabs.AV3Manager
                     var param = new VisualElement().ChildOf(parametersArea).WithFlexDirection(FlexDirection.Row);
                     var label = new Label(parameter.Parameter.name).ChildOf(param).WithFlex(2, 0, 2);
                     label.style.overflow = Overflow.Hidden;
-                    var expressionCheckboxDiv = new VisualElement().ChildOf(param).WithFlex(2, 0, 2).WithAlignItems(Align.Center);
-                    var expressionCheckbox = FluentUIElements.NewToggle(parameter.IsExpression).ChildOf(expressionCheckboxDiv);
-                    var syncedCheckboxDiv = new VisualElement().ChildOf(param).WithFlex(1, 0, 1).WithAlignItems(Align.Center);
+                    var expressionCheckboxDiv = new VisualElement().ChildOf(param).WithFlex(2, 0, 2)
+                        .WithAlignItems(Align.Center);
+                    var expressionCheckbox = FluentUIElements.NewToggle(parameter.IsExpression)
+                        .ChildOf(expressionCheckboxDiv);
+                    var syncedCheckboxDiv = new VisualElement().ChildOf(param).WithFlex(1, 0, 1)
+                        .WithAlignItems(Align.Center);
                     var syncedCheckbox = FluentUIElements.NewToggle(parameter.IsSynced).ChildOf(syncedCheckboxDiv);
-                    int totalCostIfExpressionAndSynced = layer.ExpressionParametersCost + VRCExpressionParameters.TypeCost(AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(parameter.Parameter.type));
-                    
-                    bool canExpressionAndSync = totalCostIfExpressionAndSynced <= VRCExpressionParameters.MAX_PARAMETER_COST;
+                    int totalCostIfExpressionAndSynced = layer.ExpressionParametersCost +
+                                                         VRCExpressionParameters.TypeCost(
+                                                             AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(
+                                                                 parameter.Parameter.type));
+
+                    bool canExpressionAndSync =
+                        totalCostIfExpressionAndSynced <= VRCExpressionParameters.MAX_PARAMETER_COST;
                     expressionCheckbox.RegisterValueChangedCallback(x =>
                     {
                         layer.ToggleParameterSync(parameter, x.newValue, parameter.IsSynced);
@@ -138,7 +157,6 @@ namespace VRLabs.AV3Manager
                         UpdateParams();
                         tab.UpdateLabel(layer.ExpressionParametersCost);
                     });
-
                 }
             }
 
@@ -149,11 +167,11 @@ namespace VRLabs.AV3Manager
             var operationsArea = new VisualElement()
                 .WithFlexDirection(FlexDirection.Row);
             var animatorToMergeButton = FluentUIElements
-                .NewButton("Add animator to merge", "Select animator to merge to the current layer animator.")
+                .NewButton(_m.Get(Layers_AddAnimatorToMerge).text, _m.Get(Layers_AddAnimatorToMerge).tooltip)
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
             var swapAnimationsButton = FluentUIElements
-                .NewButton("Swap Animations", "Swap animations in the current animator.")
+                .NewButton(_m.Get(Layers_SwapAnimations).text, _m.Get(Layers_SwapAnimations).tooltip)
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
 
@@ -165,7 +183,7 @@ namespace VRLabs.AV3Manager
             endArea.Add(operationsArea);
 
             content.Add(layer.Layer.isDefault ? defaultLayerArea : animatorArea);
-            
+
             layerAnimator.RegisterValueChangedCallback(x =>
             {
                 layer.SetController(x.newValue as AnimatorController);
@@ -181,29 +199,32 @@ namespace VRLabs.AV3Manager
                 content.Clear();
                 content.Add(animatorArea);
             };
-            
+
             copyFromDefaultLayer.clicked += () =>
             {
                 layer.SetDefault(false);
                 content.Clear();
                 content.Add(animatorArea);
                 Directory.CreateDirectory(AnimatorCloner.STANDARD_NEW_ANIMATOR_FOLDER);
-                string uniquePath = AssetDatabase.GenerateUniqueAssetPath(AnimatorCloner.STANDARD_NEW_ANIMATOR_FOLDER + Path.GetFileName(AV3ManagerFunctions.DefaultControllersPath[layer.Layer.type]));
+                string uniquePath = AssetDatabase.GenerateUniqueAssetPath(AnimatorCloner.STANDARD_NEW_ANIMATOR_FOLDER +
+                                                                          Path.GetFileName(
+                                                                              AV3ManagerFunctions.DefaultControllersPath
+                                                                                  [layer.Layer.type]));
                 AssetDatabase.CopyAsset(AV3ManagerFunctions.DefaultControllersPath[layer.Layer.type], uniquePath);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
-                
+
                 layer.SetController(AssetDatabase.LoadAssetAtPath<AnimatorController>(uniquePath));
                 _onAvatarAnimatorChange?.Invoke();
             };
-            
+
             useDefaultLayer.clicked += () =>
             {
                 layer.SetDefault(true);
                 content.Clear();
                 content.Add(defaultLayerArea);
             };
-            
+
             titleTab.clicked += () =>
             {
                 _isTabOpen = !_isTabOpen;
@@ -238,7 +259,7 @@ namespace VRLabs.AV3Manager
             {
                 endArea.Clear();
                 var swapper = new ClipsSwapAreaElement(layer).ChildOf(endArea);
-                
+
                 swapper.OnClose += () =>
                 {
                     swapper.OnClose = null;
@@ -247,9 +268,7 @@ namespace VRLabs.AV3Manager
                     UpdateParams();
                     _onAvatarAnimatorChange?.Invoke();
                 };
-
             };
-
         }
     }
 
@@ -262,12 +281,12 @@ namespace VRLabs.AV3Manager
         private VRCExpressionParameters _expressionParameters;
         public CustomAnimLayer Layer => _layerArray[_index];
         public int ExpressionParametersCost => _expressionParameters.CalcTotalCost();
-        
+
         public AnimatorControllerParameter[] AvatarParameters => _layerArray.Concat(_offLayerArray)
             .Select(x => x.animatorController as AnimatorController)
             .Where(x => x != null)
             .SelectMany(x => x.parameters).ToArray();
-        
+
         public List<SyncedParameter> Parameters { get; set; }
 
         public AnimatorController Controller => Layer.animatorController as AnimatorController;
@@ -279,7 +298,7 @@ namespace VRLabs.AV3Manager
             _offLayerArray = useSpecialLayers ? _avatar.baseAnimationLayers : _avatar.specialAnimationLayers;
             _index = index;
             _expressionParameters = _avatar.expressionParameters;
-            
+
             Parameters = new List<SyncedParameter>();
             UpdateParameters();
         }
@@ -294,10 +313,11 @@ namespace VRLabs.AV3Manager
             }
         }
 
-        [Obsolete("ToggleParameterSync(SyncedParameter, bool) is deprecated and will be removed in the future. Please move to using the ToggleParameterSync(SyncedParameter, bool, bool) method instead.")]
+        [Obsolete(
+            "ToggleParameterSync(SyncedParameter, bool) is deprecated and will be removed in the future. Please move to using the ToggleParameterSync(SyncedParameter, bool, bool) method instead.")]
         public void ToggleParameterSync(SyncedParameter parameter, bool toggle)
         {
-            ToggleParameterSync(parameter, toggle, toggle);    
+            ToggleParameterSync(parameter, toggle, toggle);
         }
 
 
@@ -310,18 +330,18 @@ namespace VRLabs.AV3Manager
             parameter.IsExpression = isExpression;
             parameter.IsSynced = isExpression ? synced : false;
             Parameters[index] = parameter;
-            
-            var expParam =_expressionParameters.FindParameter(parameter.Parameter.name);
+
+            var expParam = _expressionParameters.FindParameter(parameter.Parameter.name);
 
             var paramType = AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(parameter.Parameter.type);
-            
-            if (parameter.IsExpression && 
-                _expressionParameters.CalcTotalCost() + VRCExpressionParameters.TypeCost(paramType) <= VRCExpressionParameters.MAX_PARAMETER_COST || !parameter.IsSynced)
+
+            if (parameter.IsExpression &&
+                _expressionParameters.CalcTotalCost() + VRCExpressionParameters.TypeCost(paramType) <=
+                VRCExpressionParameters.MAX_PARAMETER_COST || !parameter.IsSynced)
             {
                 // Add parameter if it doesnt exist.
                 if (expParam == null)
                 {
-
                     int count = _expressionParameters.parameters.Length;
                     VRCExpressionParameters.Parameter[] parameterArray =
                         new VRCExpressionParameters.Parameter[count + 1];
@@ -359,7 +379,7 @@ namespace VRLabs.AV3Manager
 
                 _expressionParameters.parameters = list.ToArray();
             }
-            
+
             EditorUtility.SetDirty(_expressionParameters);
             //AssetDatabase.SaveAssets();
             //AssetDatabase.Refresh();
@@ -370,9 +390,9 @@ namespace VRLabs.AV3Manager
             if (controller == null) return;
             _layerArray[_index].isDefault = false;
             _layerArray[_index].animatorController = controller;
-            
+
             UpdateParameters();
-            
+
             EditorUtility.SetDirty(_avatar);
         }
 
@@ -387,11 +407,13 @@ namespace VRLabs.AV3Manager
                              x.type == AnimatorControllerParameterType.Float ||
                              x.type == AnimatorControllerParameterType.Bool))
                 {
-                    bool isExpression = _expressionParameters != null && _expressionParameters.FindParameter(parameter.name) != null;
+                    bool isExpression = _expressionParameters != null &&
+                                        _expressionParameters.FindParameter(parameter.name) != null;
                     bool isSynced = isExpression
                         ? _expressionParameters.FindParameter(parameter.name).networkSynced
                         : false;
-                    Parameters.Add(new SyncedParameter { Parameter = parameter, IsExpression = isExpression, IsSynced = isSynced});
+                    Parameters.Add(new SyncedParameter
+                        { Parameter = parameter, IsExpression = isExpression, IsSynced = isSynced });
                 }
             }
         }
@@ -403,5 +425,4 @@ namespace VRLabs.AV3Manager
         public bool IsSynced;
         public bool IsExpression;
     }
-    
 }

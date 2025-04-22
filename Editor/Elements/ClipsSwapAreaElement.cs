@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Animations;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static VRLabs.AV3Manager.AV3ManagerLocalization.Keys;
+using DreadScripts.Localization;
 
 namespace VRLabs.AV3Manager
 {
@@ -14,36 +15,38 @@ namespace VRLabs.AV3Manager
 
         private List<ClipSwapItem> _animationsToSwap;
 
+        private readonly LocalizationHandler<AV3ManagerLocalization> _m =
+            new LocalizationHandler<AV3ManagerLocalization>();
 
         public ClipsSwapAreaElement(VrcAnimationLayer layer)
         {
-            new Label("Animations Swap Mode")
+            new Label(_m.Get(Clips_SwapMode).text)
                 .WithClass("header")
                 .ChildOf(this);
-            
-            new Label("Do NOT modify the animator while you're swapping animations with the manager to avoid issues.")
+
+            new Label(_m.Get(Clips_DontModifyAnimatorWarning).text)
                 .WithClass("warning-label", "bordered-container")
                 .WithFontSize(10)
                 .ChildOf(this);
 
             _animationsToSwap = new List<ClipSwapItem>();
-            
+
             if (layer.Controller != null)
             {
                 foreach (var animatorLayer in layer.Controller.layers)
                 {
                     var clips = animatorLayer.GetClipsToSwap().ToList();
-                    
+
                     _animationsToSwap.AddRange(clips);
 
                     var container = new VisualElement()
-                        .WithClass("bordered-container") 
+                        .WithClass("bordered-container")
                         .ChildOf(this);
 
                     new Label(animatorLayer.name)
                         .WithClass("header-small")
                         .ChildOf(container);
-                    
+
                     var clipsContainer = new VisualElement()
                         .WithClass("clips-container")
                         .ChildOf(container);
@@ -55,7 +58,7 @@ namespace VRLabs.AV3Manager
                             {
                                 var foldout = new Foldout().ChildOf(parentObject);
                                 foldout.text = clipSwapItem.Name;
-                                
+
                                 foreach (var child in clipSwapItem.TreeChildren)
                                 {
                                     if (child.IsTree)
@@ -64,9 +67,10 @@ namespace VRLabs.AV3Manager
                                     }
                                     else
                                     {
-                                        ObjectField item = FluentUIElements.NewObjectField(child.Name, typeof(AnimationClip), child.Clip)
+                                        ObjectField item = FluentUIElements
+                                            .NewObjectField(child.Name, typeof(AnimationClip), child.Clip)
                                             .ChildOf(foldout);
-                                
+
                                         item.RegisterValueChangedCallback(x =>
                                         {
                                             child.Clip = x.newValue as AnimationClip;
@@ -74,17 +78,16 @@ namespace VRLabs.AV3Manager
                                     }
                                 }
                             }
+
                             MakeTree(clip, clipsContainer);
                         }
                         else
                         {
-                            ObjectField item = FluentUIElements.NewObjectField(clip.Name, typeof(AnimationClip), clip.Clip)
+                            ObjectField item = FluentUIElements
+                                .NewObjectField(clip.Name, typeof(AnimationClip), clip.Clip)
                                 .ChildOf(clipsContainer);
-                                
-                            item.RegisterValueChangedCallback(x =>
-                            {
-                                clip.Clip = x.newValue as AnimationClip;
-                            });
+
+                            item.RegisterValueChangedCallback(x => { clip.Clip = x.newValue as AnimationClip; });
                         }
                     }
                 }
@@ -95,15 +98,15 @@ namespace VRLabs.AV3Manager
                 .WithFlexDirection(FlexDirection.Row)
                 .ChildOf(this);
             var mergeOnCurrent = FluentUIElements
-                .NewButton("Apply on current", "Apply the changes on this controller")
+                .NewButton(_m.Get(Clips_ApplyOnCurrent).text, _m.Get(Clips_ApplyOnCurrent).tooltip)
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
             var mergeOnNew = FluentUIElements
-                .NewButton("Apply on new", "Apply the changes on a new copy of the controller and applies it to the avatar")
+                .NewButton(_m.Get(Clips_ApplyOnNew).text, _m.Get(Clips_ApplyOnNew).tooltip)
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
             var cancelButton = FluentUIElements
-                .NewButton("Cancel", "Cancel operation")
+                .NewButton(_m.Get(Clips_Cancel).text, _m.Get(Clips_Cancel).tooltip)
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
 
@@ -114,13 +117,12 @@ namespace VRLabs.AV3Manager
                 layer.SetController(layer.Controller.SwapAnimations(_animationsToSwap));
                 OnClose?.Invoke();
             };
-            
+
             mergeOnNew.clicked += () =>
             {
                 layer.SetController(layer.Controller.SwapAnimations(_animationsToSwap, true));
                 OnClose?.Invoke();
             };
-
         }
     }
 }

@@ -8,6 +8,8 @@ using UnityEngine.UIElements;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Avatars.ScriptableObjects;
 using ValueType = VRC.SDK3.Avatars.ScriptableObjects.VRCExpressionParameters.ValueType;
+using static VRLabs.AV3Manager.AV3ManagerLocalization.Keys;
+using DreadScripts.Localization;
 
 namespace VRLabs.AV3Manager
 {
@@ -28,23 +30,28 @@ namespace VRLabs.AV3Manager
         private VRCAvatarDescriptor _avatar;
         private VRCExpressionParameters _paramsToCopyAsset;
 
+        private readonly LocalizationHandler<AV3ManagerLocalization> _m =
+            new LocalizationHandler<AV3ManagerLocalization>();
+
         public ParametersTab()
         {
             TabContainer = new VisualElement();
-            TabName = "Parameters";
+            TabName = _m.Get(Params_Params).text;
 
-            TabIcon = Resources.Load<Texture2D>("AV3M/ParametersTabIcon" +(EditorGUIUtility.isProSkin ? "Dark" : "Light"));
-            
+            TabIcon = Resources.Load<Texture2D>("AV3M/ParametersTabIcon" +
+                                                (EditorGUIUtility.isProSkin ? "Dark" : "Light"));
+
             _expressionParametersField = FluentUIElements
-                .NewObjectField("Expression Parameters", typeof(VRCExpressionParameters))
+                .NewObjectField(_m.Get(Params_ExprParams).text, typeof(VRCExpressionParameters))
                 .WithClass("top-spaced")
                 .ChildOf(TabContainer);
 
-            FluentUIElements.NewButton("Open asset in inspector", "Selects the asset and shows it in the inspector.",
+            FluentUIElements.NewButton(_m.Get(Params_OpenInInspector).text, _m.Get(Params_OpenInInspector).tooltip,
                     () =>
                     {
                         if (_avatar == null || _avatar.expressionParameters == null) return;
-                        Selection.SetActiveObjectWithContext(_avatar.expressionParameters, _avatar.expressionParameters);
+                        Selection.SetActiveObjectWithContext(_avatar.expressionParameters,
+                            _avatar.expressionParameters);
                     })
                 .ChildOf(TabContainer);
 
@@ -59,25 +66,25 @@ namespace VRLabs.AV3Manager
                 .WithFlexDirection(FlexDirection.Row)
                 .ChildOf(TabContainer);
 
-            new Label("Name")
+            new Label(_m.Get(Params_Name).text)
                 .WithClass("header-small")
                 .WithFlex(2.5f, 0, 1)
                 .ChildOf(paramHeader);
-            new Label("Type")
+            new Label(_m.Get(Params_Type).text)
                 .WithClass("header-small")
                 .WithFlex(1, 0, 1)
                 .ChildOf(paramHeader);
-            new Label("Default")
+            new Label(_m.Get(Params_Default).text)
                 .WithClass("header-small")
                 .WithUnityTextAlign(TextAnchor.UpperCenter)
                 .WithFlex(1, 0, 1)
                 .ChildOf(paramHeader);
-            new Label("Saved")
+            new Label(_m.Get(Params_Saved).text)
                 .WithClass("header-small")
                 .WithFlex(1, 0, 1)
                 .WithUnityTextAlign(TextAnchor.UpperCenter)
                 .ChildOf(paramHeader);
-            new Label("NetworkSynced")
+            new Label(_m.Get(Params_Synced).text)
                 .WithClass("header-small")
                 .WithFlex(1.5f, 0, 1)
                 .WithUnityTextAlign(TextAnchor.UpperCenter)
@@ -85,32 +92,36 @@ namespace VRLabs.AV3Manager
             new VisualElement().WithWidth(26).ChildOf(paramHeader);
 
             _paramsListContainer = new VisualElement().ChildOf(TabContainer);
-            
-            new Label("Copy parameters").WithClass("header-small").WithMargin(5,20,5,0).ChildOf(TabContainer);
-            var paramsToCopy = FluentUIElements
-                .NewObjectField("Parameters to copy", typeof(VRCExpressionParameters))
+
+            new Label(_m.Get(Params_CopyParams).text).WithClass("header-small").WithMargin(5, 20, 5, 0)
                 .ChildOf(TabContainer);
-            
+            var paramsToCopy = FluentUIElements
+                .NewObjectField(_m.Get(Params_ParamsToCopy).text, typeof(VRCExpressionParameters))
+                .ChildOf(TabContainer);
+
             _additionalCostLabel = new Label()
                 .WithClass("bordered-container", "margin-normal", "hidden")
                 .WithFontSize(10)
                 .ChildOf(TabContainer);
 
-            var copyParametersButton = FluentUIElements.NewButton("Copy parameters", "Copies parameters into the current asset. The settings of it will be copied over if a parameter is already listed.",
+            var copyParametersButton = FluentUIElements.NewButton(_m.Get(Params_CopyParamsButton).text,
+                    _m.Get(Params_CopyParamsButton).tooltip,
                     () =>
                     {
                         if (_avatar == null || _avatar.expressionParameters == null) return;
                         if (!(paramsToCopy.value is VRCExpressionParameters paramsToCopyAsset)) return;
                         foreach (var parameter in paramsToCopyAsset.parameters)
                         {
-                            VRCExpressionParameters.Parameter p = _avatar.expressionParameters.FindParameter(parameter.name);
+                            VRCExpressionParameters.Parameter p =
+                                _avatar.expressionParameters.FindParameter(parameter.name);
                             if (p == null)
                             {
-                                int count =  _avatar.expressionParameters.parameters.Length;
-                                VRCExpressionParameters.Parameter[] parameterArray = new VRCExpressionParameters.Parameter[count + 1];
+                                int count = _avatar.expressionParameters.parameters.Length;
+                                VRCExpressionParameters.Parameter[] parameterArray =
+                                    new VRCExpressionParameters.Parameter[count + 1];
                                 for (int i = 0; i < count; i++)
                                 {
-                                    parameterArray[i] =  _avatar.expressionParameters.GetParameter(i);
+                                    parameterArray[i] = _avatar.expressionParameters.GetParameter(i);
                                 }
 
                                 parameterArray[count] = parameter.GetCopy();
@@ -123,11 +134,12 @@ namespace VRLabs.AV3Manager
                                 p.networkSynced = parameter.networkSynced;
                             }
                         }
+
                         EditorUtility.SetDirty(_avatar.expressionParameters);
                         UpdateParameters();
                     })
                 .ChildOf(TabContainer);
-            
+
             paramsToCopy.RegisterValueChangedCallback(evt =>
             {
                 if (!(paramsToCopy.value is VRCExpressionParameters paramsToCopyAsset))
@@ -136,7 +148,7 @@ namespace VRLabs.AV3Manager
                     _additionalCostLabel.AddToClassList("hidden");
                     return;
                 }
-                
+
                 _paramsToCopyAsset = paramsToCopyAsset;
                 int paramsCost = 0;
                 int totalCost = 0;
@@ -168,9 +180,9 @@ namespace VRLabs.AV3Manager
             _paramsListContainer.Clear();
             _expressionParametersField.SetValueWithoutNotify(null);
             _expressionParametersField.SetEnabled(false);
-            
+
             if (_avatar == null) return;
-            
+
             _expressionParametersField.SetValueWithoutNotify(_avatar.expressionParameters);
             _expressionParametersField.SetEnabled(true);
 
@@ -184,7 +196,8 @@ namespace VRLabs.AV3Manager
             _paramsListContainer.Clear();
             var usedParameters = new List<string>();
             HashSet<string> set = new HashSet<string>();
-            foreach (VRCAvatarDescriptor.CustomAnimLayer x in _avatar.baseAnimationLayers.Concat(_avatar.specialAnimationLayers))
+            foreach (VRCAvatarDescriptor.CustomAnimLayer x in _avatar.baseAnimationLayers.Concat(
+                         _avatar.specialAnimationLayers))
             {
                 var controller = x.animatorController as AnimatorController;
                 if (controller == null) continue;
@@ -213,12 +226,14 @@ namespace VRLabs.AV3Manager
                     case ValueType.Int:
                         var intValue = FluentUIElements.NewIntField((int)parameter.defaultValue)
                             .WithFlex(1, 0, 1).ChildOf(row);
-                        intValue.RegisterValueChangedCallback(evt => parameter.defaultValue = Mathf.Clamp(evt.newValue, 0, 255));
+                        intValue.RegisterValueChangedCallback(evt =>
+                            parameter.defaultValue = Mathf.Clamp(evt.newValue, 0, 255));
                         break;
                     case ValueType.Float:
                         var floatValue = FluentUIElements.NewFloatField(parameter.defaultValue)
                             .WithFlex(1, 0, 1).ChildOf(row);
-                        floatValue.RegisterValueChangedCallback(evt => parameter.defaultValue = Mathf.Clamp(evt.newValue, -1f, 1f));
+                        floatValue.RegisterValueChangedCallback(evt =>
+                            parameter.defaultValue = Mathf.Clamp(evt.newValue, -1f, 1f));
                         break;
                     case ValueType.Bool:
                         var boolValue = FluentUIElements.NewToggle(parameter.defaultValue != 0)
@@ -230,30 +245,33 @@ namespace VRLabs.AV3Manager
                 var saved = FluentUIElements.NewToggle(parameter.saved).WithClass("centered-toggle")
                     .WithFlex(1, 0, 1).ChildOf(row);
                 saved.RegisterValueChangedCallback(evt => parameter.saved = evt.newValue);
-                
+
                 var networkSynced = FluentUIElements.NewToggle(parameter.networkSynced).WithClass("centered-toggle")
                     .WithFlex(1.5f, 0, 1).ChildOf(row);
                 networkSynced.RegisterValueChangedCallback(evt => parameter.networkSynced = evt.newValue);
-                
-                FluentUIElements.NewButton( () =>
+
+                FluentUIElements.NewButton(() =>
                     {
                         List<VRCExpressionParameters.Parameter> list = new List<VRCExpressionParameters.Parameter>();
                         foreach (VRCExpressionParameters.Parameter x in _avatar.expressionParameters.parameters)
-                            if (x != parameter) list.Add(x);
+                            if (x != parameter)
+                                list.Add(x);
 
                         _avatar.expressionParameters.parameters = list.ToArray();
-                        
+
                         UpdateParameters();
                     })
                     .WithClass("delete-button")
                     .WithFlex(1, 0, 1).ChildOf(row);
-                
+
 
                 if (!usedParameters.Contains(parameter.name))
-                    new Label("This parameter is not used in any animator, remove it or make it local only to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
+                    new Label(_m.Get(Params_UnusedExprParamWarning).text).WithClass("warning-label")
+                        .ChildOf(paramElement);
 
                 if (AV3Manager.VrcParameters.Contains(parameter.name))
-                    new Label("This parameter doesn't need to be in the parameters asset, remove it or make it local only to save some parameter space.").WithClass("warning-label").ChildOf(paramElement);
+                    new Label(_m.Get(Params_BuiltinInExprParamWarning).text).WithClass("warning-label")
+                        .ChildOf(paramElement);
             }
 
             UpdateLabel(_avatar.expressionParameters.CalcTotalCost());
@@ -263,19 +281,22 @@ namespace VRLabs.AV3Manager
         public void UpdateLabel(int currentCount)
         {
             if (_label == null) return;
-            _label.text = $"Parameters memory used: {currentCount}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
+            _label.text =
+                $"{_m.Get(Params_UsedParamMemory).text}: {currentCount}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
             _label.RemoveFromClassList("hidden");
         }
-        
+
         public void UpdateAdditionalCostLabel(VRCExpressionParameters paramsToCopyAsset)
         {
             if (_additionalCostLabel == null) return;
-            
+
             int additionalCost = 0;
             int totalCost = 0;
             if (_avatar.expressionParameters != null)
             {
-                additionalCost = paramsToCopyAsset == null ? 0 : paramsToCopyAsset.parameters.GetCost(_avatar.expressionParameters.parameters);
+                additionalCost = paramsToCopyAsset == null
+                    ? 0
+                    : paramsToCopyAsset.parameters.GetCost(_avatar.expressionParameters.parameters);
                 totalCost = additionalCost + _avatar.expressionParameters.CalcTotalCost();
             }
             else
@@ -283,10 +304,12 @@ namespace VRLabs.AV3Manager
                 additionalCost = paramsToCopyAsset == null ? 0 : paramsToCopyAsset.CalcTotalCost();
                 totalCost = additionalCost;
             }
-            _additionalCostLabel.text = $"Additional cost: {additionalCost}";
-            _additionalCostLabel.text += $"\nTotal cost after update: {totalCost}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
-            if(totalCost > VRCExpressionParameters.MAX_PARAMETER_COST)
-                _additionalCostLabel.text += "\nCan't merge, the cost surpasses the maximum.";
+
+            _additionalCostLabel.text = $"{_m.Get(Params_AdditionalCostOfAnimatorToMerge).text}: {additionalCost}";
+            _additionalCostLabel.text +=
+                $"\n{_m.Get(Params_TotalParamMemoryAfterMerge).text}: {totalCost}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
+            if (totalCost > VRCExpressionParameters.MAX_PARAMETER_COST)
+                _additionalCostLabel.text += $"\n{_m.Get(Params_MergeWouldSurpassParamMemoryWarning).text}";
             _additionalCostLabel.RemoveFromClassList("hidden");
         }
     }

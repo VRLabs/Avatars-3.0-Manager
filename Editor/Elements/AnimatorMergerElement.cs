@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DreadScripts.Localization;
 using UnityEditor.Animations;
-using UnityEngine;
 using UnityEngine.UIElements;
+using static VRLabs.AV3Manager.AV3ManagerLocalization.Keys;
 
 namespace VRLabs.AV3Manager
 {
@@ -32,6 +33,9 @@ namespace VRLabs.AV3Manager
         private Button mergeOnCurrent;
         private Button mergeOnNew;
 
+        private readonly LocalizationHandler<AV3ManagerLocalization> _m =
+            new LocalizationHandler<AV3ManagerLocalization>();
+
         public void UpdateUI()
         {
             bool allowMerge = true;
@@ -39,7 +43,8 @@ namespace VRLabs.AV3Manager
             for (var i = 0; i < _controller.parameters.Length; i++)
             {
                 var param = _controller.parameters[i];
-                if (layerParameters.Any(x => x.nameHash == param.nameHash && x.type != param.type && _parametersToMerge[i].Suffix == ""))
+                if (layerParameters.Any(x =>
+                        x.nameHash == param.nameHash && x.type != param.type && _parametersToMerge[i].Suffix == ""))
                 {
                     _parameterWarningLabels[i].RemoveFromClassList("hidden");
                     allowMerge = false;
@@ -58,6 +63,7 @@ namespace VRLabs.AV3Manager
             {
                 warningLabel.RemoveFromClassList("hidden");
             }
+
             mergeOnCurrent.SetEnabled(allowMerge);
             mergeOnNew.SetEnabled(allowMerge);
 
@@ -70,47 +76,47 @@ namespace VRLabs.AV3Manager
                 suffixClearButton.AddToClassList("hidden");
             }
         }
-        
+
         public AnimatorMergerElement(VrcAnimationLayer layer)
         {
             _layer = layer;
             _parametersToMerge = new List<ParameterToMerge>();
             _parameterWarningLabels = new List<Label>();
-            new Label("Merge Animator Mode")
+            new Label(_m.Get(Merger_AnimatorMode).text)
                 .WithClass("header")
                 .ChildOf(this);
-            
+
             var controller = FluentUIElements
-                .NewObjectField("Animator", typeof(AnimatorController))
+                .NewObjectField(_m.Get(Merger_Animator).text, typeof(AnimatorController))
                 .ChildOf(this);
-            
+
             var paramHeader = new VisualElement()
                 .WithFlexDirection(FlexDirection.Row)
                 .ChildOf(this);
-            var labelHeader = new Label("Parameters").WithClass("header-small").ChildOf(paramHeader);
+            var labelHeader = new Label(_m.Get(Merger_Parameters).text).WithClass("header-small").ChildOf(paramHeader);
             var sp = new VisualElement().ChildOf(paramHeader);
             sp.style.flexGrow = 1;
-            var checkboxHeader = new Label("Suffix").WithClass("header-small").ChildOf(paramHeader);
+            var checkboxHeader = new Label(_m.Get(Merger_Suffix).text).WithClass("header-small").ChildOf(paramHeader);
 
             var parametersListContainer = new VisualElement()
                 .ChildOf(this);
-            
+
             var layerParameters = layer.Parameters.Select(x => x.Parameter).ToArray();
             var allParameters = layer.AvatarParameters.Where(x => !layerParameters.Contains(x)).ToArray();
 
             mergeOnCurrent = null;
             mergeOnNew = null;
-            
+
             controller.RegisterValueChangedCallback(evt =>
             {
                 var newController = evt.newValue as AnimatorController;
-                
+
                 parametersListContainer.Clear();
                 _parametersToMerge.Clear();
-                
+
                 if (newController == layer.Controller)
                 {
-                    new Label("Cannot merge controller onto itself.")
+                    new Label(_m.Get(Merger_SelfMergeWarning).text)
                         .WithClass("red-text")
                         .WithClass("white-space-normal")
                         .ChildOf(parametersListContainer);
@@ -118,9 +124,9 @@ namespace VRLabs.AV3Manager
                     mergeOnNew.SetEnabled(false);
                     return;
                 }
-                
+
                 if (newController == null) return;
-                
+
                 _controller = newController;
 
                 List<TextField> suffixFields = new List<TextField>();
@@ -128,25 +134,25 @@ namespace VRLabs.AV3Manager
                 {
                     var itemContainer = new VisualElement()
                         .WithClass("bordered-container").ChildOf(parametersListContainer);
-                    
+
                     var p = new ParameterToMerge(param.name);
                     /*var row = new VisualElement()
                         .WithFlexDirection(FlexDirection.Row)
                         .ChildOf(parametersListContainer);*/
-                    
+
                     var suffixField = new TextField(p.Name).ChildOf(itemContainer);
                     suffixField.tooltip = p.Name;
-                    
-                    var warningLabel = new Label("Target controller contains this parameter with a different type than the base controller. These controllers cannot be merged.")
+
+                    var warningLabel = new Label(_m.Get(Merger_DuplicateParamWarning).text)
                         .WithClass("red-text")
                         .WithClass("white-space-normal")
                         .ChildOf(itemContainer);
 
                     _parameterWarningLabels.Add(warningLabel);
-                    
+
                     if (AV3Manager.VrcParameters.Any(x => x == param.name))
                     {
-                        new Label("Parameter is a default one, by default it will be added to the parameters, but not listed in the synced parameters, you should not add any affix unless you know what you're doing")
+                        new Label(_m.Get(Merger_BuiltinParamWarning).text)
                             .WithClass("warning-label")
                             .ChildOf(itemContainer);
                     }
@@ -158,7 +164,7 @@ namespace VRLabs.AV3Manager
                         for (int i = fixedName.Length - 1; i >= 0; i--)
                             if (char.IsNumber(fixedName[i]))
                                 charNumber.Insert(0, fixedName[i]);
-                        
+
                         if (int.TryParse(string.Concat(charNumber), out int number))
                             p.Suffix = " " + (number);
                         else
@@ -166,11 +172,11 @@ namespace VRLabs.AV3Manager
                     }
                     else if (allParameters.Any(x => x.nameHash == param.nameHash))
                     {
-                        new Label("Parameter is already used in another layer, you may want to add a suffix")
+                        new Label(_m.Get(Merger_ParamInDifferentLayerWarning).text)
                             .WithClass("warning-label")
                             .ChildOf(itemContainer);
                     }
-                    
+
                     suffixField.value = p.Suffix;
 
                     suffixField.RegisterValueChangedCallback(e =>
@@ -178,15 +184,15 @@ namespace VRLabs.AV3Manager
                         p.Suffix = e.newValue;
                         UpdateUI();
                     });
-                    
+
                     suffixFields.Add(suffixField);
 
                     _parametersToMerge.Add(p);
                 }
-                
-                
+
+
                 suffixClearButton = FluentUIElements
-                    .NewButton("Clear all suffixes", "Remove all suffixes, which will use the same parameters for newly merged parameters",
+                    .NewButton(_m.Get(Merger_ClearSuffixes).text, _m.Get(Merger_ClearSuffixes).tooltip,
                         () =>
                         {
                             foreach (var suffixField in suffixFields)
@@ -196,13 +202,12 @@ namespace VRLabs.AV3Manager
                         })
                     .WithClass("grow-control")
                     .ChildOf(parametersListContainer);
-                
-                warningLabel = new Label("Target controller contains a parameter with a different type than the base controller. These controllers cannot be merged.")
+
+                warningLabel = new Label(_m.Get(Merger_ParamTypeMismatchWarning).text)
                     .WithClass("red-text")
                     .WithClass("white-space-normal")
                     .ChildOf(parametersListContainer);
                 UpdateUI();
-
             });
 
             var operationsArea = new VisualElement()
@@ -210,15 +215,15 @@ namespace VRLabs.AV3Manager
                 .WithFlexDirection(FlexDirection.Row)
                 .ChildOf(this);
             mergeOnCurrent = FluentUIElements
-                .NewButton("Merge on current", "Merge this animator on the current layer animator")
+                .NewButton(_m.Get(Merger_MergeOnCurrent).text, _m.Get(Merger_MergeOnCurrent).tooltip)
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
             mergeOnNew = FluentUIElements
-                .NewButton("Merge on new", "Create a copy of the layer animator and merge this animator on that")
+                .NewButton(_m.Get(Merger_MergeOnNew).text, _m.Get(Merger_MergeOnNew).tooltip)
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
             var cancelButton = FluentUIElements
-                .NewButton("Cancel", "Cancel operation")
+                .NewButton(_m.Get(Merger_Cancel).text, _m.Get(Merger_Cancel).tooltip)
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
 
@@ -227,17 +232,20 @@ namespace VRLabs.AV3Manager
             mergeOnCurrent.clicked += () =>
             {
                 var dictionary = _parametersToMerge.ToDictionary(p => p.Name, p => p.Name + p.Suffix);
-                layer.SetController(AnimatorCloner.MergeControllers(layer.Layer.animatorController as AnimatorController, controller.value as AnimatorController, dictionary));
-                OnClose?.Invoke();
-            };
-            
-            mergeOnNew.clicked += () =>
-            {
-                var dictionary = _parametersToMerge.ToDictionary(p => p.Name, p => p.Name + p.Suffix);
-                layer.SetController(AnimatorCloner.MergeControllers(layer.Layer.animatorController as AnimatorController, controller.value as AnimatorController, dictionary, true));
+                layer.SetController(AnimatorCloner.MergeControllers(
+                    layer.Layer.animatorController as AnimatorController, controller.value as AnimatorController,
+                    dictionary));
                 OnClose?.Invoke();
             };
 
+            mergeOnNew.clicked += () =>
+            {
+                var dictionary = _parametersToMerge.ToDictionary(p => p.Name, p => p.Name + p.Suffix);
+                layer.SetController(AnimatorCloner.MergeControllers(
+                    layer.Layer.animatorController as AnimatorController, controller.value as AnimatorController,
+                    dictionary, true));
+                OnClose?.Invoke();
+            };
         }
     }
 }
