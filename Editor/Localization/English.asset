@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0450617712bbc5846a824c3bde9ca990, type: 3}
-  m_Name: New Localization File
+  m_Name: English
   m_EditorClassIdentifier: 
   languageName: English
   localizedContent:
@@ -36,11 +36,14 @@ MonoBehaviour:
       tooltip: 
   - keyName: Merger_DuplicateParamWarning
     content:
-      text: Target controller contains this parameter with a different type than the base controller. These controllers cannot be merged.
+      text: Target controller contains this parameter with a different type than
+        the base controller. These controllers cannot be merged.
       tooltip: 
   - keyName: Merger_BuiltinParamWarning
     content:
-      text: Parameter is a default one, by default it will be added to the parameters, but not listed in the synced parameters, you should not add any affix unless you know what you're doing
+      text: Parameter is a default one, by default it will be added to the parameters,
+        but not listed in the synced parameters, you should not add any affix unless
+        you know what you're doing
       tooltip: 
   - keyName: Merger_ParamInDifferentLayerWarning
     content:
@@ -49,10 +52,12 @@ MonoBehaviour:
   - keyName: Merger_ClearSuffixes
     content:
       text: Clear all suffixes
-      tooltip: Remove all suffixes, which will use the same parameters for newly merged parameters
+      tooltip: Remove all suffixes, which will use the same parameters for newly
+        merged parameters
   - keyName: Merger_ParamTypeMismatchWarning
     content:
-      text: Target controller contains a parameter with a different type than the base controller. These controllers cannot be merged.
+      text: Target controller contains a parameter with a different type than the
+        base controller. These controllers cannot be merged.
       tooltip: 
   - keyName: Merger_MergeOnCurrent
     content:
@@ -60,8 +65,8 @@ MonoBehaviour:
       tooltip: Merge this animator on the current layer animator
   - keyName: Merger_MergeOnNew
     content: Merge on new
-      text: Create a copy of the layer animator and merge this animator on that
-      tooltip: 
+    text: Create a copy of the layer animator and merge this animator on that
+    tooltip: 
   - keyName: Merger_Cancel
     content:
       text: Cancel
@@ -72,7 +77,8 @@ MonoBehaviour:
       tooltip: 
   - keyName: Clips_DontModifyAnimatorWarning
     content:
-      text: Do NOT modify the animator while you're swapping animations with the manager to avoid issues.
+      text: Do NOT modify the animator while you're swapping animations with the
+        manager to avoid issues.
       tooltip: 
   - keyName: Clips_ApplyOnCurrent
     content:
@@ -81,7 +87,8 @@ MonoBehaviour:
   - keyName: Clips_ApplyOnNew
     content:
       text: Apply on new
-      tooltip: Apply the changes on a new copy of the controller and applies it to the avatar
+      tooltip: Apply the changes on a new copy of the controller and applies it to
+        the avatar
   - keyName: Clips_Cancel
     content:
       text: Cancel
@@ -173,14 +180,17 @@ MonoBehaviour:
   - keyName: Params_CopyParamsButton
     content:
       text: Copy parameters
-      tooltip: Copies parameters into the current asset. The settings of it will be copied over if a parameter is already listed.
+      tooltip: Copies parameters into the current asset. The settings of it will
+        be copied over if a parameter is already listed.
   - keyName: Params_UnusedExprParamWarning
     content:
-      text: This parameter is not used in any animator, remove it or make it local only to save some parameter space.
+      text: This parameter is not used in any animator, remove it or make it local
+        only to save some parameter space.
       tooltip: 
   - keyName: Params_BuiltinInExprParamWarning
     content:
-      text: This parameter doesn't need to be in the parameters asset, remove it or make it local only to save some parameter space.
+      text: This parameter doesn't need to be in the parameters asset, remove it
+        or make it local only to save some parameter space.
       tooltip: 
   - keyName: Params_UsedParamMemory
     content:
@@ -208,11 +218,13 @@ MonoBehaviour:
       tooltip: 
   - keyName: WD_ForceAllWDWarning
     content:
-      text: Forcing the Write Defaults settings on states that explicitly request a specific setting is not advisable.
+      text: Forcing the Write Defaults settings on states that explicitly request
+        a specific setting is not advisable.
       tooltip: 
   - keyName: WD_DBTWarning
     content:
-      text: Direct Blend Tree without explicit WD setting found. These should probably be kept in the same state as they are now.
+      text: Direct Blend Tree without explicit WD setting found. These should probably
+        be kept in the same state as they are now.
       tooltip: 
   - keyName: WD_IgnoreDBT
     content:
@@ -228,11 +240,15 @@ MonoBehaviour:
       tooltip: 
   - keyName: WD_ForceWDOffMessage
     content:
-      text: Some states are requesting to keep WD On, but you're attempting to override this by setting WD to Off with the force option.\nDo you want to proceed with this override?
+      text: Some states are requesting to keep WD On, but you're attempting to override
+        this by setting WD to Off with the force option.\nDo you want to proceed
+        with this override?
       tooltip: 
   - keyName: WD_ForceWDOnMessage
     content:
-      text: Some states are requesting to keep WD Off, but you're attempting to override this by setting WD to On with the force option.\nDo you want to proceed with this override?
+      text: Some states are requesting to keep WD Off, but you're attempting to override
+        this by setting WD to On with the force option.\nDo you want to proceed with
+        this override?
       tooltip: 
   - keyName: WD_Proceed
     content:
@@ -248,11 +264,13 @@ MonoBehaviour:
       tooltip: Set Write Defaults to on.
   - keyName: WD_MixedWDWarning
     content:
-      text: You have mixed write defaults in your layers, you may experience weird interactions in-game.
+      text: You have mixed write defaults in your layers, you may experience weird
+        interactions in-game.
       tooltip: 
   - keyName: WD_EmptyStatesWarning
     content:
-      text: Some states have no motions, this can be an issue when using WD Off. Upon setting a unified WD state, an empty motion clip will fill those states.
+      text: Some states have no motions, this can be an issue when using WD Off.
+        Upon setting a unified WD state, an empty motion clip will fill those states.
       tooltip: 
   - keyName: WD_List
     content:
@@ -273,7 +291,8 @@ MonoBehaviour:
   - keyName: WD_Default
     content:
       text: Default
-      tooltip: Whether the state name contains "(WD On)" or "(WD Off)", which stops the AV3 Manager from changing the Write Defaults (unless forced).
+      tooltip: Whether the state name contains "(WD On)" or "(WD Off)", which stops
+        the AV3 Manager from changing the Write Defaults (unless forced).
   - keyName: WD_ViewState
     content:
       text: View State
