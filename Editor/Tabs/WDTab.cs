@@ -14,6 +14,7 @@ namespace VRLabs.AV3Manager
 {
     // ReSharper disable once InconsistentNaming
     // ReSharper disable once UnusedType.Global
+    [TabOrder(0)]
     public class WDTab : IAV3ManagerTab
     {
         public VisualElement TabContainer { get; set; }

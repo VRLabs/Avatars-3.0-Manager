@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -19,6 +20,28 @@ namespace VRLabs.AV3Manager
         string TabName { get; set; }
         Texture2D TabIcon { get; set; }
         void UpdateTab(VRCAvatarDescriptor avatar);
+    }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class TabOrderAttribute : Attribute
+    {
+        public int Order { get; }
+        
+        public TabOrderAttribute(int order)
+        {
+            Order = order;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class)]
+    public class TabGroupAttribute : Attribute
+    {
+        public int GroupNumber { get; }
+        
+        public TabGroupAttribute(int groupNumber)
+        {
+            GroupNumber = groupNumber;
+        }
     }
     
     // ReSharper disable once InconsistentNaming
@@ -64,9 +87,10 @@ namespace VRLabs.AV3Manager
             "IsMirror"
         };
         
-        private List<IAV3ManagerTab> _tabs;
+        private List<List<IAV3ManagerTab>> _tabs;
         private IAV3ManagerTab _selectedTab;
         private ScrollView _selectedTabArea;
+        private List<VisualElement> _tabsContainers = new();
 
         private VRCAvatarDescriptor _avatar;
 
@@ -76,7 +100,7 @@ namespace VRLabs.AV3Manager
             var window = GetWindow<AV3Manager>();
             window.titleContent = new GUIContent("AV3 Manager");
             window.titleContent.image = Resources.Load<Texture>("AV3M/logo");
-            window.minSize = new Vector2(400, 500);
+            window.minSize = new Vector2(400, 20);
             window.Show();
             
         }
@@ -97,11 +121,24 @@ namespace VRLabs.AV3Manager
                     .WithFlexGrow(1)
                     .ChildOf(root);
             
+                
+                
                 _selectedTabArea = new ScrollView().WithClass("selected-tab").ChildOf(mainBody);
-                VisualElement tabsArea = new VisualElement().WithClass("tabs-area").ChildOf(mainBody);
+                
+                VisualElement tabsContainer = new VisualElement().ChildOf(mainBody);
+                
+                ScrollView tabsArea = new ScrollView()
+                    .WithClass("tabs-area")
+                    .WithScrollerVisibility(ScrollerVisibility.Hidden, ScrollerVisibility.Hidden)
+                    .ChildOf(tabsContainer);
+                
+                new VisualElement().WithClass("tabs-empty-area").ChildOf(tabsContainer);
+                var tabsBottomArea = new VisualElement().WithClass("tabs-bottom-area").ChildOf(tabsContainer);
+                
+                
 
                 LoadTopArea(topArea);
-                LoadTabs(tabsArea);
+                LoadTabs(new List<VisualElement> {tabsArea, tabsBottomArea});
 
                 UpdateTabs();
             }
@@ -118,7 +155,7 @@ namespace VRLabs.AV3Manager
                 GenerateNewExpressionParametersAsset();
             }
             
-            foreach (var tab in _tabs)
+            foreach (var tab in _tabs.SelectMany(x => x))
             {
                 tab.UpdateTab(_avatar);
             }
@@ -144,60 +181,77 @@ namespace VRLabs.AV3Manager
             });
         }
 
-        private void LoadTabs(VisualElement tabsArea)
+        private void LoadTabs(List<VisualElement> tabsAreas)
         {
-            _tabs = new List<IAV3ManagerTab>();
-            var tabTypes = AppDomain.CurrentDomain
+            _tabs = new List<List<IAV3ManagerTab>>();
+            var tabGroups = AppDomain.CurrentDomain
                 .GetAssemblies()
                 .SelectMany(x => x.GetTypes())
                 .Where(x => x.GetInterface(typeof(IAV3ManagerTab).FullName) != null)
-                .OrderBy(x => x.Name)
-                .ToList();
+                .GroupBy(x => x.GetCustomAttribute<TabGroupAttribute>()?.GroupNumber ?? 0);
             
-            foreach (var type in tabTypes)
+            int x = 0;
+            
+            foreach (var group in tabGroups)
             {
-                var tab = Activator.CreateInstance(type) as IAV3ManagerTab;
+                _tabs.Add(new List<IAV3ManagerTab>());
                 
-                var tabButton = new Button();
-                tabButton.tooltip = tab?.TabName;
-                var iconElement = new VisualElement();
-                iconElement.style.backgroundImage = new StyleBackground(tab?.TabIcon);
-                iconElement.style.flexGrow = 1;
-                #if UNITY_2022_1_OR_NEWER
-                iconElement.style.backgroundPositionX = new BackgroundPosition(BackgroundPositionKeyword.Center);
-                iconElement.style.backgroundPositionY = new BackgroundPosition(BackgroundPositionKeyword.Center);
-                iconElement.style.backgroundRepeat = new BackgroundRepeat(Repeat.NoRepeat, Repeat.NoRepeat);
-                iconElement.style.backgroundSize = new BackgroundSize(BackgroundSizeType.Contain);
-                #else
-                iconElement.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
-                #endif
-                tabButton.Add(iconElement);
-                tabButton.AddToClassList("tab-button");
+                var tabTypes =  group
+                    .OrderByDescending(x => x.GetCustomAttribute<TabOrderAttribute>()?.Order ?? 0)
+                    .ThenBy(x => x.Name)
+                    .ToList();
                 
-                tabButton.clicked += () =>
+                foreach (var type in tabTypes)
                 {
-                    foreach (var button in tabsArea.Children())
-                        if(button.ClassListContains("tab-button-selected"))
-                            button.RemoveFromClassList("tab-button-selected");
+                    var tab = Activator.CreateInstance(type) as IAV3ManagerTab;
                     
-                    tabButton.AddToClassList("tab-button-selected");
-                   
-                    _selectedTabArea.Clear();
-                    _selectedTabArea.Add(tab?.TabContainer);
-                    _selectedTab = tab;
+                    var tabButton = new Button();
+                    tabButton.tooltip = tab?.TabName;
+                    var iconElement = new VisualElement();
+                    iconElement.style.backgroundImage = new StyleBackground(tab?.TabIcon);
+                    iconElement.style.flexGrow = 1;
+                    #if UNITY_2022_1_OR_NEWER
+                    iconElement.style.backgroundPositionX = new BackgroundPosition(BackgroundPositionKeyword.Center);
+                    iconElement.style.backgroundPositionY = new BackgroundPosition(BackgroundPositionKeyword.Center);
+                    iconElement.style.backgroundRepeat = new BackgroundRepeat(Repeat.NoRepeat, Repeat.NoRepeat);
+                    iconElement.style.backgroundSize = new BackgroundSize(BackgroundSizeType.Contain);
+                    #else
+                    iconElement.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+                    #endif
+                    tabButton.Add(iconElement);
+                    tabButton.AddToClassList("tab-button");
+
+                    tabButton.clicked += () =>
+                    {
+                        foreach (var button in tabsAreas.SelectMany(e => e.Children()))
+                            if(button.ClassListContains("tab-button-selected"))
+                                button.RemoveFromClassList("tab-button-selected");
+                        
+                        tabButton.AddToClassList("tab-button-selected");
+                       
+                        _selectedTabArea.Clear();
+                        _selectedTabArea.Add(tab?.TabContainer);
+                        _selectedTab = tab;
+                        
+                        tab.UpdateTab(_avatar);
+                    };
                     
-                    tab.UpdateTab(_avatar);
-                };
-                
-                tabsArea.Add(tabButton);
-                _tabs.Add(tab);
+                    tabsAreas[x].Add(tabButton);
+                    _tabs[x].Add(tab);
+                }
+
+                x++;
+
             }
 
-            if (tabsArea.childCount > 0 && _tabs.Count > 0)
+            if (tabsAreas.Count > 0 && tabsAreas[0].childCount > 0 && _tabs.Count > 0 && _tabs[0].Count > 0)
             {
-                tabsArea[0].AddToClassList("tab-button-selected");
-                _selectedTabArea.Add(_tabs[0].TabContainer);
-                _selectedTab = _tabs[0];
+                tabsAreas[0][0].WithClass("tab-button-selected", "tab-button-top");
+                _selectedTabArea.Add(_tabs[0][0].TabContainer);
+                _selectedTab = _tabs[0][0];
+
+                var lastTab = tabsAreas.Last();
+                lastTab[lastTab.childCount - 1].WithClass("tab-button-bottom");
             }
         }
         

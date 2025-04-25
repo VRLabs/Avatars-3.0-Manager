@@ -12,6 +12,7 @@ using static VRC.SDK3.Avatars.Components.VRCAvatarDescriptor;
 
 namespace VRLabs.AV3Manager
 {
+    [TabOrder(0)]
     public class LayersTab : IAV3ManagerTab
     {
         public VisualElement TabContainer { get; set; }
