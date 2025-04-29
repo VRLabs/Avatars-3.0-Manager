@@ -90,7 +90,7 @@ namespace VRLabs.AV3Manager
         private List<List<IAV3ManagerTab>> _tabs;
         private IAV3ManagerTab _selectedTab;
         private ScrollView _selectedTabArea;
-        private List<VisualElement> _tabsContainers = new();
+        private List<VisualElement> _tabsContainers = new List<VisualElement>();
 
         private VRCAvatarDescriptor _avatar;
 
