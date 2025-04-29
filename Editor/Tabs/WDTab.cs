@@ -14,6 +14,7 @@ namespace VRLabs.AV3Manager
 {
     // ReSharper disable once InconsistentNaming
     // ReSharper disable once UnusedType.Global
+    [TabOrder(0)]
     public class WDTab : IAV3ManagerTab
     {
         public VisualElement TabContainer { get; set; }
@@ -250,8 +251,8 @@ namespace VRLabs.AV3Manager
         {
             if (state.Controller == null || state.Layer == null || state.Layer.stateMachine == null || state.State == null) return;
             List<Object> FindStateBreadcrumbs(List<Object> currentPath, AnimatorStateMachine stateMachine, AnimatorState target) {
-                foreach (var state in stateMachine.states) {
-                    if (state.state == target)
+                foreach (var animatorState in stateMachine.states) {
+                    if (animatorState.state == target)
                     {
                         return currentPath;
                     }

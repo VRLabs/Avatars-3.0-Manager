@@ -1,6 +1,13 @@
 ﻿.tabs-area
 {
     background-color: #A4A4A4;
+    border-color: #898989;
+}
+
+.tabs-bottom-area
+{
+    background-color: #A4A4A4;
+    border-color: #898989;
 }
 
 .selected-tab
@@ -14,6 +21,12 @@
     background-color: #A4A4A4;
     border-color: #898989;
     border-left-color: #3A78BA;
+}
+
+.tabs-empty-area
+{
+    background-color: #A4A4A4;
+    border-color: #898989;
 }
 
 .tab-button-selected

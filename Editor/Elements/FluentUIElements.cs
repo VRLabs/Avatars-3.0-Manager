@@ -73,6 +73,22 @@ namespace VRLabs.AV3Manager
 
         public static FloatField NewFloatField(string label, float value, int maxLength = -1) => NewFloatField(label, "", value, maxLength);
         
+#if UNITY_2022_1_OR_NEWER
+        public static T WithScrollerVisibility<T>(this T control, ScrollerVisibility horizontal = ScrollerVisibility.Auto, ScrollerVisibility vertical = ScrollerVisibility.Auto) where T : ScrollView
+        {
+            control.horizontalScrollerVisibility = horizontal;
+            control.verticalScrollerVisibility = vertical;
+            return control;
+        }
+#else 
+        public static T WithScrollbarVisibility<T>(this T control, bool showHorizontal = true, bool showVertical = true) where T : ScrollView
+        {
+            control.showVertical = showVertical;
+            control.showHorizontal = showHorizontal;
+            return control;
+        }
+#endif
+        
         public static T WithName<T>(this T control, string name) where T : VisualElement
         {
             control.name = name;

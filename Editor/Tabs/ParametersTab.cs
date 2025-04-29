@@ -12,6 +12,7 @@ using ValueType = VRC.SDK3.Avatars.ScriptableObjects.VRCExpressionParameters.Val
 namespace VRLabs.AV3Manager
 {
     // ReSharper disable once UnusedType.Global
+    [TabOrder(0)]
     public class ParametersTab : IAV3ManagerTab
     {
         public VisualElement TabContainer { get; set; }

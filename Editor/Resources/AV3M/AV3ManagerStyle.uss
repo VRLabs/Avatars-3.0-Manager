@@ -8,42 +8,70 @@
     background-image: resource("Refresh@2X");
     background-color: transparent;
     border-width: 0;
-    margin: 10 6 10 3;
+    margin: 10px 6px 10px 3px;
     width: 18px;
     height: 18px;
+}
+
+.tabs-empty-area
+{
+    flex-grow: 1;
+    border-right-width: 1px;
+}
+
+.tabs-area
+{
+    border-top-width: 1px;
+}
+
+.tabs-bottom-area
+{
+    flex-shrink: 0;
 }
 
 .selected-tab
 {
     flex-grow: 1;
     flex-basis: 1px;
-    border-left-width: 1;
-    border-top-width: 1;
+    border-top-width: 1px;
 }
 
 .tab-button 
 {
-    width: 30px;
-    height: 30px;
-
-    border-width: 0;
-    
-    padding: 4 3 4 5;
-    
-    margin: 0 0 0 2;
-    border-radius: 5 0 0 5;
+    width: 32px;
+    height: 35px;
+    border-width: 0 1px 0 0;
+    padding: 4px 3px 4px 5px;
+    margin: 0 0 0 0;
+    border-radius: 3px 0 0 3px;
 }
 
 .tab-button-selected
 {
-    width: 31px;
-    height: 30px;
+    padding: 3px 4px 3px 2px;
+    border-width: 1px 0 1px 3px;
+    margin: 0 0 0 0;
+}
 
-    padding: 3 3 3 3;
+.tab-button-selected.tab-button-top
+{
+    padding-top: 4px;
+}
 
-    border-width: 1 0 1 2;
-    
-    margin:0 -1 0 2;
+.tab-button-selected.tab-button-bottom
+{
+    padding-bottom: 4px;
+}
+
+
+.tab-button-top
+{
+    border-top-width: 0;
+}
+
+.tab-button-bottom
+{
+    border-bottom-width: 0;
 }
 
 .margin-normal
