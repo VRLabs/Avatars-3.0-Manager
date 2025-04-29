@@ -129,7 +129,11 @@ namespace VRLabs.AV3Manager
                 
                 ScrollView tabsArea = new ScrollView()
                     .WithClass("tabs-area")
+#if UNITY_2022_1_OR_NEWER
                     .WithScrollerVisibility(ScrollerVisibility.Hidden, ScrollerVisibility.Hidden)
+#else
+                    .WithScrollbarVisibility(false, false)
+#endif
                     .ChildOf(tabsContainer);
                 
                 new VisualElement().WithClass("tabs-empty-area").ChildOf(tabsContainer);
@@ -190,7 +194,7 @@ namespace VRLabs.AV3Manager
                 .Where(x => x.GetInterface(typeof(IAV3ManagerTab).FullName) != null)
                 .GroupBy(x => x.GetCustomAttribute<TabGroupAttribute>()?.GroupNumber ?? 0);
             
-            int x = 0;
+            int index = 0;
             
             foreach (var group in tabGroups)
             {
@@ -236,11 +240,11 @@ namespace VRLabs.AV3Manager
                         tab.UpdateTab(_avatar);
                     };
                     
-                    tabsAreas[x].Add(tabButton);
-                    _tabs[x].Add(tab);
+                    tabsAreas[index].Add(tabButton);
+                    _tabs[index].Add(tab);
                 }
 
-                x++;
+                index++;
 
             }
 
