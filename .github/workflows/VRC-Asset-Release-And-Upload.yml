@@ -1,84 +1,26 @@
-﻿name: VRC Asset Release and Listing Upload
+name: Create Tag and Release
 on:
-  push:
-    tags:
-      - "*.*.*"
-
-env:
-  ASSETS_PATH: .
-  RELEASE_PATH: Packages 
-  ARTIFACT_DURATION: 30 # In days
-  UPLOAD_ENDPOINT: https://api.vrlabs.dev/packages/add
-  WORKFLOW_VERSION: 1.0.0
+  workflow_dispatch:
+    inputs:
+      TAG:
+        required: true
+        type: string
+        description: Tag to be applied, for example 1.0.0
+      CHANGELOG:
+        required: true
+        type: string
+        description: Enter as a list using '- ' and '\n' (e.g. "- First item\n- Second item".). Don't use  ".
+      CHECKOUT_REF:
+        type: string
+        description: full commit hash, if none supplied, latest main is taken
 
 jobs:
-  build:
-    runs-on: "ubuntu-latest"
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Check if package.json exists
-        run: |
-          if [ ! -f package.json ]; then
-            echo "package.json not found"
-            exit 1
-          fi
-
-      - name: Get package.json
-        id: get_package_json
-        run: |
-          {
-            echo 'package_json<<"""'
-            echo $(cat package.json)
-            echo '"""'
-          } >> $GITHUB_OUTPUT
-
-      - name: Get needed Data
-        id: job_data
-        run: |
-          version=$(echo "${{ github.ref_name }}")
-          version=$(echo $version | tr '[:upper:]' '[:lower:]')
-          echo "version=$version" >> $GITHUB_OUTPUT
-          major_version=$(echo $version | cut -d '.' -f 1)
-          minor_version=$(echo $version | cut -d '.' -f 2)
-          echo "major_version=$major_version" >> $GITHUB_OUTPUT
-          echo "minor_version=$minor_version" >> $GITHUB_OUTPUT
-          name="${{ fromJson(steps.get_package_json.outputs.package_json).name }}"
-          display_name="${{ fromJson(steps.get_package_json.outputs.package_json).displayName }}"
-          echo "package_name=$name" >> $GITHUB_OUTPUT
-          echo "package_display_name=$display_name" >> $GITHUB_OUTPUT
-
-      - name: Create Packages
-        id: create_packages
-        uses: VRLabs/VRCTools-Packaging-Action@v1
-        with:
-          path: '${{ env.ASSETS_PATH }}'
-          outputPath: '${{ env.RELEASE_PATH }}'
-          releaseUrl: 'https://github.com/${{ github.repository }}/releases/download/${{ steps.job_data.outputs.version }}/${{ steps.job_data.outputs.package_name }}-${{ steps.job_data.outputs.version }}.zip'
-          unityReleaseUrl: 'https://github.com/${{ github.repository }}/releases/download/${{ steps.job_data.outputs.version }}/${{ steps.job_data.outputs.package_name }}-${{ steps.job_data.outputs.version }}.unitypackage'
-          releaseVersion: '${{ steps.job_data.outputs.version }}'
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          name: "${{ steps.job_data.outputs.package_display_name }} ${{ steps.job_data.outputs.version }}"
-          files: |
-            ${{ steps.create_packages.outputs.unityPackagePath }}
-            ${{ steps.create_packages.outputs.vccPackagePath }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SOURCE_TAG: ${{ steps.job_data.outputs.version }}
-
-      - name: Add server-json to Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: server-json
-          path: ${{ steps.create_packages.outputs.serverPackageJsonPath }}
-          retention-days: ${{ env.ARTIFACT_DURATION }} 
-
-      - name: Send package info to a server
-        run: |
-          curl -X POST -H "Content-Type: application/json" -H "Vrl-Api-Key: ${{ secrets.LISTINGS_API_KEY }}" --data @${{ steps.create_packages.outputs.serverPackageJsonPath }} ${{ env.UPLOAD_ENDPOINT }} || exit 0
-        shell: bash
+  deploy:
+    uses: VRLabs/Workflows-collection/.github/workflows/VRC-Asset-Release-And-Upload.yml@main
+    with:
+      ASSETS_PATH: .
+      TAG: ${{ inputs.TAG }}
+      CHANGELOG: ${{ inputs.CHANGELOG }}
+      REPOSITORY: ${{ github.repository }}
+      CHECKOUT_REF: ${{ inputs.CHECKOUT_REF }}
+    secrets: inherit
