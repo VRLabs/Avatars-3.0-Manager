@@ -33,8 +33,7 @@ namespace VRLabs.AV3Manager
         private Button mergeOnCurrent;
         private Button mergeOnNew;
 
-        private readonly LocalizationHandler<AV3ManagerLocalization> _m =
-            new LocalizationHandler<AV3ManagerLocalization>();
+        private readonly LocalizationHandler<AV3ManagerLocalization> LocalizationHandler = AV3Manager.LocalizationHandler;
 
         public void UpdateUI()
         {
@@ -82,21 +81,21 @@ namespace VRLabs.AV3Manager
             _layer = layer;
             _parametersToMerge = new List<ParameterToMerge>();
             _parameterWarningLabels = new List<Label>();
-            new Label(_m.Get(Merger_AnimatorMode).text)
+            new Label(LocalizationHandler.Get(Merger_AnimatorMode).text)
                 .WithClass("header")
                 .ChildOf(this);
 
             var controller = FluentUIElements
-                .NewObjectField(_m.Get(Merger_Animator).text, typeof(AnimatorController))
+                .NewObjectField(LocalizationHandler.Get(Merger_Animator).text, typeof(AnimatorController))
                 .ChildOf(this);
 
             var paramHeader = new VisualElement()
                 .WithFlexDirection(FlexDirection.Row)
                 .ChildOf(this);
-            var labelHeader = new Label(_m.Get(Merger_Parameters).text).WithClass("header-small").ChildOf(paramHeader);
+            var labelHeader = new Label(LocalizationHandler.Get(Merger_Parameters).text).WithClass("header-small").ChildOf(paramHeader);
             var sp = new VisualElement().ChildOf(paramHeader);
             sp.style.flexGrow = 1;
-            var checkboxHeader = new Label(_m.Get(Merger_Suffix).text).WithClass("header-small").ChildOf(paramHeader);
+            var checkboxHeader = new Label(LocalizationHandler.Get(Merger_Suffix).text).WithClass("header-small").ChildOf(paramHeader);
 
             var parametersListContainer = new VisualElement()
                 .ChildOf(this);
@@ -116,7 +115,7 @@ namespace VRLabs.AV3Manager
 
                 if (newController == layer.Controller)
                 {
-                    new Label(_m.Get(Merger_SelfMergeWarning).text)
+                    new Label(LocalizationHandler.Get(Merger_SelfMergeWarning).text)
                         .WithClass("red-text")
                         .WithClass("white-space-normal")
                         .ChildOf(parametersListContainer);
@@ -143,7 +142,7 @@ namespace VRLabs.AV3Manager
                     var suffixField = new TextField(p.Name).ChildOf(itemContainer);
                     suffixField.tooltip = p.Name;
 
-                    var warningLabel = new Label(_m.Get(Merger_DuplicateParamWarning).text)
+                    var warningLabel = new Label(LocalizationHandler.Get(Merger_DuplicateParamWarning).text)
                         .WithClass("red-text")
                         .WithClass("white-space-normal")
                         .ChildOf(itemContainer);
@@ -152,7 +151,7 @@ namespace VRLabs.AV3Manager
 
                     if (AV3Manager.VrcParameters.Any(x => x == param.name))
                     {
-                        new Label(_m.Get(Merger_BuiltinParamWarning).text)
+                        new Label(LocalizationHandler.Get(Merger_BuiltinParamWarning).text)
                             .WithClass("warning-label")
                             .ChildOf(itemContainer);
                     }
@@ -172,7 +171,7 @@ namespace VRLabs.AV3Manager
                     }
                     else if (allParameters.Any(x => x.nameHash == param.nameHash))
                     {
-                        new Label(_m.Get(Merger_ParamInDifferentLayerWarning).text)
+                        new Label(LocalizationHandler.Get(Merger_ParamInDifferentLayerWarning).text)
                             .WithClass("warning-label")
                             .ChildOf(itemContainer);
                     }
@@ -192,7 +191,7 @@ namespace VRLabs.AV3Manager
 
 
                 suffixClearButton = FluentUIElements
-                    .NewButton(_m.Get(Merger_ClearSuffixes).text, _m.Get(Merger_ClearSuffixes).tooltip,
+                    .NewButton(LocalizationHandler.Get(Merger_ClearSuffixes).text, LocalizationHandler.Get(Merger_ClearSuffixes).tooltip,
                         () =>
                         {
                             foreach (var suffixField in suffixFields)
@@ -203,7 +202,7 @@ namespace VRLabs.AV3Manager
                     .WithClass("grow-control")
                     .ChildOf(parametersListContainer);
 
-                warningLabel = new Label(_m.Get(Merger_ParamTypeMismatchWarning).text)
+                warningLabel = new Label(LocalizationHandler.Get(Merger_ParamTypeMismatchWarning).text)
                     .WithClass("red-text")
                     .WithClass("white-space-normal")
                     .ChildOf(parametersListContainer);
@@ -215,15 +214,15 @@ namespace VRLabs.AV3Manager
                 .WithFlexDirection(FlexDirection.Row)
                 .ChildOf(this);
             mergeOnCurrent = FluentUIElements
-                .NewButton(_m.Get(Merger_MergeOnCurrent).text, _m.Get(Merger_MergeOnCurrent).tooltip)
+                .NewButton(LocalizationHandler.Get(Merger_MergeOnCurrent).text, LocalizationHandler.Get(Merger_MergeOnCurrent).tooltip)
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
             mergeOnNew = FluentUIElements
-                .NewButton(_m.Get(Merger_MergeOnNew).text, _m.Get(Merger_MergeOnNew).tooltip)
+                .NewButton(LocalizationHandler.Get(Merger_MergeOnNew).text, LocalizationHandler.Get(Merger_MergeOnNew).tooltip)
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
             var cancelButton = FluentUIElements
-                .NewButton(_m.Get(Merger_Cancel).text, _m.Get(Merger_Cancel).tooltip)
+                .NewButton(LocalizationHandler.Get(Merger_Cancel).text, LocalizationHandler.Get(Merger_Cancel).tooltip)
                 .WithClass("grow-control")
                 .ChildOf(operationsArea);
 

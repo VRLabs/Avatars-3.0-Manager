@@ -2,7 +2,7 @@
     "name": "VRLabs.AV3Manager.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:5310497b387edc24db91f997b59edb91"
+        "GUID:6aa255c166c35784cbf3d5a673ac570f"
     ],
     "includePlatforms": [
         "Editor"
