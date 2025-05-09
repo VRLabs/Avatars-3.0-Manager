@@ -91,7 +91,8 @@ namespace VRLabs.AV3Manager
 		private List<List<IAV3ManagerTab>> _tabs;
 		private IAV3ManagerTab _selectedTab;
 		private ScrollView _selectedTabArea;
-		private string _selectedTabName;
+		private int _selectedTabGroupIndex = 0;
+		private int _selectedTabIndex = 0;
 		private List<VisualElement> _tabsContainers = new List<VisualElement>();
 
 		private static LocalizationHandler<AV3ManagerLocalization> _localizationHandler;
@@ -239,6 +240,8 @@ namespace VRLabs.AV3Manager
 					tabButton.Add(iconElement);
 					tabButton.AddToClassList("tab-button");
 
+					var tabIndex = _tabs[index].Count;
+					var tabGroupIndex = index;
 					tabButton.clicked += () =>
 					{
 						foreach (var button in tabsAreas.SelectMany(e => e.Children()))
@@ -250,7 +253,8 @@ namespace VRLabs.AV3Manager
 						_selectedTabArea.Clear();
 						_selectedTabArea.Add(tab?.TabContainer);
 						_selectedTab = tab;
-						_selectedTabName = tab?.TabName;
+						_selectedTabIndex = tabIndex;
+						_selectedTabGroupIndex = tabGroupIndex;
 
 						tab.UpdateTab(_avatar);
 					};
@@ -264,37 +268,11 @@ namespace VRLabs.AV3Manager
 
 			if (tabsAreas.Count > 0 && tabsAreas[0].childCount > 0 && _tabs.Count > 0 && _tabs[0].Count > 0)
 			{
-				if (String.IsNullOrEmpty(_selectedTabName))
-				{
-					_selectedTab = _tabs[0][0];
-					_selectedTabArea.Add(_tabs[0][0].TabContainer);
-					tabsAreas[0][0].WithClass("tab-button-selected");
-				}
-				else
-				{
-					bool found = false;
-					for (var i = 0; i < _tabs.Count; i++)
-					{
-						var tabArea = _tabs[i];
-						for (var j = 0; j < tabArea.Count; j++)
-						{
-							if (tabArea[j].TabName == _selectedTabName)
-							{
-								_selectedTab = _tabs[i][j];
-								_selectedTabArea.Add(_tabs[i][j].TabContainer);
-								tabsAreas[i][j].WithClass("tab-button-selected");
-								found = true;
-							}
-						}
-					}
 
-					if (!found)
-					{
-						_selectedTab = _tabs[0][0];
-						_selectedTabArea.Add(_tabs[0][0].TabContainer);
-						tabsAreas[0][0].WithClass("tab-button-selected");
-					}
-				}
+				_selectedTab = _tabs[_selectedTabGroupIndex][_selectedTabIndex];
+				_selectedTabArea.Add(_tabs[_selectedTabGroupIndex][_selectedTabIndex].TabContainer);
+				tabsAreas[_selectedTabGroupIndex][_selectedTabIndex].WithClass("tab-button-selected");
+				
 				tabsAreas[0][0].WithClass("tab-button-top");
 				var lastTab = tabsAreas.Last();
 				lastTab[lastTab.childCount - 1].WithClass("tab-button-bottom");
