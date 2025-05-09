@@ -64,9 +64,9 @@ MonoBehaviour:
       text: Merge on current
       tooltip: Merge this animator on the current layer animator
   - keyName: Merger_MergeOnNew
-    content: Merge on new
-    text: Create a copy of the layer animator and merge this animator on that
-    tooltip: 
+    content:
+      text: Create a copy of the layer animator and merge this animator on that
+      tooltip: 
   - keyName: Merger_Cancel
     content:
       text: Cancel
