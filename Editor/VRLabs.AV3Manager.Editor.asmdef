@@ -1,6 +1,9 @@
 {
     "name": "VRLabs.AV3Manager.Editor",
-    "references": [],
+    "rootNamespace": "",
+    "references": [
+        "GUID:6aa255c166c35784cbf3d5a673ac570f"
+    ],
     "includePlatforms": [
         "Editor"
     ],
