@@ -209,7 +209,7 @@ namespace VRLabs.AV3Manager
 						.WithFlexDirection(FlexDirection.Row)
 						.ChildOf(group);
 
-					new Label(LocalizationHandler.Get(WD_State).text).WithClass("header-small").WithFlex(6, 0, 1)
+					new Label(LocalizationHandler.Get(WD_State).text).WithClass("header-small").WithFlex(2, 0, 1)
 						.ChildOf(headerRow);
 					new Label(LocalizationHandler.Get(WD_Motion).text).WithClass("header-small")
 						.WithUnityTextAlign(TextAnchor.UpperCenter).WithFlex(1, 0, 1).ChildOf(headerRow);
@@ -230,7 +230,7 @@ namespace VRLabs.AV3Manager
 
 				new Label(state.StateName)
 					.WithAlignSelf(Align.Center)
-					.WithFlex(6, 0, 1)
+					.WithFlex(2, 0, 1)
 					.ChildOf(row);
 
 				new Label(state.State.motion == null ? "None" : state.State.motion.name)
