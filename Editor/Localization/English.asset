@@ -123,7 +123,7 @@ MonoBehaviour:
       tooltip: 
   - keyName: Layers_ExprParams
     content:
-      text: Expression Parameter
+      text: VRC Expression Parameter
       tooltip: 
   - keyName: Layers_Synced
     content:
@@ -143,7 +143,7 @@ MonoBehaviour:
       tooltip: 
   - keyName: Params_ExprParams
     content:
-      text: Expression Parameters
+      text: VRC Expression Parameters
       tooltip: 
   - keyName: Params_OpenInInspector
     content:
@@ -189,8 +189,8 @@ MonoBehaviour:
       tooltip: 
   - keyName: Params_BuiltinInExprParamWarning
     content:
-      text: This parameter doesn't need to be in the parameters asset, remove it
-        or or turn off the "Synced" toggle to save some parameter space
+      text: This parameter doesn't need to be in the VRC Expression Parameters asset,
+        remove it or or turn off the "Synced" toggle to save some parameter space
       tooltip: 
   - keyName: Params_UsedParamMemory
     content:
