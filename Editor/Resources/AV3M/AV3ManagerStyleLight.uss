@@ -1,57 +1,57 @@
-﻿.tabs-area
-{
+﻿.tabs-area {
     background-color: #A4A4A4;
+    border-color: #898989;
 }
 
-.selected-tab
-{
+.tabs-bottom-area {
+    background-color: #A4A4A4;
+    border-color: #898989;
+}
+
+.selected-tab {
     background-color: #C0C0C0;
     border-color: #898989;
 }
 
-.tab-button
-{
+.tab-button {
     background-color: #A4A4A4;
     border-color: #898989;
     border-left-color: #3A78BA;
 }
 
-.tab-button-selected
-{
+.tabs-empty-area {
+    background-color: #A4A4A4;
+    border-color: #898989;
+}
+
+.tab-button-selected {
     background-color: #C0C0C0;
 }
 
-.warning-label
-{
+.warning-label {
     color: #EFFF29;
 }
 
-.red-text
-{
+.red-text {
     color: red;
 }
 
-.yellow-text
-{
+.yellow-text {
     color: #EFFF29;
 }
 
-.green-text
-{
+.green-text {
     color: green;
 }
 
-.gray-text
-{
+.gray-text {
     color: gray;
 }
 
-.layer-tab-arrow
-{
+.layer-tab-arrow {
     background-image: resource("builtin skins/lightskin/images/in foldout.png");
 }
 
-.layer-tab-arrow-on
-{
+.layer-tab-arrow-on {
     background-image: resource("builtin skins/lightskin/images/in foldout on.png");
 }

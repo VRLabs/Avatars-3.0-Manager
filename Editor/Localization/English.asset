@@ -1,0 +1,332 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0450617712bbc5846a824c3bde9ca990, type: 3}
+  m_Name: English
+  m_EditorClassIdentifier: 
+  languageName: English
+  localizedContent:
+  - keyName: Merger_AnimatorMode
+    content:
+      text: Merge Controller Mode
+      tooltip: 
+  - keyName: Merger_Animator
+    content:
+      text: Controller
+      tooltip: 
+  - keyName: Merger_Parameters
+    content:
+      text: Parameters
+      tooltip: 
+  - keyName: Merger_Suffix
+    content:
+      text: Suffix
+      tooltip: 
+  - keyName: Merger_SelfMergeWarning
+    content:
+      text: Cannot merge controller onto itself.
+      tooltip: 
+  - keyName: Merger_DuplicateParamWarning
+    content:
+      text: Target controller contains this parameter with a different type than
+        the base controller. These controllers cannot be merged
+      tooltip: 
+  - keyName: Merger_BuiltinParamWarning
+    content:
+      text: Parameter is a default one, by default it will be added to the parameters,
+        but not listed in the synced parameters, you should not add any affix unless
+        you know what you're doing
+      tooltip: 
+  - keyName: Merger_ParamInDifferentLayerWarning
+    content:
+      text: Parameter is already used in another layer, you may want to add a suffix
+      tooltip: 
+  - keyName: Merger_ClearSuffixes
+    content:
+      text: Clear all suffixes
+      tooltip: Remove all suffixes, which will use the same parameters for newly
+        merged parameters
+  - keyName: Merger_ParamTypeMismatchWarning
+    content:
+      text: Target controller contains a parameter with a different type than the
+        base controller. These controllers cannot be merged
+      tooltip: 
+  - keyName: Merger_MergeOnCurrent
+    content:
+      text: Merge on current
+      tooltip: Merge this controller on the current layer controller
+  - keyName: Merger_MergeOnNew
+    content:
+      text: Merge on copy
+      tooltip: Create a copy of the layer controller and merge this animator on it
+  - keyName: Merger_Cancel
+    content:
+      text: Cancel
+      tooltip: Cancel operation
+  - keyName: Clips_SwapMode
+    content:
+      text: Animations Swap Mode
+      tooltip: 
+  - keyName: Clips_DontModifyAnimatorWarning
+    content:
+      text: Do NOT modify the animator while you're swapping animations with the
+        AV3 Manager to avoid issues
+      tooltip: 
+  - keyName: Clips_ApplyOnCurrent
+    content:
+      text: Apply on current
+      tooltip: Apply the changes on this controller
+  - keyName: Clips_ApplyOnNew
+    content:
+      text: Apply on new
+      tooltip: Apply the changes on a new copy of the controller and applies it to
+        the avatar
+  - keyName: Clips_Cancel
+    content:
+      text: Cancel
+      tooltip: Cancel operation
+  - keyName: Layers_Layers
+    content:
+      text: Layers
+      tooltip: 
+  - keyName: Layers_UsedParamMemory
+    content:
+      text: Parameters memory used
+      tooltip: 
+  - keyName: Layers_UseCustomLayer
+    content:
+      text: Use Custom Layer
+      tooltip: Use your own controller for this layer
+  - keyName: Layers_UseDefaultLayer
+    content:
+      text: Use Default Layer as custom
+      tooltip: Use a copy of the default layer for this layer
+  - keyName: Layers_UseDefaulVRCLayer
+    content:
+      text: Use Default Layer
+      tooltip: Use the default layer from VRChat
+  - keyName: Layers_Controller
+    content:
+      text: Controller
+      tooltip: 
+  - keyName: Layers_Params
+    content:
+      text: Parameters
+      tooltip: 
+  - keyName: Layers_ExprParams
+    content:
+      text: VRC Expression Parameter
+      tooltip: 
+  - keyName: Layers_Synced
+    content:
+      text: Synced
+      tooltip: 
+  - keyName: Layers_AddAnimatorToMerge
+    content:
+      text: Add controller to merge
+      tooltip: Select controller to merge to the current layer controller
+  - keyName: Layers_SwapAnimations
+    content:
+      text: Swap Animations
+      tooltip: Swap animations in the current controller
+  - keyName: Params_Params
+    content:
+      text: Parameters
+      tooltip: 
+  - keyName: Params_ExprParams
+    content:
+      text: VRC Expression Parameters
+      tooltip: 
+  - keyName: Params_OpenInInspector
+    content:
+      text: Open asset in inspector
+      tooltip: Selects the asset and shows it in the inspector
+  - keyName: Params_Name
+    content:
+      text: Name
+      tooltip: 
+  - keyName: Params_Type
+    content:
+      text: Type
+      tooltip: 
+  - keyName: Params_Default
+    content:
+      text: Default
+      tooltip: 
+  - keyName: Params_Saved
+    content:
+      text: Saved
+      tooltip: 
+  - keyName: Params_Synced
+    content:
+      text: Synced
+      tooltip: 
+  - keyName: Params_CopyParams
+    content:
+      text: Copy parameters
+      tooltip: 
+  - keyName: Params_ParamsToCopy
+    content:
+      text: Parameters to copy
+      tooltip: 
+  - keyName: Params_CopyParamsButton
+    content:
+      text: Copy parameters
+      tooltip: Copies parameters into the current asset. If a parameter already existed,
+        its settings will be replaced
+  - keyName: Params_UnusedExprParamWarning
+    content:
+      text: This parameter is not used in any animator, remove it or turn off the
+        "Synced" toggle to save some parameter space
+      tooltip: 
+  - keyName: Params_BuiltinInExprParamWarning
+    content:
+      text: This parameter doesn't need to be in the VRC Expression Parameters asset,
+        remove it or or turn off the "Synced" toggle to save some parameter space
+      tooltip: 
+  - keyName: Params_UsedParamMemory
+    content:
+      text: Parameters memory used
+      tooltip: 
+  - keyName: Params_AdditionalCostOfAnimatorToMerge
+    content:
+      text: Additional cost
+      tooltip: 
+  - keyName: Params_TotalParamMemoryAfterMerge
+    content:
+      text: Total cost after update
+      tooltip: 
+  - keyName: Params_MergeWouldSurpassParamMemoryWarning
+    content:
+      text: Can't merge, the total cost would surpass the maximum
+      tooltip: 
+  - keyName: WD_WD
+    content:
+      text: Write Defaults
+      tooltip: 
+  - keyName: WD_ForceAllWD
+    content:
+      text: Force all Write Defaults
+      tooltip: 
+  - keyName: WD_ForceAllWDWarning
+    content:
+      text: Forcing the Write Defaults settings on states that explicitly request
+        a specific setting is not advisable
+      tooltip: 
+  - keyName: WD_DBTWarning
+    content:
+      text: Direct Blend Tree without explicit Write Defaults setting found. These
+        should probably be kept in the same state as they are now
+      tooltip: 
+  - keyName: WD_IgnoreDBT
+    content:
+      text: Ignore Direct Blend Trees
+      tooltip: 
+  - keyName: WD_SetWDOff
+    content:
+      text: Set Write Defaults Off
+      tooltip: Set Write Defaults to off
+  - keyName: WD_ForceWD
+    content:
+      text: Force Write Defaults Settings
+      tooltip: 
+  - keyName: WD_ForceWDOffMessage
+    content:
+      text: 'Some states are requesting to keep Write Defaults On, but you''re attempting
+        to override this by setting Write Defaults to Off with the force option.
+
+        Do
+        you want to proceed with this override?'
+      tooltip: 
+  - keyName: WD_ForceWDOnMessage
+    content:
+      text: 'Some states are requesting to keep Write Defaults Off, but you''re attempting
+        to override this by setting Write Defaults to On with the force option.
+
+        Do
+        you want to proceed with this override?'
+      tooltip: 
+  - keyName: WD_Proceed
+    content:
+      text: Proceed
+      tooltip: 
+  - keyName: WD_Cancel
+    content:
+      text: Cancel
+      tooltip: 
+  - keyName: WD_SetWDOn
+    content:
+      text: Set Write Defaults On
+      tooltip: Set Write Defaults to on
+  - keyName: WD_MixedWDWarning
+    content:
+      text: You have mixed Write Defaults in your layers, you may experience weird
+        interactions in-game
+      tooltip: 
+  - keyName: WD_EmptyStatesWarning
+    content:
+      text: Some states have no motions, this can be an issue when using Write Defaults
+        Off. Upon setting a unified Write Defaults state, an empty motion clip will
+        fill those states
+      tooltip: 
+  - keyName: WD_List
+    content:
+      text: Write Defaults List
+      tooltip: 
+  - keyName: WD_State
+    content:
+      text: State
+      tooltip: 
+  - keyName: WD_Motion
+    content:
+      text: Motion
+      tooltip: 
+  - keyName: WD_WDOn
+    content:
+      text: Write Defaults
+      tooltip: 
+  - keyName: WD_Default
+    content:
+      text: Default
+      tooltip: Whether the state name contains "(WD On)" or "(WD Off)", which stops
+        the AV3 Manager from changing the Write Defaults (unless forced)
+  - keyName: WD_ViewState
+    content:
+      text: View State
+      tooltip: 
+  - keyName: WD_On
+    content:
+      text: On
+      tooltip: 
+  - keyName: WD_Off
+    content:
+      text: Off
+      tooltip: 
+  - keyName: WD_None
+    content:
+      text: None
+      tooltip: 
+  - keyName: WD_View
+    content:
+      text: View
+      tooltip: 
+  - keyName: Settings_Settings
+    content:
+      text: Settings
+      tooltip: 
+  - keyName: Settings_HelpMessage
+    content:
+      text: Want to help with the translation? Join our server at https://discord.vrlabs.dev.
+      tooltip:
+  - keyName: Settings_IgnoreParamLimit
+    content:
+      text: Ignore Max Parameter Limit
+      tooltip: 

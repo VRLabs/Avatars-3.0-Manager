@@ -1,0 +1,334 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0450617712bbc5846a824c3bde9ca990, type: 3}
+  m_Name: "Fran\xE7ais"
+  m_EditorClassIdentifier: 
+  languageName: "Fran\xE7ais"
+  localizedContent:
+  - keyName: Merger_AnimatorMode
+    content:
+      text: Mode de fusion de l'Animator
+      tooltip: 
+  - keyName: Merger_Animator
+    content:
+      text: Animator
+      tooltip: 
+  - keyName: Merger_Parameters
+    content:
+      text: "Param\xE8tres"
+      tooltip: 
+  - keyName: Merger_Suffix
+    content:
+      text: Suffixe
+      tooltip: 
+  - keyName: Merger_SelfMergeWarning
+    content:
+      text: "Impossible de fusionner le Controller avec lui-m\xEAme."
+      tooltip: 
+  - keyName: Merger_DuplicateParamWarning
+    content:
+      text: "Le Controller cible contient ce param\xE8tre avec un type diff\xE9rent
+        de celui du contr\xF4leur de base. Ces contr\xF4leurs ne peuvent donc pas
+        \xEAtre fusionn\xE9s."
+      tooltip: 
+  - keyName: Merger_BuiltinParamWarning
+    content:
+      text: "Ce param\xE8tre est un param\xE8tre syst\xE8me (par d\xE9faut). Il sera
+        ajout\xE9 aux param\xE8tres mais ne sera pas list\xE9 dans les param\xE8tres
+        synchronis\xE9s. Vous ne devriez pas ajouter d'affixe sauf si vous savez
+        ce que vous faites."
+      tooltip: 
+  - keyName: Merger_ParamInDifferentLayerWarning
+    content:
+      text: "Param\xE8tre d\xE9j\xE0 utilis\xE9 dans un autre Layer, vous devriez
+        peut-\xEAtre ajouter un suffixe."
+      tooltip: 
+  - keyName: Merger_ClearSuffixes
+    content:
+      text: Effacer tous les suffixes
+      tooltip: "Supprime tous les suffixes, ce qui utilisera les m\xEAmes param\xE8tres
+        pour les param\xE8tres nouvellement fusionn\xE9s"
+  - keyName: Merger_ParamTypeMismatchWarning
+    content:
+      text: "Le Controller cible contient un param\xE8tre avec un type diff\xE9rent
+        de celui du Controller de base. Ces Controller ne peuvent pas \xEAtre fusionn\xE9s."
+      tooltip: 
+  - keyName: Merger_MergeOnCurrent
+    content:
+      text: Fusionner sur le Controller actuel
+      tooltip: Fusionne ce Controller sur le Controller de la couche actuelle
+  - keyName: Merger_MergeOnNew
+    content:
+      text: "Cr\xE9er une copie du Controller en place et y fusionner ce Controller"
+      tooltip: 
+  - keyName: Merger_Cancel
+    content:
+      text: Annuler
+      tooltip: "Annuler l'op\xE9ration"
+  - keyName: Clips_SwapMode
+    content:
+      text: "Mode d'\xE9change pour les animations"
+      tooltip: 
+  - keyName: Clips_DontModifyAnimatorWarning
+    content:
+      text: "NE MODIFIEZ PAS l'animateur pendant que vous \xE9changez des animations
+        avec AV3 Manager afin d'\xE9viter des probl\xE8mes."
+      tooltip: 
+  - keyName: Clips_ApplyOnCurrent
+    content:
+      text: Appliquer sur l'actuel
+      tooltip: "Appliquer les changements sur ce contr\xF4leur"
+  - keyName: Clips_ApplyOnNew
+    content:
+      text: Appliquer sur un nouveau
+      tooltip: "Appliquer les changements sur une nouvelle copie du contr\xF4leur
+        et l'appliquer \xE0 l'avatar"
+  - keyName: Clips_Cancel
+    content:
+      text: Annuler
+      tooltip: "Annuler l'op\xE9ration"
+  - keyName: Layers_Layers
+    content:
+      text: Layers
+      tooltip: 
+  - keyName: Layers_UsedParamMemory
+    content:
+      text: "M\xE9moire utilis\xE9e par les param\xE8tres"
+      tooltip: 
+  - keyName: Layers_UseCustomLayer
+    content:
+      text: "Utiliser un Controller personnalis\xE9"
+      tooltip: Utilisez votre propre animateur pour cette couche
+  - keyName: Layers_UseDefaultLayer
+    content:
+      text: "Utiliser le Layer par d\xE9faut comme Controller personnalis\xE9"
+      tooltip: "Utilisez une copie de la couche par d\xE9faut pour cette couche."
+  - keyName: Layers_UseDefaulVRCLayer
+    content:
+      text: "Utiliser le Layer VRC par d\xE9faut"
+      tooltip: DefaultLayerButton
+  - keyName: Layers_Controller
+    content:
+      text: Controller
+      tooltip: 
+  - keyName: Layers_Params
+    content:
+      text: "Param\xE8tres"
+      tooltip: 
+  - keyName: Layers_ExprParams
+    content:
+      text: "Param\xE8tre d'expression"
+      tooltip: 
+  - keyName: Layers_Synced
+    content:
+      text: "Synchronis\xE9"
+      tooltip: 
+  - keyName: Layers_AddAnimatorToMerge
+    content:
+      text: "Ajouter un Controller \xE0 fusionner"
+      tooltip: "S\xE9lectionnez un animateur \xE0 fusionner avec l'animateur de la
+        couche actuelle."
+  - keyName: Layers_SwapAnimations
+    content:
+      text: "\xC9changer les animations"
+      tooltip: "\xC9changer les animations dans l'animateur actuel."
+  - keyName: Params_Params
+    content:
+      text: "Param\xE8tres"
+      tooltip: 
+  - keyName: Params_ExprParams
+    content:
+      text: "Param\xE8tres d'expression"
+      tooltip: 
+  - keyName: Params_OpenInInspector
+    content:
+      text: Ouvrir la ressource dans l'inspecteur
+      tooltip: "S\xE9lectionne la ressource et l'affiche dans l'inspecteur."
+  - keyName: Params_Name
+    content:
+      text: Nom
+      tooltip: 
+  - keyName: Params_Type
+    content:
+      text: Type
+      tooltip: 
+  - keyName: Params_Default
+    content:
+      text: "D\xE9faut"
+      tooltip: 
+  - keyName: Params_Saved
+    content:
+      text: "Enregistr\xE9"
+      tooltip: 
+  - keyName: Params_Synced
+    content:
+      text: "Synchronis\xE9"
+      tooltip: 
+  - keyName: Params_CopyParams
+    content:
+      text: "Copier les param\xE8tres"
+      tooltip: 
+  - keyName: Params_ParamsToCopy
+    content:
+      text: "Sauvgard\xE9"
+      tooltip: 
+  - keyName: Params_CopyParamsButton
+    content:
+      text: "Copier les param\xE8tres"
+      tooltip: "Copie les param\xE8tres dans la ressource actuelle. Les param\xE8tres
+        existants seront mis \xE0 jour s\u2019ils sont d\xE9j\xE0 list\xE9s."
+  - keyName: Params_UnusedExprParamWarning
+    content:
+      text: "Ce param\xE8tre n'est utilis\xE9 dans aucun Controller. Supprimez-le
+        ou d\xE9finissez-le en \"local only\" pour \xE9conomiser de l'espace."
+      tooltip: 
+  - keyName: Params_BuiltinInExprParamWarning
+    content:
+      text: "Ce param\xE8tre n'a pas besoin d'\xEAtre dans le composant de param\xE8tres.
+        Supprimez-le ou d\xE9finissez-le en \"local only\" pour \xE9conomiser de
+        l'espace."
+      tooltip: 
+  - keyName: Params_UsedParamMemory
+    content:
+      text: "M\xE9moire utilis\xE9e par les param\xE8tres"
+      tooltip: 
+  - keyName: Params_AdditionalCostOfAnimatorToMerge
+    content:
+      text: "Co\xFBt suppl\xE9mentaire"
+      tooltip: 
+  - keyName: Params_TotalParamMemoryAfterMerge
+    content:
+      text: "Co\xFBt total apr\xE8s modifications"
+      tooltip: 
+  - keyName: Params_MergeWouldSurpassParamMemoryWarning
+    content:
+      text: "Impossible de fusionner, le co\xFBt d\xE9passe le maximum autoris\xE9."
+      tooltip: 
+  - keyName: WD_WD
+    content:
+      text: Write Defaults
+      tooltip: 
+  - keyName: WD_ForceAllWD
+    content:
+      text: Forcer tous les WD
+      tooltip: 
+  - keyName: WD_ForceAllWDWarning
+    content:
+      text: "Forcer le mode Write Defaults sur des \xE9tats qui demandent un r\xE9glage
+        sp\xE9cifiquenon recommand\xE9."
+      tooltip: 
+  - keyName: WD_DBTWarning
+    content:
+      text: "un \"Direct Blend Tree\" sans r\xE9glage WD explicite a \xE9t\xE9 trouv\xE9.
+        Ceux-ci devraient probablement rester dans leur \xE9tat actuel."
+      tooltip: 
+  - keyName: WD_IgnoreDBT
+    content:
+      text: Ignorer les Direct Blend Trees
+      tooltip: 
+  - keyName: WD_SetWDOff
+    content:
+      text: "D\xE9sactiver les WD"
+      tooltip: "D\xE9finir Write Defaults sur off."
+  - keyName: WD_ForceWD
+    content:
+      text: Forcer les WD
+      tooltip: 
+  - keyName: WD_ForceWDOffMessage
+    content:
+      text: "Certains \xE9tats demandent de garder WD activ\xE9, mais vous essayez
+        de le d\xE9sactiver en for\xE7ant cette option.\nVoulez-vous vraiment proc\xE9der
+        \xE0 cette modification ?"
+      tooltip: 
+  - keyName: WD_ForceWDOnMessage
+    content:
+      text: "Certains \xE9tats demandent de garder WD d\xE9sactiv\xE9, mais vous
+        essayez de l'activer en for\xE7ant cette option.\nVoulez-vous vraiment proc\xE9der
+        \xE0 cette modification ?"
+      tooltip: 
+  - keyName: WD_Proceed
+    content:
+      text: Continuer
+      tooltip: 
+  - keyName: WD_Cancel
+    content:
+      text: Annuler
+      tooltip: 
+  - keyName: WD_SetWDOn
+    content:
+      text: Activer le WD
+      tooltip: "D\xE9finir Write Defaults sur on."
+  - keyName: WD_MixedWDWarning
+    content:
+      text: "Vous avez des Write Defaults m\xE9lang\xE9s dans vos Layers, cela peut
+        provoquer des comportements \xE9tranges en jeu."
+      tooltip: 
+  - keyName: WD_EmptyStatesWarning
+    content:
+      text: "Certains \xE9tats n'ont pas de \"Motion\", ce qui peut poser probl\xE8me
+        lorsque les WD est d\xE9sactiv\xE9s. Lors de la d\xE9finition d'un \xE9tat
+        WD unifi\xE9, un clip de \"Motion\" vide remplira ces \xE9tats."
+      tooltip: 
+  - keyName: WD_List
+    content:
+      text: Liste WD
+      tooltip: 
+  - keyName: WD_State
+    content:
+      text: "\xC9tat"
+      tooltip: 
+  - keyName: WD_Motion
+    content:
+      text: Motion
+      tooltip: 
+  - keyName: WD_WDOn
+    content:
+      text: "WD Activ\xE9"
+      tooltip: 
+  - keyName: WD_Default
+    content:
+      text: "D\xE9faut"
+      tooltip: "Si le nom de l'\xE9tat contient \"(WD On)\" ou \"(WD Off)\", cela
+        emp\xEAche AV3 Manager de modifier le param\xE8tre Write Defaults (sauf si
+        forc\xE9)."
+  - keyName: WD_ViewState
+    content:
+      text: "Voir l'\xE9tat"
+      tooltip: 
+  - keyName: WD_On
+    content:
+      text: "Activ\xE9"
+      tooltip: 
+  - keyName: WD_Off
+    content:
+      text: "D\xE9sactiv\xE9"
+      tooltip: 
+  - keyName: WD_None
+    content:
+      text: Aucun
+      tooltip: 
+  - keyName: WD_View
+    content:
+      text: Voir
+      tooltip: 
+  - keyName: Settings_Settings
+    content:
+      text: "Param\xE8tres"
+      tooltip: 
+  - keyName: Settings_IgnoreParamLimit
+    content:
+      text: "Ignorer la limite maximale de param\xE8tres"
+      tooltip: 
+  - keyName: Settings_HelpMessage
+    content:
+      text: Want to help with the translation? Join our server at https://discord.vrlabs.dev.
+      tooltip: 

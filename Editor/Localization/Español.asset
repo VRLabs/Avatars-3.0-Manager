@@ -1,0 +1,331 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0450617712bbc5846a824c3bde9ca990, type: 3}
+  m_Name: "Espa\xF1ol"
+  m_EditorClassIdentifier: 
+  languageName: "Espa\xF1ol"
+  localizedContent:
+  - keyName: Merger_Animator
+    content:
+      text: Controlador
+      tooltip: 
+  - keyName: Merger_AnimatorMode
+    content:
+      text: "Modo de Fusi\xF3n de Controladores"
+      tooltip: 
+  - keyName: Clips_Cancel
+    content:
+      text: Cancelar
+      tooltip: "Cancelar la operaci\xF3n"
+  - keyName: Settings_Settings
+    content:
+      text: Configuraciones
+      tooltip: 
+  - keyName: Settings_IgnoreParamLimit
+    content:
+      text: "Ignorar el L\xEDmite de Par\xE1metros M\xE1ximo"
+      tooltip: 
+  - keyName: WD_On
+    content:
+      text: Encendido
+      tooltip: 
+  - keyName: WD_Off
+    content:
+      text: Apagado
+      tooltip: 
+  - keyName: WD_None
+    content:
+      text: Ninguno
+      tooltip: 
+  - keyName: WD_View
+    content:
+      text: Ver
+      tooltip: 
+  - keyName: WD_Default
+    content:
+      text: Por defecto
+      tooltip: Si el nombre del estado contiene "(WD On)" o "(WD Off)", lo que impide
+        que AV3 Manager cambie los valores de Write Defaults (a menos que sea forzado)
+  - keyName: WD_Cancel
+    content:
+      text: Cancelar
+      tooltip: 
+  - keyName: Params_CopyParamsButton
+    content:
+      text: "Copiar par\xE1metros"
+      tooltip: "Copia los par\xE1metros al archivo actual. Las configuraciones de
+        este se copiar\xE1n si un par\xE1metro ya existe en la lista."
+  - keyName: Clips_DontModifyAnimatorWarning
+    content:
+      text: "NO modificar el animador cuando se est\xE1 cambiando animaciones con
+        el AV3 Manager para evitar problemas"
+      tooltip: 
+  - keyName: Params_Type
+    content:
+      text: Tipo
+      tooltip: 
+  - keyName: Params_Name
+    content:
+      text: Nombre
+      tooltip: 
+  - keyName: Params_Default
+    content:
+      text: Por defecto
+      tooltip: 
+  - keyName: Merger_Suffix
+    content:
+      text: Sufijo
+      tooltip: 
+  - keyName: Layers_UsedParamMemory
+    content:
+      text: "Memoria de par\xE1metros usada"
+      tooltip: 
+  - keyName: Layers_UseDefaulVRCLayer
+    content:
+      text: Usar Capa Por Defecto
+      tooltip: Usar Capa Por Defecto de VRChat
+  - keyName: Params_CopyParams
+    content:
+      text: "Copiar par\xE1metros"
+      tooltip: 
+  - keyName: Params_ParamsToCopy
+    content:
+      text: "Par\xE1metros a copiar"
+      tooltip: 
+  - keyName: Params_AdditionalCostOfAnimatorToMerge
+    content:
+      text: Costo adicional
+      tooltip: 
+  - keyName: Params_Saved
+    content:
+      text: Guardado
+      tooltip: 
+  - keyName: Params_Params
+    content:
+      text: "Par\xE1metros"
+      tooltip: 
+  - keyName: Layers_SwapAnimations
+    content:
+      text: Intercambiar animaciones
+      tooltip: Intercambiar animaciones en el controlador actual
+  - keyName: Layers_Params
+    content:
+      text: "Par\xE1metros"
+      tooltip: 
+  - keyName: Layers_Controller
+    content:
+      text: Controlador
+      tooltip: 
+  - keyName: Clips_ApplyOnNew
+    content:
+      text: Aplicar en nuevo
+      tooltip: Aplica los cambios en una nueva copia del controlador y lo asigna
+        al avatar.
+  - keyName: Clips_ApplyOnCurrent
+    content:
+      text: Aplicar en actual
+      tooltip: Aplica los cambios en este controlador.
+  - keyName: Layers_Synced
+    content:
+      text: Sincronizado
+      tooltip: 
+  - keyName: Layers_AddAnimatorToMerge
+    content:
+      text: Agregar controlador para unir
+      tooltip: Seleccione el controlador para fusionar con el controlador de capa
+        actual
+  - keyName: Params_OpenInInspector
+    content:
+      text: Abrir archivo en el inspector
+      tooltip: Selecciona el archivo y lo muestra en el inspector.
+  - keyName: Params_UsedParamMemory
+    content:
+      text: "Memoria usada de par\xE1metros"
+      tooltip: 
+  - keyName: Params_TotalParamMemoryAfterMerge
+    content:
+      text: "Costo total despu\xE9s de la actualizaci\xF3n"
+      tooltip: 
+  - keyName: Params_MergeWouldSurpassParamMemoryWarning
+    content:
+      text: "No se puede unir, el costo supera el m\xE1ximo."
+      tooltip: 
+  - keyName: WD_Proceed
+    content:
+      text: Continuar
+      tooltip: 
+  - keyName: Merger_SelfMergeWarning
+    content:
+      text: No se puede fusionar el controlador consigo mismo.
+      tooltip: 
+  - keyName: Merger_Parameters
+    content:
+      text: "Par\xE1metros"
+      tooltip: 
+  - keyName: Merger_MergeOnCurrent
+    content:
+      text: Fusionar al actual
+      tooltip: Fusiona este controlador en el controlador de la capa actual.
+  - keyName: Merger_Cancel
+    content:
+      text: Cancelar
+      tooltip: "Cancelar la operaci\xF3n."
+  - keyName: Merger_ParamTypeMismatchWarning
+    content:
+      text: "El controlador objetivo contiene un par\xE1metro con un tipo distinto
+        al del control base. Estos controladores no pueden fusionarse."
+      tooltip: 
+  - keyName: Params_UnusedExprParamWarning
+    content:
+      text: "Este par\xE1metro no es usado en ning\xFAn animador. Remu\xE9valo o
+        desactive el sincronizado para ahorrar espacio de par\xE1metros"
+      tooltip: 
+  - keyName: Params_BuiltinInExprParamWarning
+    content:
+      text: "Este par\xE1metro no necesita estar en el archivo de par\xE1metros de
+        VRC. Remu\xE9valo o desactive el sincronizado para ahorrar espacio de par\xE1metros."
+      tooltip: 
+  - keyName: WD_SetWDOn
+    content:
+      text: Activar Write Defaults
+      tooltip: Configura Write Defaults a encendido.
+  - keyName: Params_Synced
+    content:
+      text: Sincronizado
+      tooltip: 
+  - keyName: Params_ExprParams
+    content:
+      text: "Par\xE1metros de Expresi\xF3n de VRC"
+      tooltip: 
+  - keyName: Layers_ExprParams
+    content:
+      text: "Par\xE1metro de Expresi\xF3n de VRC"
+      tooltip: 
+  - keyName: Merger_BuiltinParamWarning
+    content:
+      text: "El par\xE1metro es uno por defecto. Ser\xE1 agregado a los par\xE1metros,
+        pero no aparecer\xE1 en la lista de parametros sincronizados. No deber\xEDas
+        agregar ning\xFAn afijo a menos que sepas lo que haces."
+      tooltip: 
+  - keyName: Merger_ClearSuffixes
+    content:
+      text: Borrar todos los sufijos
+      tooltip: "Eliminar todos los sufijos, que utilizar\xE1 los mismos par\xE1metros
+        para los nuevos par\xE1metros fusionados."
+  - keyName: Merger_MergeOnNew
+    content:
+      text: Fusionar en la copia
+      tooltip: Crea una copia del controlador de esta capa y fusiona este animador
+        con ella
+  - keyName: Merger_ParamInDifferentLayerWarning
+    content:
+      text: "El par\xE1metro ya existe en otra capa. Quiz\xE1s quieras agregar un
+        sufijo."
+      tooltip: 
+  - keyName: WD_WDOn
+    content:
+      text: Write Defaults
+      tooltip: 
+  - keyName: WD_List
+    content:
+      text: Lista de Write Defaults
+      tooltip: 
+  - keyName: WD_MixedWDWarning
+    content:
+      text: "Hay write defaults mezclados en las capas. Esto puede causar interacciones
+        extra\xF1as en el juego."
+      tooltip: 
+  - keyName: WD_EmptyStatesWarning
+    content:
+      text: "Algunos estados no tienen animaci\xF3n. Esto puede ser un problema al
+        usar Write Defaults apagado. Al establecer un estado de Write Defaults unificado,
+        un clip de animaci\xF3n vac\xEDo llenar\xE1 esos estados."
+      tooltip: 
+  - keyName: WD_State
+    content:
+      text: Estado
+      tooltip: 
+  - keyName: WD_Motion
+    content:
+      text: Motion
+      tooltip: 
+  - keyName: WD_SetWDOff
+    content:
+      text: Apagar Write Defaults
+      tooltip: Configura Write Defaults a apagado.
+  - keyName: WD_ForceWD
+    content:
+      text: "Forzar la configuraci\xF3n de Write Defaults"
+      tooltip: 
+  - keyName: WD_ViewState
+    content:
+      text: Ver Estado
+      tooltip: 
+  - keyName: Clips_SwapMode
+    content:
+      text: Modo de Intercambio de Animaciones
+      tooltip: 
+  - keyName: Merger_DuplicateParamWarning
+    content:
+      text: "El controlador objetivo contiene este par\xE1metro con un tipo distinto
+        al del control base. Estos controladores no pueden fusionarse."
+      tooltip: 
+  - keyName: Layers_Layers
+    content:
+      text: Capas
+      tooltip: 
+  - keyName: Layers_UseCustomLayer
+    content:
+      text: Usar Capa Personalizada
+      tooltip: Usar un controlador propio para esta capa
+  - keyName: Layers_UseDefaultLayer
+    content:
+      text: Usar Capa Por Defecto Como Personalizado
+      tooltip: Usar una copia de la capa por defecto para esta capa.
+  - keyName: WD_WD
+    content:
+      text: Write Defaults
+      tooltip: 
+  - keyName: WD_ForceAllWD
+    content:
+      text: Forzar todos los Write Defaults
+      tooltip: 
+  - keyName: WD_ForceAllWDWarning
+    content:
+      text: "No es aconsejable forzar la configuraci\xF3n de Write Defaults en los
+        estados que solicitan expl\xEDcitamente una configuraci\xF3n espec\xEDfica"
+      tooltip: 
+  - keyName: WD_IgnoreDBT
+    content:
+      text: Ignorar Direct Blend Trees
+      tooltip: 
+  - keyName: WD_DBTWarning
+    content:
+      text: "Direct Blend Tree sin ajuste Write Defaults expl\xEDcito encontrado.
+        Probablemente deber\xEDan mantenerse en el mismo estado que est\xE1n ahora."
+      tooltip: 
+  - keyName: WD_ForceWDOnMessage
+    content:
+      text: "Algunos estados solicitan mantener Write Defaults en \"Apagado\", pero
+        est\xE1s intentando sobrescribir esto forz\xE1ndolo a \"Encendido\".\n\xBFDeseas
+        continuar y sobrescribir?"
+      tooltip: 
+  - keyName: WD_ForceWDOffMessage
+    content:
+      text: "Algunos estados solicitan mantener Write Defaults en \"Encendido\",
+        pero est\xE1s intentando sobrescribir esto forz\xE1ndolo a \"Apagado\".\n\xBFDeseas
+        continuar y sobrescribir?"
+      tooltip: 
+  - keyName: Settings_HelpMessage
+    content:
+      text: Want to help with the translation? Join our server at https://discord.vrlabs.dev.
+      tooltip: 
