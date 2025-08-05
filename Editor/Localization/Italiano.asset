@@ -1,0 +1,341 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0450617712bbc5846a824c3bde9ca990, type: 3}
+  m_Name: Italiano
+  m_EditorClassIdentifier: 
+  languageName: Italiano
+  localizedContent:
+  - keyName: Merger_AnimatorMode
+    content:
+      text: "Modalit\xE0 di unione degli Animator"
+      tooltip: 
+  - keyName: Merger_Animator
+    content:
+      text: Controller
+      tooltip: 
+  - keyName: Merger_Parameters
+    content:
+      text: Parametri
+      tooltip: 
+  - keyName: Merger_Suffix
+    content:
+      text: Suffisso
+      tooltip: 
+  - keyName: Merger_SelfMergeWarning
+    content:
+      text: "Non \xE8 possibile unire un Controller con s\xE8 stesso"
+      tooltip: 
+  - keyName: Merger_DuplicateParamWarning
+    content:
+      text: 'Il Controller di destinazione contiene questo parametro con un tipo
+        diverso da quello del Controller di base. Questi Controller non possono essere
+        uniti '
+      tooltip: 
+  - keyName: Merger_BuiltinParamWarning
+    content:
+      text: "Il parametro \xE8 uno dei parametri di default, verr\xE0 aggiunto alla
+        lista dei parametri del Controller, ma non nella lista dei parametri sincronizzati,
+        non aggiungere un suffisso se non sai cosa stai facendo"
+      tooltip: 
+  - keyName: Merger_ParamInDifferentLayerWarning
+    content:
+      text: "Il parametro \xE8 gi\xE0 usato da un altro Layer, potresti voler aggiungere
+        un suffisso"
+      tooltip: 
+  - keyName: Merger_ClearSuffixes
+    content:
+      text: Rimuovi tutti i suffissi
+      tooltip: Rimuove tutti i suffissi, e verranno usati i parametri preesistenti
+  - keyName: Merger_ParamTypeMismatchWarning
+    content:
+      text: Il Controller selezionato contiene lo stesso parametro ma con un tipo
+        di valore diverso dal controller di base. Questi controller non si possono
+        unire
+      tooltip: 
+  - keyName: Merger_MergeOnCurrent
+    content:
+      text: Unisci al corrente
+      tooltip: Unisci questo controller nel corrente controller di questo layer
+  - keyName: Merger_MergeOnNew
+    content:
+      text: Unisci a copia
+      tooltip: Crea una copia del controller e unisci questo controller a quello
+  - keyName: Merger_Cancel
+    content:
+      text: Annulla
+      tooltip: Annulla l'unione
+  - keyName: Clips_SwapMode
+    content:
+      text: "Modalit\xE0 Sostituzione Animazioni"
+      tooltip: 
+  - keyName: Clips_DontModifyAnimatorWarning
+    content:
+      text: Per evitare problemi, NON modificare il Controller mentre stai sostituendo
+        delle animazione con AV3Manager
+      tooltip: 
+  - keyName: Clips_ApplyOnCurrent
+    content:
+      text: Applica al corrente
+      tooltip: Applica le modifiche a questo Controller
+  - keyName: Clips_ApplyOnNew
+    content:
+      text: Applica a nuovo
+      tooltip: "Applica le modifiche ad una nuova copia del Controller, che verr\xE0
+        applicata all'avatar"
+  - keyName: Clips_Cancel
+    content:
+      text: Annulla
+      tooltip: Annulla le modifiche
+  - keyName: Layers_Layers
+    content:
+      text: Layer
+      tooltip: 
+  - keyName: Layers_UsedParamMemory
+    content:
+      text: Memoria utilizzata per i parametri
+      tooltip: 
+  - keyName: Layers_UseCustomLayer
+    content:
+      text: Utilizza un Layer personalizzato
+      tooltip: Utilizza un tuo Controller per questo layer invede del default di
+        VRChat
+  - keyName: Layers_UseDefaulVRCLayer
+    content:
+      text: Usa Layer di default
+      tooltip: Usa il Layer di defailt di VRChat
+  - keyName: Layers_UseDefaultLayer
+    content:
+      text: Usa il Layer di default come personalizzato
+      tooltip: Usa una copia del Layer di default di VRChat per questo Layer
+  - keyName: Layers_Controller
+    content:
+      text: Controller
+      tooltip: 
+  - keyName: Layers_Params
+    content:
+      text: Parametri
+      tooltip: 
+  - keyName: Layers_ExprParams
+    content:
+      text: VRC Expression Parameter
+      tooltip: 
+  - keyName: Layers_AddAnimatorToMerge
+    content:
+      text: Aggiungi un Controller da unire
+      tooltip: Seleziona un Controller da unire al Controller di questo Layer
+  - keyName: Layers_Synced
+    content:
+      text: Sincronizzati
+      tooltip: 
+  - keyName: Layers_SwapAnimations
+    content:
+      text: Cambia le Animazioni
+      tooltip: Cambia le Animazione del Controller corrente
+  - keyName: Params_Params
+    content:
+      text: Parametri
+      tooltip: 
+  - keyName: Params_ExprParams
+    content:
+      text: VRC Expression Parameters
+      tooltip: 
+  - keyName: Params_OpenInInspector
+    content:
+      text: Apri l'asset nell'Inspector
+      tooltip: Seleziona l'asset corrente e lo mostra nell'Inspector
+  - keyName: Params_Name
+    content:
+      text: Nome
+      tooltip: 
+  - keyName: Params_Type
+    content:
+      text: Tipo
+      tooltip: 
+  - keyName: Params_Default
+    content:
+      text: Default
+      tooltip: 
+  - keyName: Params_Saved
+    content:
+      text: Salvato
+      tooltip: 
+  - keyName: Params_Synced
+    content:
+      text: Sincronizzato
+      tooltip: 
+  - keyName: Params_CopyParams
+    content:
+      text: Copia parametri
+      tooltip: 
+  - keyName: Params_ParamsToCopy
+    content:
+      text: Parametri da copiare
+      tooltip: 
+  - keyName: Params_CopyParamsButton
+    content:
+      text: Copia parametri
+      tooltip: "Copia i parametri nell'asset corrente. Se un parametro gi\xE0 esisteva,
+        le sue impostazioni verranno aggiornate"
+  - keyName: Params_UnusedExprParamWarning
+    content:
+      text: "Questo parametro non \xE8 utilizzato in nessun Controller, rimuovilo
+        o rimuovi la spunta su \"Sincronizzato\" per risparmiare della memoria dei
+        parametri"
+      tooltip: 
+  - keyName: Params_BuiltinInExprParamWarning
+    content:
+      text: "Questo parametro \xE8 un parametro che non ha bisogno di essere presente
+        nell'asset \"VRC Expression Parameters\", rimuovilo o o rimuovi la spunta
+        su \"Sincronizzato\" per risparmiare della memoria dei parametri"
+      tooltip: 
+  - keyName: Params_UsedParamMemory
+    content:
+      text: Memoria dei parametri usata
+      tooltip: 
+  - keyName: Params_AdditionalCostOfAnimatorToMerge
+    content:
+      text: Costo aggiuntivo
+      tooltip: 
+  - keyName: Params_TotalParamMemoryAfterMerge
+    content:
+      text: Memoria totale dopo l'aggiornamento
+      tooltip: 
+  - keyName: Params_MergeWouldSurpassParamMemoryWarning
+    content:
+      text: Impossibile unire i parametri, la memoria totale sorpasserebbe il massimo
+        consentito.
+      tooltip: 
+  - keyName: WD_WD
+    content:
+      text: Write Defaults
+      tooltip: 
+  - keyName: WD_ForceAllWD
+    content:
+      text: Forza tutte le impostazioni "Write Defaults"
+      tooltip: 
+  - keyName: WD_ForceAllWDWarning
+    content:
+      text: "Non \xE8 consigliato forzare l'impostazione \"Write Defaults\" in stati
+        che richiedono esplicitamente un'impostazione specifica"
+      tooltip: 
+  - keyName: WD_DBTWarning
+    content:
+      text: Trovato un "Direct Blend Tree" senza impostazioni di "Write Defaults"
+        specificate. Questi stati dovrebbero essere lasciati nello stesso stato in
+        cui sono ora
+      tooltip: 
+  - keyName: WD_IgnoreDBT
+    content:
+      text: Ignora i "Direct Blend Tree"
+      tooltip: 
+  - keyName: WD_SetWDOff
+    content:
+      text: Disabilita "Write Defaults"
+      tooltip: 'Disabilita le impostazioni di "Write Defaults" '
+  - keyName: WD_ForceWD
+    content:
+      text: Forza le impostazioni di "Write Defaults"
+      tooltip: 
+  - keyName: WD_ForceWDOffMessage
+    content:
+      text: 'Alcuni stati richiedono di tenere la loro impostazione di "Write Defaults"
+        abilitata, ma hai abilitato l''opzione di forzatura dell''impostazione
+
+        Vuoi
+        procedere comunque?'
+      tooltip: 
+  - keyName: WD_ForceWDOnMessage
+    content:
+      text: 'Alcuni stati richiedono di tenere la loro impostazione di "Write Defaults"
+        disabilitata, ma hai abilitato l''opzione di forzatura dell''impostazione
+
+        Vuoi
+        procedere comunque?'
+      tooltip: 
+  - keyName: WD_Proceed
+    content:
+      text: Sovrascrivi
+      tooltip: 
+  - keyName: WD_Cancel
+    content:
+      text: Annulla
+      tooltip: 
+  - keyName: WD_SetWDOn
+    content:
+      text: Abilita "Write Defaults"
+      tooltip: 'Abilita le impostazioni di "Write Defaults" '
+  - keyName: WD_MixedWDWarning
+    content:
+      text: Hai delle impostazioni di "Write Defaults" abilitate e alcune disabilitare,
+        potresti avere delle strane interazioni in gioco
+      tooltip: 
+  - keyName: WD_EmptyStatesWarning
+    content:
+      text: "Alcuni stati non hanno nessuna clip di animazione, questo potrebbe essere
+        un problema con le impostazioni di \"Write Defaults\" disabilitate, quando
+        verr\xE0 impostato un valore unificato di \"Write Defaults\", una clip d'animazione
+        vuota verr\xE0 impostata in quei stati"
+      tooltip: 
+  - keyName: WD_List
+    content:
+      text: Lista dei "Write Defaults"
+      tooltip: 
+  - keyName: WD_State
+    content:
+      text: Stato
+      tooltip: 
+  - keyName: WD_Motion
+    content:
+      text: Animazione
+      tooltip: 
+  - keyName: WD_WDOn
+    content:
+      text: Write Defaults
+      tooltip: 
+  - keyName: WD_Default
+    content:
+      text: Default
+      tooltip: "Indica de lo stato contiene \"(WD On)\" o \"(WD Off)\" nel nome,
+        indicando all' AV3 Manager come cambiare l'impostazione (amenoch\xE8 non
+        forzi un'impostazione specifica)"
+  - keyName: WD_ViewState
+    content:
+      text: Visualizza Stato
+      tooltip: 
+  - keyName: WD_On
+    content:
+      text: Abilitato
+      tooltip: 
+  - keyName: WD_Off
+    content:
+      text: Disabilitato
+      tooltip: 
+  - keyName: WD_None
+    content:
+      text: Nessuno
+      tooltip: 
+  - keyName: WD_View
+    content:
+      text: Visualizza
+      tooltip: 
+  - keyName: Settings_Settings
+    content:
+      text: Impostazioni
+      tooltip: 
+  - keyName: Settings_HelpMessage
+    content:
+      text: Vuoi autare a migliorare le traduzioni? Unisciti al nostro server https://discord.vrlabs.dev.
+      tooltip:
+  - keyName: Settings_IgnoreParamLimit
+    content:
+      text: Ignora il limite della memoria dei parametri
+      tooltip: 

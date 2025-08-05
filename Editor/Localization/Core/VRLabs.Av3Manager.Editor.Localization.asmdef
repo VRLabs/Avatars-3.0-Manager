@@ -1,0 +1,24 @@
+{
+  "name": "VRLabs.Av3Manager.Editor.Localization",
+  "rootNamespace": "",
+  "references": [],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [
+    "!DREADSCRIPTS_LOCALIZATION"
+  ],
+  "versionDefines": [
+    {
+      "name": "com.dreadscripts.localization",
+      "expression": "",
+      "define": "DREADSCRIPTS_LOCALIZATION"
+    }
+  ],
+  "noEngineReferences": false
+}

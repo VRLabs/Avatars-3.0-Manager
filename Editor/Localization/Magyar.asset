@@ -1,0 +1,332 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0450617712bbc5846a824c3bde9ca990, type: 3}
+  m_Name: Magyar
+  m_EditorClassIdentifier: 
+  languageName: Magyar
+  localizedContent:
+  - keyName: Merger_AnimatorMode
+    content:
+      text: "Animator Egyes\xEDt\u0151 M\xF3d"
+      tooltip: 
+  - keyName: Merger_Animator
+    content:
+      text: Animator
+      tooltip: 
+  - keyName: Merger_Parameters
+    content:
+      text: "Param\xE9terek"
+      tooltip: 
+  - keyName: Merger_Suffix
+    content:
+      text: "Ut\xF3tag"
+      tooltip: 
+  - keyName: Merger_SelfMergeWarning
+    content:
+      text: "Nem egyes\xEDthet\u0151 a kontroller \xF6nmag\xE1val."
+      tooltip: 
+  - keyName: Merger_DuplicateParamWarning
+    content:
+      text: "A kiv\xE1lasztott kontrollerben m\xE1s t\xEDpus\xFA ez a param\xE9ter,
+        mint az alap kontrollerben. A kontrollerek nem egyes\xEDthet\u0151ek."
+      tooltip: 
+  - keyName: Merger_BuiltinParamWarning
+    content:
+      text: "Ez egy alap param\xE9ter, amely alapb\xF3l a param\xE9terekhez lesz
+        adva, de nem lesz a szinkroniz\xE1lt param\xE9terek list\xE1j\xE1ban. Csak
+        akkor adj hozz\xE1 ut\xF3tagot, ha tudod mit csin\xE1lsz."
+      tooltip: 
+  - keyName: Merger_ParamInDifferentLayerWarning
+    content:
+      text: "A param\xE9ter m\xE1r m\xE1sik layer-ben haszn\xE1lva van. \xC9rdemes
+        lehet ut\xF3tagot hozz\xE1adni."
+      tooltip: 
+  - keyName: Merger_ClearSuffixes
+    content:
+      text: "Minden ut\xF3tag t\xF6rl\xE9se"
+      tooltip: "Minden ut\xF3tagot elt\xE1vol\xEDt, \xEDgy a megl\xE9v\u0151 param\xE9tereket
+        fogja haszn\xE1lni"
+  - keyName: Merger_ParamTypeMismatchWarning
+    content:
+      text: "A kiv\xE1lasztott kontrollerben m\xE1s t\xEDpus\xFA ez a param\xE9ter,
+        mint az alap kontrollerben. A kontrollerek nem egyes\xEDthet\u0151ek."
+      tooltip: 
+  - keyName: Merger_MergeOnCurrent
+    content:
+      text: "Jelenlegivel egyes\xEDt"
+      tooltip: "Az anim\xE1tor egyes\xEDt\xE9se a jelenlegi layer anim\xE1torral"
+  - keyName: Merger_MergeOnNew
+    content:
+      text: "K\xE9sz\xEDt egy m\xE1solatot a layer anim\xE1tor\xE1b\xF3l \xE9s azzal
+        egyes\xEDt"
+      tooltip: 
+  - keyName: Merger_Cancel
+    content:
+      text: "M\xE9gse"
+      tooltip: "M\u0171velet megszak\xEDt\xE1sa"
+  - keyName: Clips_SwapMode
+    content:
+      text: "Anim\xE1ci\xF3csere M\xF3d"
+      tooltip: 
+  - keyName: Clips_DontModifyAnimatorWarning
+    content:
+      text: "NE m\xF3dos\xEDtsd az anim\xE1tort, am\xEDg anim\xE1ci\xF3kat cser\xE9lsz
+        a managerrel, a hib\xE1k elker\xFCl\xE9se miatt."
+      tooltip: 
+  - keyName: Clips_ApplyOnCurrent
+    content:
+      text: Jelenlegire alkalmaz
+      tooltip: "Alkalmazza a v\xE1ltoz\xE1sokat erre a kontrollerre"
+  - keyName: Clips_ApplyOnNew
+    content:
+      text: "\xDAj p\xE9ld\xE1nyra alkalmaz"
+      tooltip: "A kontroller m\xE1solat\xE1ra alkalmazza a v\xE1ltoztat\xE1sokat,
+        amelyet azt\xE1n az avatar megkap"
+  - keyName: Clips_Cancel
+    content:
+      text: "M\xE9gse"
+      tooltip: "M\u0171velet megszak\xEDt\xE1sa"
+  - keyName: Layers_Layers
+    content:
+      text: Layerek
+      tooltip: 
+  - keyName: Layers_UsedParamMemory
+    content:
+      text: "Felhaszn\xE1lt param\xE9ter mem\xF3ria"
+      tooltip: 
+  - keyName: Layers_UseCustomLayer
+    content:
+      text: "Egyedi Anim\xE1tor Layer Haszn\xE1lata"
+      tooltip: "Saj\xE1t anim\xE1torod haszn\xE1lata ehhez a layerhez"
+  - keyName: Layers_UseDefaultLayer
+    content:
+      text: "Alap layer haszn\xE1lata egyedi layerk\xE9nt"
+      tooltip: "Az alap layer m\xE1solat\xE1t haszn\xE1lja erre a layer-re."
+  - keyName: Layers_UseDefaulVRCLayer
+    content:
+      text: "Alap VRC Layer Haszn\xE1lata"
+      tooltip: AlapLayerGomb
+  - keyName: Layers_Controller
+    content:
+      text: Kontroller
+      tooltip: 
+  - keyName: Layers_Params
+    content:
+      text: "Param\xE9terek"
+      tooltip: 
+  - keyName: Layers_ExprParams
+    content:
+      text: "Expression Param\xE9terek"
+      tooltip: 
+  - keyName: Layers_Synced
+    content:
+      text: "Szinkroniz\xE1lt"
+      tooltip: 
+  - keyName: Layers_AddAnimatorToMerge
+    content:
+      text: "Anim\xE1tor hozz\xE1ad\xE1sa egyes\xEDt\xE9sre"
+      tooltip: "V\xE1lassz egy anim\xE1tort amit a jelenlegivel egyes\xEDteni szeretn\xE9l."
+  - keyName: Layers_SwapAnimations
+    content:
+      text: "Anim\xE1ci\xF3k Cser\xE9je"
+      tooltip: "Anim\xE1ci\xF3k cser\xE9je a jelenlegi anim\xE1torban."
+  - keyName: Params_Params
+    content:
+      text: "Param\xE9terek"
+      tooltip: 
+  - keyName: Params_ExprParams
+    content:
+      text: "Expression Param\xE9terek"
+      tooltip: 
+  - keyName: Params_OpenInInspector
+    content:
+      text: "Asset megnyit\xE1sa az Inspectorban"
+      tooltip: "Kiv\xE1lasztja az asset-et \xE9s megmutatja az inspector-ban."
+  - keyName: Params_Name
+    content:
+      text: "N\xE9v"
+      tooltip: 
+  - keyName: Params_Type
+    content:
+      text: "T\xEDpus"
+      tooltip: 
+  - keyName: Params_Default
+    content:
+      text: "Alap\xE9rt\xE9k"
+      tooltip: 
+  - keyName: Params_Saved
+    content:
+      text: Mentett
+      tooltip: 
+  - keyName: Params_Synced
+    content:
+      text: "H\xE1l\xF3zaton Szinkroniz\xE1lt"
+      tooltip: 
+  - keyName: Params_CopyParams
+    content:
+      text: "Param\xE9terek m\xE1sol\xE1sa"
+      tooltip: 
+  - keyName: Params_ParamsToCopy
+    content:
+      text: "M\xE1soland\xF3 param\xE9terek"
+      tooltip: 
+  - keyName: Params_CopyParamsButton
+    content:
+      text: "Param\xE9terek m\xE1sol\xE1sa"
+      tooltip: "\xC1tm\xE1solja a param\xE9tereket a jelenlegi asset-be. Ha a param\xE9ter
+        m\xE1r szerepel, a be\xE1ll\xEDt\xE1sai ker\xFClnek m\xE1sol\xE1sra."
+  - keyName: Params_UnusedExprParamWarning
+    content:
+      text: "Ez a param\xE9ter egy anim\xE1torban sincsen haszn\xE1lva. T\xF6r\xF6ld,
+        vagy \xE1ll\xEDtsd csak helyire, hogy param\xE9ter mem\xF3ri\xE1t sp\xF3rolj."
+      tooltip: 
+  - keyName: Params_BuiltinInExprParamWarning
+    content:
+      text: "Ez a param\xE9ter nem kell, hogy a param\xE9ter asset-ben szerepeljen.
+        T\xF6r\xF6ld, vagy \xE1ll\xEDtsd csak helyire, hogy param\xE9ter mem\xF3ri\xE1t
+        sp\xF3rolj."
+      tooltip: 
+  - keyName: Params_UsedParamMemory
+    content:
+      text: "Felhaszn\xE1lt param\xE9ter mem\xF3ria"
+      tooltip: 
+  - keyName: Params_AdditionalCostOfAnimatorToMerge
+    content:
+      text: "Extra k\xF6lts\xE9g"
+      tooltip: 
+  - keyName: Params_TotalParamMemoryAfterMerge
+    content:
+      text: "Teljes k\xF6lts\xE9g egyes\xEDt\xE9s ut\xE1n"
+      tooltip: 
+  - keyName: Params_MergeWouldSurpassParamMemoryWarning
+    content:
+      text: "Nem lehet egyes\xEDteni, mert a k\xF6lts\xE9g meghaladja a maximumot."
+      tooltip: 
+  - keyName: WD_WD
+    content:
+      text: Write Defaults
+      tooltip: 
+  - keyName: WD_ForceAllWD
+    content:
+      text: "Minden WD k\xE9nyszer\xEDt\xE9se"
+      tooltip: 
+  - keyName: WD_ForceAllWDWarning
+    content:
+      text: "A Write Defaults \xE9rt\xE9k k\xE9nyszer\xEDt\xE9se nem aj\xE1nlott
+        olyan state-ekre, amelyek k\xFCl\xF6nleges be\xE1ll\xEDt\xE1st ig\xE9nyelnek."
+      tooltip: 
+  - keyName: WD_DBTWarning
+    content:
+      text: "Direct Blend Tree-t tal\xE1ltunk megadott WD \xE9rt\xE9k n\xE9lk\xFCl.
+        Ezeket val\xF3sz\xEDn\u0171leg a jelenlegi \xE1llapotukban kellene hagyni."
+      tooltip: 
+  - keyName: WD_IgnoreDBT
+    content:
+      text: "Direct Blend Tree Kihagy\xE1sa"
+      tooltip: 
+  - keyName: WD_SetWDOff
+    content:
+      text: WD Ki
+      tooltip: "Kikapcsolja a Write Defaults \xE9rt\xE9ket."
+  - keyName: WD_ForceWD
+    content:
+      text: "WD-k k\xE9nyszer\xEDt\xE9se"
+      tooltip: 
+  - keyName: WD_ForceWDOffMessage
+    content:
+      text: "N\xE9h\xE1ny state bekapcsolt WD-t szeretne haszn\xE1lni, de te ezt
+        fel\xFCl szeretn\xE9d b\xEDr\xE1lni, a \"k\xE9nyszer\xEDt\xE9s\" be\xE1ll\xEDt\xE1ssal.\nBiztosan
+        fel\xFCl szeretn\xE9d b\xEDr\xE1lni ezeket?"
+      tooltip: 
+  - keyName: WD_ForceWDOnMessage
+    content:
+      text: "N\xE9h\xE1ny state kikapcsolt WD-t szeretne haszn\xE1lni, de te ezt
+        fel\xFCl szeretn\xE9d b\xEDr\xE1lni, a \"k\xE9nyszer\xEDt\xE9s\" be\xE1ll\xEDt\xE1ssal.\nBiztosan
+        fel\xFCl szeretn\xE9d b\xEDr\xE1lni ezeket?"
+      tooltip: 
+  - keyName: WD_Proceed
+    content:
+      text: "Folytat\xE1s"
+      tooltip: 
+  - keyName: WD_Cancel
+    content:
+      text: "M\xE9gse"
+      tooltip: 
+  - keyName: WD_SetWDOn
+    content:
+      text: WD Be
+      tooltip: "Bekapcsolja a Write Defaults \xE9rt\xE9ket."
+  - keyName: WD_MixedWDWarning
+    content:
+      text: "Kevert write defaults \xE9rt\xE9kek vannak a layerekben, ami furcsa
+        viselked\xE9shez vezethet a j\xE1t\xE9kban."
+      tooltip: 
+  - keyName: WD_EmptyStatesWarning
+    content:
+      text: "N\xE9h\xE1ny state-nek nincsen anim\xE1ci\xF3ja, amely probl\xE9m\xE1khoz
+        vezethet kikapcsolt WD haszn\xE1latakor. Egyes\xEDtett WD \xE9rt\xE9k be\xE1ll\xEDt\xE1sakor
+        ezek \xFCres anim\xE1ci\xF3s klipekkel lesznek kit\xF6ltve."
+      tooltip: 
+  - keyName: WD_List
+    content:
+      text: WD Lista
+      tooltip: 
+  - keyName: WD_State
+    content:
+      text: State
+      tooltip: 
+  - keyName: WD_Motion
+    content:
+      text: Motion
+      tooltip: 
+  - keyName: WD_WDOn
+    content:
+      text: WD
+      tooltip: 
+  - keyName: WD_Default
+    content:
+      text: "K\xEDv\xE1nt"
+      tooltip: "A state nev\xE9ben szerepel-e \"(WD On)\" vagy \"(WD Off)\", ami
+        miatt az AV3 Manager nem v\xE1ltoztatja meg a Write Defaults \xE9rt\xE9ket
+        (kiv\xE9ve, ha k\xE9nyszer\xEDtve van)."
+  - keyName: WD_ViewState
+    content:
+      text: "Megtekint\xE9s"
+      tooltip: 
+  - keyName: WD_On
+    content:
+      text: Be
+      tooltip: 
+  - keyName: WD_Off
+    content:
+      text: Ki
+      tooltip: 
+  - keyName: WD_None
+    content:
+      text: Semmi
+      tooltip: 
+  - keyName: WD_View
+    content:
+      text: "Megn\xE9z"
+      tooltip: 
+  - keyName: Settings_Settings
+    content:
+      text: "Be\xE1ll\xEDt\xE1sok"
+      tooltip: 
+  - keyName: Settings_IgnoreParamLimit
+    content:
+      text: "Param\xE9ter Limit Figyelmen K\xEDv\xFCl Hagy\xE1sa"
+      tooltip: 
+  - keyName: Settings_HelpMessage
+    content:
+      text: Want to help with the translation? Join our server at https://discord.vrlabs.dev.
+      tooltip: 

@@ -1,0 +1,336 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0450617712bbc5846a824c3bde9ca990, type: 3}
+  m_Name: Polski
+  m_EditorClassIdentifier: 
+  languageName: Polski
+  localizedContent:
+  - keyName: Merger_AnimatorMode
+    content:
+      text: "Tryb \u0142\u0105czenia animator\xF3w"
+      tooltip: 
+  - keyName: Merger_Animator
+    content:
+      text: Animator
+      tooltip: 
+  - keyName: Merger_Parameters
+    content:
+      text: Parametry
+      tooltip: 
+  - keyName: Merger_Suffix
+    content:
+      text: Sufiks
+      tooltip: 
+  - keyName: Merger_SelfMergeWarning
+    content:
+      text: "Nie mo\u017Cna po\u0142\u0105czy\u0107 kontrolera z samym sob\u0105."
+      tooltip: 
+  - keyName: Merger_DuplicateParamWarning
+    content:
+      text: "Kontroler docelowy zawiera ten parametr w innym typie ni\u017C kontroler
+        bazowy. Nie mo\u017Cna po\u0142\u0105czy\u0107 tych kontroler\xF3w."
+      tooltip: 
+  - keyName: Merger_BuiltinParamWarning
+    content:
+      text: "Parametr jest domy\u015Blny, domy\u015Blnie zostanie dodany do parametr\xF3w,
+        ale nie b\u0119dzie widoczny w li\u015Bcie zsynchronizowanych parametr\xF3w;
+        nie powiniene\u015B dodawa\u0107 \u017Cadnego afiksu, chyba \u017Ce wiesz,
+        co robisz."
+      tooltip: 
+  - keyName: Merger_ParamInDifferentLayerWarning
+    content:
+      text: "Parametr jest ju\u017C u\u017Cywany w innej warstwie, rozwa\u017C dodanie
+        sufiksu."
+      tooltip: 
+  - keyName: Merger_ClearSuffixes
+    content:
+      text: "Usu\u0144 wszystkie sufiksy"
+      tooltip: 
+  - keyName: Merger_ParamTypeMismatchWarning
+    content:
+      text: "Kontroler docelowy zawiera ten parametr w innym typie ni\u017C kontroler
+        bazowy. Nie mo\u017Cna po\u0142\u0105czy\u0107 tych kontroler\xF3w."
+      tooltip: 
+  - keyName: Merger_MergeOnCurrent
+    content:
+      text: "Po\u0142\u0105cz z bie\u017C\u0105cym"
+      tooltip: 
+  - keyName: Merger_MergeOnNew
+    content:
+      text: "Utw\xF3rz kopi\u0119 animatora warstwy i po\u0142\u0105cz z nim ten
+        animator"
+      tooltip: 
+  - keyName: Merger_Cancel
+    content:
+      text: Anuluj
+      tooltip: 
+  - keyName: Clips_SwapMode
+    content:
+      text: Animations Swap Mode
+      tooltip: 
+  - keyName: Clips_DontModifyAnimatorWarning
+    content:
+      text: "NIE modyfikuj animatora podczas zamiany animacji w mened\u017Cerze,
+        aby unikn\u0105\u0107 problem\xF3w."
+      tooltip: 
+  - keyName: Clips_ApplyOnCurrent
+    content:
+      text: "Zastosuj na bie\u017C\u0105cym"
+      tooltip: 
+  - keyName: Clips_ApplyOnNew
+    content:
+      text: Zastosuj na nowym
+      tooltip: 
+  - keyName: Clips_Cancel
+    content:
+      text: Anuluj
+      tooltip: 
+  - keyName: Layers_Layers
+    content:
+      text: Warstwy
+      tooltip: 
+  - keyName: Layers_UsedParamMemory
+    content:
+      text: "Zu\u017Cyta pami\u0119\u0107 parametr\xF3w"
+      tooltip: 
+  - keyName: Layers_UseCustomLayer
+    content:
+      text: "U\u017Cyj niestandardow\u0105 warstw\u0119 animatora"
+      tooltip: 
+  - keyName: Layers_UseDefaultLayer
+    content:
+      text: "U\u017Cyj domy\u015Bln\u0105 warstwy jako niestandardow\u0105"
+      tooltip: 
+  - keyName: Settings_IgnoreParamLimit
+    content:
+      text: "Ignoruj maksymalny limit parametr\xF3w"
+      tooltip: 
+  - keyName: Settings_Settings
+    content:
+      text: Ustawienia
+      tooltip: 
+  - keyName: WD_View
+    content:
+      text: "Poka\u017C"
+      tooltip: 
+  - keyName: WD_None
+    content:
+      text: "\u017Baden"
+      tooltip: 
+  - keyName: WD_Off
+    content:
+      text: Off
+      tooltip: 
+  - keyName: WD_On
+    content:
+      text: On
+      tooltip: 
+  - keyName: WD_ViewState
+    content:
+      text: "Poka\u017C stan"
+      tooltip: 
+  - keyName: WD_Default
+    content:
+      text: "Domy\u015Blnie"
+      tooltip: 
+  - keyName: WD_WDOn
+    content:
+      text: WD On
+      tooltip: 
+  - keyName: WD_Motion
+    content:
+      text: Animacja
+      tooltip: 
+  - keyName: WD_State
+    content:
+      text: Stan
+      tooltip: 
+  - keyName: WD_List
+    content:
+      text: Lista WD
+      tooltip: 
+  - keyName: WD_EmptyStatesWarning
+    content:
+      text: "Niekt\xF3re stany nie maj\u0105 animacji, co mo\u017Ce by\u0107 problematyczne
+        przy ustawieniu WD na On. Ustawienie jednolitego stanu WD spowoduje wype\u0142nienie
+        tych stan\xF3w pust\u0105 animacj\u0105."
+      tooltip: 
+  - keyName: WD_SetWDOn
+    content:
+      text: Ustaw WD na On
+      tooltip: 
+  - keyName: WD_MixedWDWarning
+    content:
+      text: "Masz mieszane ustawienia Write Defaults w warstwach, mo\u017Cesz do\u015Bwiadczy\u0107
+        dziwnych interakcji w grze."
+      tooltip: 
+  - keyName: WD_Cancel
+    content:
+      text: Anuluj
+      tooltip: 
+  - keyName: WD_Proceed
+    content:
+      text: Kontynuuj
+      tooltip: 
+  - keyName: WD_ForceWDOffMessage
+    content:
+      text: "Niekt\xF3re stany wymagaj\u0105 ustawienia WD na On, ale pr\xF3bujesz
+        to nadpisa\u0107, ustawiaj\u0105c WD na Off z opcj\u0105 wymuszenia.\nCzy
+        chcesz kontynuowa\u0107 z tym nadpisaniem?"
+      tooltip: 
+  - keyName: WD_ForceWDOnMessage
+    content:
+      text: "Niekt\xF3re stany wymagaj\u0105 ustawienia WD na Off, ale pr\xF3bujesz
+        to nadpisa\u0107, ustawiaj\u0105c WD na On z opcj\u0105 wymuszenia.\nCzy
+        chcesz kontynuowa\u0107 z tym nadpisaniem?"
+      tooltip: 
+  - keyName: WD_ForceWD
+    content:
+      text: "Wymu\u015B stan WD"
+      tooltip: 
+  - keyName: WD_SetWDOff
+    content:
+      text: Ustaw WD Off
+      tooltip: 
+  - keyName: WD_IgnoreDBT
+    content:
+      text: Ignoruj Direct Blend Tree
+      tooltip: 
+  - keyName: WD_DBTWarning
+    content:
+      text: "Znaleziono Direct Blend Tree bez jawnego ustawienia WD. Najlepiej pozostawi\u0107
+        je w obecnym stanie."
+      tooltip: 
+  - keyName: WD_ForceAllWDWarning
+    content:
+      text: "Wymuszanie ustawie\u0144 Write Defaults na stanach, kt\xF3re wyra\u017Anie
+        wymagaj\u0105 okre\u015Blonego ustawienia, nie jest zalecane."
+      tooltip: 
+  - keyName: WD_ForceAllWD
+    content:
+      text: "Wymu\u015B wszystkie stany WD"
+      tooltip: 
+  - keyName: WD_WD
+    content:
+      text: Write Defaults
+      tooltip: 
+  - keyName: Params_MergeWouldSurpassParamMemoryWarning
+    content:
+      text: "Nie mo\u017Cna po\u0142\u0105czy\u0107, koszt przekracza maksymalny
+        limit."
+      tooltip: 
+  - keyName: Params_TotalParamMemoryAfterMerge
+    content:
+      text: "Ca\u0142kowity koszt po dodaniu"
+      tooltip: 
+  - keyName: Params_AdditionalCostOfAnimatorToMerge
+    content:
+      text: Dodatkowy koszt
+      tooltip: 
+  - keyName: Params_UsedParamMemory
+    content:
+      text: "Pami\u0119\u0107 u\u017Cywana przez parametry"
+      tooltip: 
+  - keyName: Params_BuiltinInExprParamWarning
+    content:
+      text: "Ten parametr nie musi znajdowa\u0107 si\u0119 w zasobie parametr\xF3w,
+        usu\u0144 go lub ustaw jako lokalny, aby zaoszcz\u0119dzi\u0107 miejsce."
+      tooltip: 
+  - keyName: Params_UnusedExprParamWarning
+    content:
+      text: "Ten parametr nie jest u\u017Cywany w \u017Cadnym animatorze, usu\u0144
+        go lub ustaw jako lokalny, aby zaoszcz\u0119dzi\u0107 miejsce."
+      tooltip: 
+  - keyName: Params_CopyParamsButton
+    content:
+      text: Skopiuj parametry
+      tooltip: 
+  - keyName: Params_ParamsToCopy
+    content:
+      text: Parametry do skopiowania
+      tooltip: 
+  - keyName: Params_CopyParams
+    content:
+      text: Skopiuj parametry
+      tooltip: 
+  - keyName: Params_Synced
+    content:
+      text: "Zsynchronizowane z sieci\u0105"
+      tooltip: 
+  - keyName: Params_Saved
+    content:
+      text: Zapisany
+      tooltip: 
+  - keyName: Params_Default
+    content:
+      text: "Stan Domy\u015Blny"
+      tooltip: 
+  - keyName: Params_Type
+    content:
+      text: Typ
+      tooltip: 
+  - keyName: Params_Name
+    content:
+      text: Nazwa
+      tooltip: 
+  - keyName: Params_OpenInInspector
+    content:
+      text: "Otw\xF3rz zas\xF3b w inspektorze"
+      tooltip: 
+  - keyName: Params_ExprParams
+    content:
+      text: Expression Parametry
+      tooltip: 
+  - keyName: Params_Params
+    content:
+      text: Parametry
+      tooltip: 
+  - keyName: Layers_SwapAnimations
+    content:
+      text: "Zamie\u0144 animacje"
+      tooltip: 
+  - keyName: Layers_AddAnimatorToMerge
+    content:
+      text: "Dodaj animator do po\u0142\u0105czenia"
+      tooltip: 
+  - keyName: Layers_Synced
+    content:
+      text: Zsynchronizowana
+      tooltip: 
+  - keyName: Layers_ExprParams
+    content:
+      text: VRC Expression Parameter
+      tooltip: 
+  - keyName: Layers_Params
+    content:
+      text: Parametry
+      tooltip: 
+  - keyName: Layers_Controller
+    content:
+      text: Kontroler
+      tooltip: 
+  - keyName: Layers_UseDefaulVRCLayer
+    content:
+      text: "U\u017Cyj domy\u015Bln\u0105 warstw\u0119 VRC"
+      tooltip: 
+  - keyName: WD_None
+    content:
+      text: Untranslated Text
+      tooltip: 
+  - keyName: Merger_Animator
+    content:
+      text: Untranslated Text
+      tooltip: 
+  - keyName: Settings_HelpMessage
+    content:
+      text: Want to help with the translation? Join our server at https://discord.vrlabs.dev.
+      tooltip: 
