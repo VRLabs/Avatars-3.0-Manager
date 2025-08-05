@@ -328,3 +328,7 @@ MonoBehaviour:
     content:
       text: "Ignorer la limite maximale de param\xE8tres"
       tooltip: 
+  - keyName: Settings_HelpMessage
+    content:
+      text: Want to help with the translation? Join our server at https://discord.vrlabs.dev.
+      tooltip: 

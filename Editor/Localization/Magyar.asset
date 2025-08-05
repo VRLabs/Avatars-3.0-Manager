@@ -326,3 +326,7 @@ MonoBehaviour:
     content:
       text: "Param\xE9ter Limit Figyelmen K\xEDv\xFCl Hagy\xE1sa"
       tooltip: 
+  - keyName: Settings_HelpMessage
+    content:
+      text: Want to help with the translation? Join our server at https://discord.vrlabs.dev.
+      tooltip: 

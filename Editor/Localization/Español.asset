@@ -325,3 +325,7 @@ MonoBehaviour:
         pero est\xE1s intentando sobrescribir esto forz\xE1ndolo a \"Apagado\".\n\xBFDeseas
         continuar y sobrescribir?"
       tooltip: 
+  - keyName: Settings_HelpMessage
+    content:
+      text: Want to help with the translation? Join our server at https://discord.vrlabs.dev.
+      tooltip: 
