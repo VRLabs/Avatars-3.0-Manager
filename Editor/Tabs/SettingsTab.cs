@@ -38,7 +38,14 @@ namespace VRLabs.AV3Manager
 			};
 			dropdown.AddToClassList("top-spaced");
 			parent.Add(dropdown);
-            
+
+
+			var infoLabel =
+				new Label(LocalizationHandler.Get(Settings_HelpMessage).text)
+					.WithMargin(6, 0, 0, 0)
+					.WithFontSize(10); 
+			parent.Add(infoLabel);
+			
 			dropdown.RegisterValueChangedCallback(evt =>
 			{
 				var newIndex = Array.IndexOf(LocalizationHandler.languageOptionsNames, evt.newValue);

@@ -322,6 +322,10 @@ MonoBehaviour:
     content:
       text: Settings
       tooltip: 
+  - keyName: Settings_HelpMessage
+    content:
+      text: Want to help with the translation? Join our server at https://discord.vrlabs.dev.
+      tooltip:
   - keyName: Settings_IgnoreParamLimit
     content:
       text: Ignore Max Parameter Limit

@@ -82,6 +82,7 @@ namespace VRLabs.AV3Manager
 			WD_None,
 			WD_View,
 			Settings_Settings,
+			Settings_HelpMessage,
 			Settings_IgnoreParamLimit
 		}
 	}
