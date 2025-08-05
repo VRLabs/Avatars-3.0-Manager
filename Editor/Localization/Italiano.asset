@@ -331,6 +331,10 @@ MonoBehaviour:
     content:
       text: Impostazioni
       tooltip: 
+  - keyName: Settings_HelpMessage
+    content:
+      text: Vuoi autare a migliorare le traduzioni? Unisciti al nostro server https://discord.vrlabs.dev.
+      tooltip:
   - keyName: Settings_IgnoreParamLimit
     content:
       text: Ignora il limite della memoria dei parametri
