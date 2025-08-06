@@ -1,0 +1,332 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0450617712bbc5846a824c3bde9ca990, type: 3}
+  m_Name: Deutsch
+  m_EditorClassIdentifier: 
+  languageName: Deutsch
+  localizedContent:
+  - keyName: Merger_AnimatorMode
+    content:
+      text: "Controller Zusammf\xFChren-Modus"
+      tooltip: 
+  - keyName: Merger_Animator
+    content:
+      text: Controller
+      tooltip: 
+  - keyName: Merger_Parameters
+    content:
+      text: Parameter
+      tooltip: 
+  - keyName: Merger_Suffix
+    content:
+      text: Suffix
+      tooltip: 
+  - keyName: Merger_SelfMergeWarning
+    content:
+      text: "Controller kann nicht mit sich selbst zusammengef\xFChrt werden."
+      tooltip: 
+  - keyName: Merger_DuplicateParamWarning
+    content:
+      text: "Quell- und Zielcontroller beinhalten identische Parameter unterschiedlichen
+        Typs. Dies ist nicht zul\xE4ssig"
+      tooltip: 
+  - keyName: Merger_BuiltinParamWarning
+    content:
+      text: "Standardparameter welcher automatisch hinzugef\xFCgt, aber nicht bei
+        den Synchronisierten Parametern gelistet wird. Du solltest kein Suffix hinzuf\xFCgen,
+        au\xDFer du wei\xDFt was du tust"
+      tooltip: 
+  - keyName: Merger_ParamInDifferentLayerWarning
+    content:
+      text: "Parameter wird bereits in einem anderen Layer verwendet. F\xFCge ggf.
+        ein Suffix hinzu"
+      tooltip: 
+  - keyName: Merger_ClearSuffixes
+    content:
+      text: Entferne alle Suffixe
+      tooltip: "Entfernt alle Suffixe, was dazu f\xFChrt dass die gleichen Parameter
+        verwendet werden"
+  - keyName: Merger_ParamTypeMismatchWarning
+    content:
+      text: "Quell- und Zielcontroller beinhalten identische Parameter unterschiedlichen
+        Typs. Dies ist nicht zul\xE4ssig."
+      tooltip: 
+  - keyName: Merger_MergeOnCurrent
+    content:
+      text: Direkt Anwenden
+      tooltip: "F\xFChre den neuen Controller direkt mit dem aktuellen Controller
+        zusammen"
+  - keyName: Merger_MergeOnNew
+    content:
+      text: Auf Kopie Anwenden
+      tooltip: "Erstellt eine Kopie des aktuellen Controllers und f\xFChrt den neuen
+        mit diesem zusammen"
+  - keyName: Merger_Cancel
+    content:
+      text: Abbrechen
+      tooltip: Vorgang abbrechen
+  - keyName: Clips_SwapMode
+    content:
+      text: Animationen Austauschen-Modus
+      tooltip: 
+  - keyName: Clips_DontModifyAnimatorWarning
+    content:
+      text: "Nehme KEINE \xC4nderungen an dem Animator vor, w\xE4hrend du hier Animationen
+        austauschst, um Probleme zu vermeiden."
+      tooltip: 
+  - keyName: Clips_ApplyOnCurrent
+    content:
+      text: Direkt Anwenden
+      tooltip: "Wende die \xC4nderungen direkt auf den aktuellen Controller an"
+  - keyName: Clips_ApplyOnNew
+    content:
+      text: Auf Kopie Anwenden
+      tooltip: "Erstellt eine Kopie des aktuellen Controllers und wendet die \xC4nderungen
+        auf diesen an"
+  - keyName: Clips_Cancel
+    content:
+      text: Abbrechen
+      tooltip: Vorgang abbrechen
+  - keyName: Layers_Layers
+    content:
+      text: Layers
+      tooltip: 
+  - keyName: Layers_UsedParamMemory
+    content:
+      text: Genutzer Parameterspeicher
+      tooltip: 
+  - keyName: Layers_UseCustomLayer
+    content:
+      text: Benutze Custom Layer
+      tooltip: "Verwende deinen eigenen Controller f\xFCr diesen Layer"
+  - keyName: Layers_UseDefaultLayer
+    content:
+      text: Benutze Standard Layer als Custom
+      tooltip: "Benutze eine Kopie des Standard-Layers f\xFCr diesen Layer"
+  - keyName: Layers_UseDefaulVRCLayer
+    content:
+      text: Benutze Standard Layer
+      tooltip: Verwende den Standard-Layer von VRChat
+  - keyName: Layers_Controller
+    content:
+      text: Controller
+      tooltip: 
+  - keyName: Layers_Params
+    content:
+      text: Parameter
+      tooltip: 
+  - keyName: Layers_ExprParams
+    content:
+      text: VRC Expression Parameter
+      tooltip: 
+  - keyName: Layers_Synced
+    content:
+      text: Synced
+      tooltip: 
+  - keyName: Layers_AddAnimatorToMerge
+    content:
+      text: "Controller hinzuf\xFCgen"
+      tooltip: "W\xE4hle einen Controller aus, den du mit den aktuellen Controller
+        zusammenf\xFChren m\xF6chtest"
+  - keyName: Layers_SwapAnimations
+    content:
+      text: Wechsle Animationen
+      tooltip: Tausche Animationen in dem Controller
+  - keyName: Params_Params
+    content:
+      text: Parameter
+      tooltip: 
+  - keyName: Params_ExprParams
+    content:
+      text: VRC Expression Parameter
+      tooltip: 
+  - keyName: Params_OpenInInspector
+    content:
+      text: "Asset in Inspector \xF6ffnen"
+      tooltip: "W\xE4hle das Asset aus und zeige es im Inspector"
+  - keyName: Params_Name
+    content:
+      text: Name
+      tooltip: 
+  - keyName: Params_Type
+    content:
+      text: Typ
+      tooltip: 
+  - keyName: Params_Default
+    content:
+      text: Standard
+      tooltip: 
+  - keyName: Params_Saved
+    content:
+      text: Saved
+      tooltip: 
+  - keyName: Params_Synced
+    content:
+      text: Synced
+      tooltip: 
+  - keyName: Params_CopyParams
+    content:
+      text: Parameter kopieren
+      tooltip: 
+  - keyName: Params_ParamsToCopy
+    content:
+      text: Zu kopierende Parameter
+      tooltip: 
+  - keyName: Params_CopyParamsButton
+    content:
+      text: Parameter kopieren
+      tooltip: "Kopiert Parameter in die aktuelle Liste. Sollten Parameter bereits
+        bestehen, werden dessen Einstellungen \xFCbernommen."
+  - keyName: Params_UnusedExprParamWarning
+    content:
+      text: Dieser Parameter wird in keinem Animator verwendet. Entferne ihn oder
+        deaktiviere die "Synced" checkbox um Speicherplatz zu sparen.
+      tooltip: 
+  - keyName: Params_BuiltinInExprParamWarning
+    content:
+      text: Dieser Parameter muss nicht in der Parameterliste sein. Entferne ihn
+        oder deaktiviere die "Synced" checkbox um Speicherplatz zu sparen.
+      tooltip: 
+  - keyName: Params_UsedParamMemory
+    content:
+      text: Genutzer Parameterspeicher
+      tooltip: 
+  - keyName: Params_AdditionalCostOfAnimatorToMerge
+    content:
+      text: "Zus\xE4tzlicher Verbrauch"
+      tooltip: 
+  - keyName: Params_TotalParamMemoryAfterMerge
+    content:
+      text: Gesamter Verbrauch (Nachher)
+      tooltip: 
+  - keyName: Params_MergeWouldSurpassParamMemoryWarning
+    content:
+      text: "Merge nicht m\xF6glich, es w\xFCrde das Parameterlimit \xFCberschreiten."
+      tooltip: 
+  - keyName: WD_WD
+    content:
+      text: Write Defaults
+      tooltip: 
+  - keyName: WD_ForceAllWD
+    content:
+      text: Erzwinge alle Write Defaults
+      tooltip: 
+  - keyName: WD_ForceAllWDWarning
+    content:
+      text: "Write Defaults f\xFCr States zu erzwingen, die explizit eine bestimmte
+        Einstellung anfordern, ist nicht empfohlen."
+      tooltip: 
+  - keyName: WD_DBTWarning
+    content:
+      text: Direct Blend Tree ohne explizite Write Defaults Einstellung gefunden.
+        Diese sollten bei ihrer aktuellen Einstellung verbleiben
+      tooltip: 
+  - keyName: WD_IgnoreDBT
+    content:
+      text: Ignoriere Direct Blend Trees
+      tooltip: 
+  - keyName: WD_SetWDOff
+    content:
+      text: Setze Write Defaults Off
+      tooltip: Setze Write Defaults auf Off
+  - keyName: WD_ForceWD
+    content:
+      text: Erzwinge Write Defaults Einstellung
+      tooltip: 
+  - keyName: WD_ForceWDOffMessage
+    content:
+      text: "Einige States fordern Write Defaults On an, du bist aber im Begriff
+        dies mit Write Defaults Off zu \xFCberschreiben.\nM\xF6chtest du damit fortfahren?"
+      tooltip: 
+  - keyName: WD_ForceWDOnMessage
+    content:
+      text: "Einige States fordern Write Defaults Off an, du bist aber im Begriff
+        dies mit Write Defaults On zu \xFCberschreiben.\nM\xF6chtest du damit fortfahren?"
+      tooltip: 
+  - keyName: WD_Proceed
+    content:
+      text: Fortfahren
+      tooltip: 
+  - keyName: WD_Cancel
+    content:
+      text: Abbrechen
+      tooltip: 
+  - keyName: WD_SetWDOn
+    content:
+      text: Setze Write Defaults On
+      tooltip: Setze Write Defaults auf On
+  - keyName: WD_MixedWDWarning
+    content:
+      text: "Du hast gemischte Write Defaults Einstellungen in Layern, dies kann
+        sich merkw\xFCrdig verhalten"
+      tooltip: 
+  - keyName: WD_EmptyStatesWarning
+    content:
+      text: "Einige States haben keine Animation, dies kann zu Problemen in Write
+        Defaults Off f\xFChren. Wird eine einheitliche Write Defaults Einstellung
+        gesetzt, werden diese mit leeren Animationen gef\xFCllt."
+      tooltip: 
+  - keyName: WD_List
+    content:
+      text: Write Defaults Liste
+      tooltip: 
+  - keyName: WD_State
+    content:
+      text: State
+      tooltip: 
+  - keyName: WD_Motion
+    content:
+      text: Motion
+      tooltip: 
+  - keyName: WD_WDOn
+    content:
+      text: Write Defaults
+      tooltip: 
+  - keyName: WD_Default
+    content:
+      text: Standard
+      tooltip: "Beinhaltet der Name des States \"(WD On)\" oder \"(WD Off)\", wird
+        AV3 Manager die Write Defaults Einstellung nicht \xE4ndern (au\xDFer es wird
+        erzwungen)"
+  - keyName: WD_ViewState
+    content:
+      text: Zeige State
+      tooltip: 
+  - keyName: WD_On
+    content:
+      text: On
+      tooltip: 
+  - keyName: WD_Off
+    content:
+      text: Off
+      tooltip: 
+  - keyName: WD_None
+    content:
+      text: None
+      tooltip: 
+  - keyName: WD_View
+    content:
+      text: Anzeigen
+      tooltip: 
+  - keyName: Settings_Settings
+    content:
+      text: Einstellungen
+      tooltip: 
+  - keyName: Settings_HelpMessage
+    content:
+      text: "Du m\xF6chtest bei der \xDCbersetzung helfen? Trete unseren Server bei:
+        https://discord.vrlabs.dev."
+      tooltip: 
+  - keyName: Settings_IgnoreParamLimit
+    content:
+      text: Ignoriere Parameter Limit
+      tooltip: 
