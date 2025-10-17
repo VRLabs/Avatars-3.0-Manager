@@ -1,7 +1,7 @@
 {
   "name": "dev.vrlabs.av3manager",
   "displayName": "Avatars 3.0 Manager",
-  "version": "2.0.999",
+  "version": "2.1.999",
   "license": "MIT",
   "unity": "2019.4",
   "description": "A tool for managing playable layers and parameters for Avatars 3.0.",
