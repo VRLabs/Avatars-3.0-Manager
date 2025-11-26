@@ -12,7 +12,7 @@
   },
   "siteUrl": "https://github.com/VRLabs/Avatars-3.0-Manager",
   "vpmDependencies": {
-    "com.vrchat.avatars": "3.2 - 3.9"
+    "com.vrchat.avatars": "3.2 - 3.10"
   },
   "legacyFolders": {
     "Assets\\VRLabs\\Avatars 3.0 Manager": "513a67139704dd249855ebe5f760cba5"
