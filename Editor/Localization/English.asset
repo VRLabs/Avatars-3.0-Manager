@@ -330,3 +330,47 @@ MonoBehaviour:
     content:
       text: Ignore Max Parameter Limit
       tooltip: 
+  - keyName: Params_OverParamMemoryWarning
+    content:
+      text: "Synced parameters use more memory than allowed, the avatar can't be uploaded"
+      tooltip: 
+  - keyName: Params_BitWidth
+    content:
+      text: Bits
+      tooltip: "Amount of bits used by the parameter, with more bits you get either higher precision or higher range based on the type"
+  - keyName: Params_Representation
+    content:
+      text: Representation
+      tooltip: "Signed allows negative values, unsigned only allows positive ones with a larger range or more precision"
+  - keyName: Params_Unsigned
+    content:
+      text: Unsigned
+      tooltip: 
+  - keyName: Params_Signed
+    content:
+      text: Signed
+      tooltip: 
+  - keyName: Params_LerpDuration
+    content:
+      text: Lerp Duration
+      tooltip: "Custom time synced value changes take to interpolate to the new value"
+  - keyName: Params_LerpDefault
+    content:
+      text: Default
+      tooltip: 
+  - keyName: Params_LerpCustom
+    content:
+      text: Custom
+      tooltip: 
+  - keyName: Params_LerpSeconds
+    content:
+      text: "Duration in seconds (0-300)"
+      tooltip: 
+  - keyName: Params_Range
+    content:
+      text: Range
+      tooltip: 
+  - keyName: Params_Precision
+    content:
+      text: Precision
+      tooltip: 

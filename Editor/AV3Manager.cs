@@ -132,6 +132,7 @@ namespace VRLabs.AV3Manager
 				root.styleSheets.Add(styleSheet);
 
 				VisualElement topArea = new VisualElement().WithClass("top-area").ChildOf(root);
+				LoadMemoryArea(root);
 				VisualElement mainBody = new VisualElement()
 					.WithFlexDirection(FlexDirection.RowReverse)
 					.WithFlexGrow(1)
@@ -198,6 +199,46 @@ namespace VRLabs.AV3Manager
 
 				UpdateTabs();
 			});
+		}
+
+		private static readonly Color MemoryFreeColor = new Color(0, 0.5f, 1, 0.5f);
+		private static readonly Color MemoryLowColor = new Color(0.8f, 0.7f, 0, 0.5f);
+		private static readonly Color MemoryOutColor = new Color(1, 0, 0, 0.5f);
+
+		/// <summary>
+		/// Synced parameter memory bar, more in line with the sdk, more curved cause pretty
+		/// </summary>
+		private void LoadMemoryArea(VisualElement root)
+		{
+			var memoryArea = new VisualElement().WithClass("memory-area").ChildOf(root);
+			var memoryBar = new ProgressBar { lowValue = 0, highValue = MAX_PARAMETER_COST }
+				.WithClass("memory-bar")
+				.ChildOf(memoryArea);
+			var memoryBarProgress = memoryBar.Q(className: "unity-progress-bar__progress");
+			var overBudgetLabel = new Label(LocalizationHandler.Get(AV3ManagerLocalization.Keys.Params_OverParamMemoryWarning).text)
+				.WithClass("red-text", "white-space-normal")
+				.ChildOf(memoryArea);
+
+			void Refresh()
+			{
+				memoryArea.EnableInClassList("hidden", _avatar == null);
+				if (_avatar == null) return;
+
+				var parameters = _avatar.expressionParameters != null ? _avatar.expressionParameters.parameters : null;
+				int cost = parameters == null ? 0 : parameters.Where(p => p != null).GetCost();
+
+				memoryBar.title =
+					$"{LocalizationHandler.Get(AV3ManagerLocalization.Keys.Params_UsedParamMemory).text}: {cost}/{MAX_PARAMETER_COST}";
+				memoryBar.value = Mathf.Min(cost, MAX_PARAMETER_COST);
+				if (memoryBarProgress != null)
+					memoryBarProgress.style.backgroundColor = cost > MAX_PARAMETER_COST ? MemoryOutColor
+						: cost > MAX_PARAMETER_COST / 2 ? MemoryLowColor
+						: MemoryFreeColor;
+				overBudgetLabel.EnableInClassList("hidden", cost <= MAX_PARAMETER_COST);
+			}
+
+			Refresh();
+			memoryArea.schedule.Execute(Refresh).Every(300);
 		}
 
 		private void LoadTabs(List<VisualElement> tabsAreas)

@@ -136,7 +136,7 @@ namespace VRLabs.AV3Manager
 			else
 			{
 				if ((descriptor.expressionParameters.CalcTotalCost() +
-				     VRCExpressionParameters.TypeCost(parameter.valueType)) >
+				     (parameter.networkSynced ? parameter.GetBitWidthByType() : 0)) >
 				    VRCExpressionParameters.MAX_PARAMETER_COST)
 				{
 					Debug.LogError("Couldn't add parameter '" + parameter.name +
@@ -265,18 +265,37 @@ namespace VRLabs.AV3Manager
 			newParam.defaultValue = parameter.defaultValue;
 			newParam.saved = parameter.saved;
 			newParam.networkSynced = parameter.networkSynced;
+			newParam.CopyAdvancedSettingsFrom(parameter);
 
 			return newParam;
 		}
+
+		/// <summary>
+		/// Copies the advanced parameters settings from another parameter into this parameter
+		/// </summary>
+		public static void CopyAdvancedSettingsFrom(this VRCExpressionParameters.Parameter target,
+			VRCExpressionParameters.Parameter source)
+		{
+			target.bitWidth = source.bitWidth;
+			target.flippedRepresentation = source.flippedRepresentation;
+			target.useCustomLerpDuration = source.useCustomLerpDuration;
+			target.customLerpDuration = source.customLerpDuration;
+		}
+
+		/// <summary>
+		/// Default synced bit cost of a parameter
+		/// </summary>
+		public static int GetDefaultBitWidth(VRCExpressionParameters.ValueType valueType) =>
+			new VRCExpressionParameters.Parameter { valueType = valueType }.GetBitWidthByType();
 
 		public static int GetCost(this IEnumerable<VRCExpressionParameters.Parameter> parameters,
 			IEnumerable<VRCExpressionParameters.Parameter> blackList = null)
 		{
 			return blackList == null
 				? parameters.Where(parameter => parameter.networkSynced)
-					.Sum(parameter => VRCExpressionParameters.TypeCost(parameter.valueType))
+					.Sum(parameter => parameter.GetBitWidthByType())
 				: parameters.Where(x => !blackList.Any(y => y.name.Equals(x.name)) && x.networkSynced)
-					.Sum(parameter => VRCExpressionParameters.TypeCost(parameter.valueType));
+					.Sum(parameter => parameter.GetBitWidthByType());
 		}
 
 		/// <summary>

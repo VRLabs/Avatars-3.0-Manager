@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -8,6 +9,7 @@ using UnityEngine.UIElements;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Avatars.ScriptableObjects;
 using ValueType = VRC.SDK3.Avatars.ScriptableObjects.VRCExpressionParameters.ValueType;
+using Parameter = VRC.SDK3.Avatars.ScriptableObjects.VRCExpressionParameters.Parameter;
 using static VRLabs.AV3Manager.AV3ManagerLocalization.Keys;
 using DreadScripts.Localization;
 
@@ -22,7 +24,6 @@ namespace VRLabs.AV3Manager
 		public string TabName { get; set; }
 		public Texture2D TabIcon { get; set; }
 
-		private Label _label;
 		private Label _additionalCostLabel;
 
 		private VisualElement _paramsListContainer;
@@ -30,6 +31,9 @@ namespace VRLabs.AV3Manager
 
 		private VRCAvatarDescriptor _avatar;
 		private VRCExpressionParameters _paramsToCopyAsset;
+
+		// Names of parameters whose advanced settings foldout is open, kept only while the window is open.
+		private readonly HashSet<string> _expandedParameters = new HashSet<string>();
 
 		public ParametersTab()
 		{
@@ -52,11 +56,6 @@ namespace VRLabs.AV3Manager
 						Selection.SetActiveObjectWithContext(_avatar.expressionParameters,
 							_avatar.expressionParameters);
 					})
-				.ChildOf(TabContainer);
-
-			_label = new Label()
-				.WithClass("bordered-container", "margin-normal", "hidden")
-				.WithFontSize(10)
 				.ChildOf(TabContainer);
 
 			var paramHeader = new VisualElement()
@@ -109,15 +108,14 @@ namespace VRLabs.AV3Manager
 					{
 						if (_avatar == null || _avatar.expressionParameters == null) return;
 						if (!(paramsToCopy.value is VRCExpressionParameters paramsToCopyAsset)) return;
+						Undo.RecordObject(_avatar.expressionParameters, "Copy Expression Parameters");
 						foreach (var parameter in paramsToCopyAsset.parameters)
 						{
-							VRCExpressionParameters.Parameter p =
-								_avatar.expressionParameters.FindParameter(parameter.name);
+							Parameter p = _avatar.expressionParameters.FindParameter(parameter.name);
 							if (p == null)
 							{
 								int count = _avatar.expressionParameters.parameters.Length;
-								VRCExpressionParameters.Parameter[] parameterArray =
-									new VRCExpressionParameters.Parameter[count + 1];
+								Parameter[] parameterArray = new Parameter[count + 1];
 								for (int i = 0; i < count; i++)
 								{
 									parameterArray[i] = _avatar.expressionParameters.GetParameter(i);
@@ -131,6 +129,7 @@ namespace VRLabs.AV3Manager
 								p.defaultValue = parameter.defaultValue;
 								p.saved = parameter.saved;
 								p.networkSynced = parameter.networkSynced;
+								p.CopyAdvancedSettingsFrom(parameter);
 							}
 						}
 
@@ -171,6 +170,14 @@ namespace VRLabs.AV3Manager
 				_avatar.expressionParameters = evt.newValue as VRCExpressionParameters;
 				UpdateParameters();
 			});
+
+			Undo.undoRedoPerformed += () =>
+			{
+				// Skip instances whose window has been closed.
+				if (TabContainer.panel == null) return;
+				if (_avatar == null || _avatar.expressionParameters == null) return;
+				UpdateParameters();
+			};
 		}
 
 		public void UpdateTab(VRCAvatarDescriptor avatar)
@@ -188,6 +195,17 @@ namespace VRLabs.AV3Manager
 			if (_avatar.expressionParameters == null) return;
 
 			UpdateParameters();
+		}
+
+		/// <summary>
+		/// Records an undo step, applies the edit to the avatar's expression parameters and marks the asset dirty.
+		/// </summary>
+		private void EditParameters(string undoName, Action edit)
+		{
+			var asset = _avatar.expressionParameters;
+			Undo.RecordObject(asset, undoName);
+			edit();
+			EditorUtility.SetDirty(asset);
 		}
 
 		private void UpdateParameters()
@@ -220,49 +238,76 @@ namespace VRLabs.AV3Manager
 
 				new Label(parameter.name).WithAlignSelf(Align.Center).WithFlex(2.5f, 0, 1).ChildOf(row);
 				new EnumField(parameter.valueType).WithFlex(1, 0, 1).WithEnabledState(false).ChildOf(row);
+
+				// Re-clamps the default value to the parameter's current range and shows it, used after a range change.
+				Action refreshDefault = null;
 				switch (parameter.valueType)
 				{
 					case ValueType.Int:
 						var intValue = FluentUIElements.NewIntField((int)parameter.defaultValue)
 							.WithFlex(1, 0, 1).ChildOf(row);
 						intValue.RegisterValueChangedCallback(evt =>
-							parameter.defaultValue = Mathf.Clamp(evt.newValue, 0, 255));
+						{
+							var (min, max) = GetIntRange(parameter);
+							int clamped = Mathf.Clamp(evt.newValue, min, max);
+							EditParameters("Edit Parameter Default", () => parameter.defaultValue = clamped);
+							if (clamped != evt.newValue) intValue.SetValueWithoutNotify(clamped);
+						});
+						refreshDefault = () =>
+						{
+							var (min, max) = GetIntRange(parameter);
+							parameter.defaultValue = Mathf.Clamp((int)parameter.defaultValue, min, max);
+							intValue.SetValueWithoutNotify((int)parameter.defaultValue);
+						};
 						break;
 					case ValueType.Float:
 						var floatValue = FluentUIElements.NewFloatField(parameter.defaultValue)
 							.WithFlex(1, 0, 1).ChildOf(row);
 						floatValue.RegisterValueChangedCallback(evt =>
-							parameter.defaultValue = Mathf.Clamp(evt.newValue, -1f, 1f));
+						{
+							var (min, max) = GetFloatRange(parameter);
+							float clamped = Mathf.Clamp(evt.newValue, min, max);
+							EditParameters("Edit Parameter Default", () => parameter.defaultValue = clamped);
+							if (!Mathf.Approximately(clamped, evt.newValue)) floatValue.SetValueWithoutNotify(clamped);
+						});
+						refreshDefault = () =>
+						{
+							var (min, max) = GetFloatRange(parameter);
+							parameter.defaultValue = Mathf.Clamp(parameter.defaultValue, min, max);
+							floatValue.SetValueWithoutNotify(parameter.defaultValue);
+						};
 						break;
 					case ValueType.Bool:
 						var boolValue = FluentUIElements.NewToggle(parameter.defaultValue != 0)
 							.WithClass("centered-toggle").WithFlex(1, 0, 1).ChildOf(row);
-						boolValue.RegisterValueChangedCallback(evt => parameter.defaultValue = evt.newValue ? 1f : 0f);
+						boolValue.RegisterValueChangedCallback(evt =>
+							EditParameters("Edit Parameter Default", () => parameter.defaultValue = evt.newValue ? 1f : 0f));
 						break;
 				}
 
 				var saved = FluentUIElements.NewToggle(parameter.saved).WithClass("centered-toggle")
 					.WithFlex(1, 0, 1).ChildOf(row);
-				saved.RegisterValueChangedCallback(evt => parameter.saved = evt.newValue);
+				saved.RegisterValueChangedCallback(evt =>
+					EditParameters("Edit Parameter Saved", () => parameter.saved = evt.newValue));
 
 				var networkSynced = FluentUIElements.NewToggle(parameter.networkSynced).WithClass("centered-toggle")
 					.WithFlex(1.5f, 0, 1).ChildOf(row);
-				networkSynced.RegisterValueChangedCallback(evt => parameter.networkSynced = evt.newValue);
+				networkSynced.RegisterValueChangedCallback(evt =>
+					EditParameters("Edit Parameter Synced", () => parameter.networkSynced = evt.newValue));
 
 				FluentUIElements.NewButton(() =>
 					{
-						List<VRCExpressionParameters.Parameter> list = new List<VRCExpressionParameters.Parameter>();
-						foreach (VRCExpressionParameters.Parameter x in _avatar.expressionParameters.parameters)
-							if (x != parameter)
-								list.Add(x);
-
-						_avatar.expressionParameters.parameters = list.ToArray();
-
+						EditParameters("Delete Expression Parameter", () =>
+							_avatar.expressionParameters.parameters = _avatar.expressionParameters.parameters
+								.Where(x => x != parameter).ToArray());
 						UpdateParameters();
 					})
 					.WithClass("delete-button")
 					.WithFlex(1, 0, 1).ChildOf(row);
 
+				// Bools are always 1 bit, unsigned and never lerp, so they have nothing to configure.
+				if (parameter.valueType != ValueType.Bool)
+					CreateAdvancedSettings(parameter, refreshDefault).ChildOf(paramElement);
 
 				if (!usedParameters.Contains(parameter.name))
 					new Label(LocalizationHandler.Get(Params_UnusedExprParamWarning).text).WithClass("warning-label")
@@ -273,17 +318,155 @@ namespace VRLabs.AV3Manager
 						.ChildOf(paramElement);
 			}
 
-			UpdateLabel(_avatar.expressionParameters.CalcTotalCost());
 			UpdateAdditionalCostLabel(_paramsToCopyAsset);
 		}
 
-		public void UpdateLabel(int currentCount)
+		/// <summary>
+		/// Foldout with the bit width, representation and lerp duration of an int or float parameter
+		/// </summary>
+		private Foldout CreateAdvancedSettings(Parameter parameter, Action refreshDefault)
 		{
-			if (_label == null) return;
-			_label.text =
-				$"{LocalizationHandler.Get(Params_UsedParamMemory).text}: {currentCount}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
-			_label.RemoveFromClassList("hidden");
+			var foldout = new Foldout { value = _expandedParameters.Contains(parameter.name) };
+			foldout.RegisterValueChangedCallback(evt =>
+			{
+				if (evt.target != foldout) return;
+				if (evt.newValue) _expandedParameters.Add(parameter.name);
+				else _expandedParameters.Remove(parameter.name);
+			});
+
+			var rangeLabel = new Label()
+				.WithUnityTextAlign(TextAnchor.MiddleRight)
+				.WithMargin(3, 1, 3, 1);
+
+			void UpdateSummary()
+			{
+				foldout.text = GetAdvancedSettingsSummary(parameter);
+				rangeLabel.text = GetRangeText(parameter);
+			}
+
+			var bits = new SliderInt(LocalizationHandler.Get(Params_BitWidth).text,
+					Parameter.MinBitWidth, Parameter.MaxBitWidth)
+				{ showInputField = true, value = parameter.GetBitWidthByType() }
+				.ChildOf(foldout);
+			bits.tooltip = LocalizationHandler.Get(Params_BitWidth).tooltip;
+			bits.RegisterValueChangedCallback(evt =>
+			{
+				if (evt.target != bits) return;
+				int width = Mathf.Clamp(evt.newValue, Parameter.MinBitWidth, Parameter.MaxBitWidth);
+				EditParameters("Edit Parameter Bit Width", () =>
+				{
+					parameter.bitWidth = (byte)width;
+					refreshDefault?.Invoke();
+				});
+				if (width != evt.newValue) bits.SetValueWithoutNotify(width);
+				UpdateSummary();
+			});
+
+			string unsignedText = LocalizationHandler.Get(Params_Unsigned).text;
+			string signedText = LocalizationHandler.Get(Params_Signed).text;
+			var representation = new DropdownField(LocalizationHandler.Get(Params_Representation).text,
+					new List<string> { unsignedText, signedText },
+					IsSigned(parameter) ? 1 : 0)
+				.ChildOf(foldout);
+			representation.tooltip = LocalizationHandler.Get(Params_Representation).tooltip;
+			representation.RegisterValueChangedCallback(evt =>
+			{
+				if (evt.target != representation) return;
+				bool signed = representation.index == 1;
+				EditParameters("Edit Parameter Representation", () =>
+				{
+					// Floats are signed by default and ints unsigned, the flag inverts that default.
+					parameter.flippedRepresentation = parameter.valueType == ValueType.Float ? !signed : signed;
+					refreshDefault?.Invoke();
+				});
+				UpdateSummary();
+			});
+
+			var lerpRow = new VisualElement().WithFlexDirection(FlexDirection.Row).ChildOf(foldout);
+			var lerpType = new DropdownField(LocalizationHandler.Get(Params_LerpDuration).text,
+					new List<string>
+					{
+						LocalizationHandler.Get(Params_LerpDefault).text,
+						LocalizationHandler.Get(Params_LerpCustom).text
+					},
+					parameter.useCustomLerpDuration ? 1 : 0)
+				.WithFlexGrow(1)
+				.ChildOf(lerpRow);
+			lerpType.tooltip = LocalizationHandler.Get(Params_LerpDuration).tooltip;
+			var lerpSeconds = FluentUIElements.NewFloatField(parameter.customLerpDuration)
+				.WithWidth(60)
+				.ChildOf(lerpRow);
+			lerpSeconds.tooltip = LocalizationHandler.Get(Params_LerpSeconds).text;
+			lerpSeconds.EnableInClassList("hidden", !parameter.useCustomLerpDuration);
+
+			lerpType.RegisterValueChangedCallback(evt =>
+			{
+				if (evt.target != lerpType) return;
+				bool custom = lerpType.index == 1;
+				EditParameters("Edit Parameter Lerp Duration", () => parameter.useCustomLerpDuration = custom);
+				lerpSeconds.EnableInClassList("hidden", !custom);
+				UpdateSummary();
+			});
+			lerpSeconds.RegisterValueChangedCallback(evt =>
+			{
+				if (evt.target != lerpSeconds) return;
+				float seconds = Mathf.Clamp(evt.newValue, Parameter.MinLerpDuration, Parameter.MaxLerpDuration);
+				EditParameters("Edit Parameter Lerp Duration", () => parameter.customLerpDuration = seconds);
+				if (!Mathf.Approximately(seconds, evt.newValue)) lerpSeconds.SetValueWithoutNotify(seconds);
+				UpdateSummary();
+			});
+
+			rangeLabel.ChildOf(foldout);
+			UpdateSummary();
+
+			return foldout;
 		}
+
+		private string GetAdvancedSettingsSummary(Parameter parameter)
+		{
+			string representation = LocalizationHandler.Get(IsSigned(parameter) ? Params_Signed : Params_Unsigned).text;
+			float? lerp = parameter.GetCustomLerpDuration();
+			string lerpText = lerp.HasValue ? $"{lerp.Value:0.###}s" : LocalizationHandler.Get(Params_LerpDefault).text;
+			return $"{LocalizationHandler.Get(Params_BitWidth).text}: {parameter.GetBitWidthByType()} · " +
+			       $"{representation} · {LocalizationHandler.Get(Params_LerpDuration).text}: {lerpText}";
+		}
+
+		/// <summary>
+		/// Values the parameter can hold with its current settings
+		/// </summary>
+		private string GetRangeText(Parameter parameter)
+		{
+			string range = LocalizationHandler.Get(Params_Range).text;
+			if (parameter.valueType == ValueType.Int)
+			{
+				var (min, max) = GetIntRange(parameter);
+				return $"{range}: [{min},{max}]";
+			}
+
+			var (minFloat, maxFloat) = GetFloatRange(parameter);
+			float step = (maxFloat - minFloat) / ((1 << parameter.GetBitWidthByType()) - 2);
+			return $"{range}: [{minFloat},{maxFloat}]  {LocalizationHandler.Get(Params_Precision).text}: {step:G4}";
+		}
+
+		private static bool IsSigned(Parameter parameter) =>
+			parameter.GetRepresentationByType() == Parameter.ValueRepresentation.Signed;
+
+		/// <summary>
+		/// Range an int parameter can hold with its bit width and representation.
+		/// </summary>
+		private static (int min, int max) GetIntRange(Parameter parameter)
+		{
+			int width = parameter.GetBitWidthByType();
+			return IsSigned(parameter)
+				? (-(1 << (width - 1)), (1 << (width - 1)) - 1)
+				: (0, (1 << width) - 1);
+		}
+
+		/// <summary>
+		/// Range a float parameter can hold with its representation.
+		/// </summary>
+		private static (float min, float max) GetFloatRange(Parameter parameter) =>
+			IsSigned(parameter) ? (-1f, 1f) : (0f, 1f);
 
 		public void UpdateAdditionalCostLabel(VRCExpressionParameters paramsToCopyAsset)
 		{

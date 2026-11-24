@@ -21,8 +21,6 @@ namespace VRLabs.AV3Manager
 		public string TabName { get; set; }
 		public Texture2D TabIcon { get; set; }
 
-		private Label _label;
-
 		public LocalizationHandler<AV3ManagerLocalization> LocalizationHandler = AV3Manager.LocalizationHandler;
 
 		public LayersTab()
@@ -40,25 +38,11 @@ namespace VRLabs.AV3Manager
 
 			TabContainer = new VisualElement();
 
-			_label = new Label()
-				.WithClass("bordered-container", "margin-normal")
-				.WithFontSize(10)
-				.ChildOf(TabContainer);
-
 			for (int i = 0; i < avatar.baseAnimationLayers.Length; i++)
 				TabContainer.Add(new AnimatorLayerTabElement(new VrcAnimationLayer(avatar, i), this));
 
 			for (int i = 0; i < avatar.specialAnimationLayers.Length; i++)
 				TabContainer.Add(new AnimatorLayerTabElement(new VrcAnimationLayer(avatar, i, true), this));
-
-			UpdateLabel(avatar.expressionParameters.CalcTotalCost());
-		}
-
-		public void UpdateLabel(int currentCount)
-		{
-			if (_label == null) return;
-			_label.text =
-				$"{LocalizationHandler.Get(Layers_UsedParamMemory).text}: {currentCount}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
 		}
 	}
 
@@ -141,9 +125,7 @@ namespace VRLabs.AV3Manager
 						.WithAlignItems(Align.Center);
 					var syncedCheckbox = FluentUIElements.NewToggle(parameter.IsSynced).ChildOf(syncedCheckboxDiv);
 					int totalCostIfExpressionAndSynced = layer.ExpressionParametersCost +
-					                                     VRCExpressionParameters.TypeCost(
-						                                     AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(
-							                                     parameter.Parameter.type));
+					                                     layer.GetSyncCost(parameter);
 
 					bool canExpressionAndSync =
 						totalCostIfExpressionAndSynced <= VRCExpressionParameters.MAX_PARAMETER_COST;
@@ -151,7 +133,6 @@ namespace VRLabs.AV3Manager
 					{
 						layer.ToggleParameterSync(parameter, x.newValue, parameter.IsSynced);
 						UpdateParams();
-						tab.UpdateLabel(layer.ExpressionParametersCost);
 					});
 
 					syncedCheckbox.SetEnabled(parameter.IsExpression && (canExpressionAndSync || parameter.IsSynced));
@@ -159,7 +140,6 @@ namespace VRLabs.AV3Manager
 					{
 						layer.ToggleParameterSync(parameter, parameter.IsExpression, x.newValue);
 						UpdateParams();
-						tab.UpdateLabel(layer.ExpressionParametersCost);
 					});
 				}
 			}
@@ -309,6 +289,20 @@ namespace VRLabs.AV3Manager
 			UpdateParameters();
 		}
 
+		/// <summary>
+		/// Cost in Bits for a parameter: if it's already an expression parameter, the cost comes from its settings, otherwise the default cost is taken
+		/// </summary>
+		public int GetSyncCost(SyncedParameter parameter)
+		{
+			var expParam = _expressionParameters != null
+				? _expressionParameters.FindParameter(parameter.Parameter.name)
+				: null;
+			return expParam != null
+				? expParam.GetBitWidthByType()
+				: AV3ManagerFunctions.GetDefaultBitWidth(
+					AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(parameter.Parameter.type));
+		}
+
 		public void SetDefault(bool value)
 		{
 			_layerArray[_index].isDefault = value;
@@ -342,8 +336,8 @@ namespace VRLabs.AV3Manager
 			var paramType = AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(parameter.Parameter.type);
 
 			if (parameter.IsExpression &&
-			    _expressionParameters.CalcTotalCost() + VRCExpressionParameters.TypeCost(paramType) <=
-			    VRCExpressionParameters.MAX_PARAMETER_COST || !parameter.IsSynced)
+			    (_expressionParameters.CalcTotalCost() + GetSyncCost(parameter) <=
+			     VRCExpressionParameters.MAX_PARAMETER_COST || !parameter.IsSynced))
 			{
 				// Add parameter if it doesnt exist.
 				if (expParam == null)

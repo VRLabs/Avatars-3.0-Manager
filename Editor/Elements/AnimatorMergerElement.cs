@@ -112,6 +112,7 @@ namespace VRLabs.AV3Manager
 
                 parametersListContainer.Clear();
                 _parametersToMerge.Clear();
+                _parameterWarningLabels.Clear();
 
                 if (newController == layer.Controller)
                 {
