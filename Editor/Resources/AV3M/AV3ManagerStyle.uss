@@ -194,6 +194,22 @@ AnimatorLayerTabElement {
     max-height: 16px;
 }
 
+/* Mirrored so the refresh arrow turns counter-clockwise, reading as "revert". */
+.reset-icon-button {
+    background-image: resource("Refresh@2X");
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+    margin: 0 0 0 4px;
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    flex-shrink: 0;
+    align-self: center;
+    scale: -1 1;
+}
+
 TextField > Label {
     max-width: 150px;
 }

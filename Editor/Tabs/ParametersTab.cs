@@ -326,41 +326,64 @@ namespace VRLabs.AV3Manager
 		/// </summary>
 		private Foldout CreateAdvancedSettings(Parameter parameter, Action refreshDefault)
 		{
-			var foldout = new Foldout { value = _expandedParameters.Contains(parameter.name) };
-			foldout.RegisterValueChangedCallback(evt =>
+			var foldout = new Foldout
 			{
-				if (evt.target != foldout) return;
-				if (evt.newValue) _expandedParameters.Add(parameter.name);
-				else _expandedParameters.Remove(parameter.name);
-			});
+				value = _expandedParameters.Contains(parameter.name),
+				text = GetAdvancedSettingsSummary(parameter)
+			};
 
 			var rangeLabel = new Label()
 				.WithUnityTextAlign(TextAnchor.MiddleRight)
 				.WithMargin(3, 1, 3, 1)
 				.WithFlexGrow(1);
 
-			var resetButton = FluentUIElements.NewButton(LocalizationHandler.Get(Params_ResetAdvanced).text,
-				LocalizationHandler.Get(Params_ResetAdvanced).tooltip,
-				() =>
+			void ResetSettings()
+			{
+				EditParameters("Reset Advanced Parameter Settings", () =>
 				{
-					EditParameters("Reset Advanced Parameter Settings", () =>
-					{
-						parameter.ResetAdvancedSettings();
-						refreshDefault?.Invoke();
-					});
-					UpdateParameters();
+					parameter.ResetAdvancedSettings();
+					refreshDefault?.Invoke();
 				});
+				UpdateParameters();
+			}
+
+			var resetButton = FluentUIElements.NewButton(LocalizationHandler.Get(Params_ResetAdvanced).text,
+				LocalizationHandler.Get(Params_ResetAdvanced).tooltip, ResetSettings);
 
 			// Small square on the foldout's arrow to show settings different from the default state.
 			var changedIndicator = new VisualElement { pickingMode = PickingMode.Ignore }
 				.WithClass("changed-indicator")
 				.ChildOf(foldout.Q(className: Toggle.checkmarkUssClassName));
 
+			// Reset icon inlined after header text 
+			var headerLabel = foldout.Q<Label>(className: Toggle.textUssClassName);
+			if (headerLabel != null) headerLabel.style.flexGrow = 0;
+			var resetIcon = FluentUIElements.NewButton(null, LocalizationHandler.Get(Params_ResetAdvanced).tooltip,
+					ResetSettings)
+				.WithClass("reset-icon-button")
+				.ChildOf(foldout.Q(className: Toggle.inputUssClassName));
+			// Stop click propagation in the icon button to prevent it from bubbling up to the foldout.
+			resetIcon.RegisterCallback<PointerDownEvent>(evt => evt.StopPropagation());
+			resetIcon.RegisterCallback<PointerUpEvent>(evt => evt.StopPropagation());
+			resetIcon.RegisterCallback<ClickEvent>(evt => evt.StopPropagation());
+
+			void UpdateResetIcon() =>
+				resetIcon.EnableInClassList("hidden", foldout.value || !HasChangedAdvancedSettings(parameter));
+
+			foldout.RegisterValueChangedCallback(evt =>
+			{
+				if (evt.target != foldout) return;
+				if (evt.newValue) _expandedParameters.Add(parameter.name);
+				else _expandedParameters.Remove(parameter.name);
+				UpdateResetIcon();
+			});
+
 			void UpdateSummary()
 			{
 				bool changed = HasChangedAdvancedSettings(parameter);
 				changedIndicator.EnableInClassList("hidden", !changed);
 				resetButton.SetEnabled(changed);
+				UpdateResetIcon();
 				foldout.text = GetAdvancedSettingsSummary(parameter);
 				rangeLabel.text = GetRangeText(parameter);
 			}
