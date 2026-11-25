@@ -188,10 +188,10 @@ AnimatorLayerTabElement {
 .delete-button {
     background-color: transparent;
     border-width: 0;
-    width: 18px;
-    height: 18px;
-    max-width: 18px;
-    max-height: 18px;
+    width: 16px;
+    height: 16px;
+    max-width: 16px;
+    max-height: 16px;
 }
 
 TextField > Label {

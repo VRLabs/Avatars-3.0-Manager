@@ -32,7 +32,7 @@ namespace VRLabs.AV3Manager
 		private VRCAvatarDescriptor _avatar;
 		private VRCExpressionParameters _paramsToCopyAsset;
 
-		// Names of parameters whose advanced settings foldout is open, kept only while the window is open.
+		// Keeps memory of the open parameter foldouts
 		private readonly HashSet<string> _expandedParameters = new HashSet<string>();
 
 		public ParametersTab()
@@ -338,7 +338,7 @@ namespace VRLabs.AV3Manager
 				.WithUnityTextAlign(TextAnchor.MiddleRight)
 				.WithMargin(3, 1, 3, 1);
 
-			// Small square on the foldout's arrow, shown when any of the settings differ from their defaults.
+			// Small square on the foldout's arrow to show settings different from the default state.
 			var changedIndicator = new VisualElement { pickingMode = PickingMode.Ignore }
 				.WithClass("changed-indicator")
 				.ChildOf(foldout.Q(className: Toggle.checkmarkUssClassName));
