@@ -281,6 +281,14 @@ MonoBehaviour:
     content:
       text: Write Defaults List
       tooltip: 
+  - keyName: WD_OnlyProblematic
+    content:
+      text: Show different states only
+      tooltip: "Only show states with a different Write Defaults setting than the majority"
+  - keyName: WD_NoProblematicStates
+    content:
+      text: No states found that differ from the majority
+      tooltip:
   - keyName: WD_State
     content:
       text: State
@@ -330,3 +338,51 @@ MonoBehaviour:
     content:
       text: Ignore Max Parameter Limit
       tooltip: 
+  - keyName: Params_OverParamMemoryWarning
+    content:
+      text: "Synced parameters use more memory than allowed, the avatar can't be uploaded"
+      tooltip: 
+  - keyName: Params_BitWidth
+    content:
+      text: Bits
+      tooltip: "Amount of bits used by the parameter, with more bits you get either higher precision or higher range based on the type"
+  - keyName: Params_Representation
+    content:
+      text: Representation
+      tooltip: "Signed allows negative values, unsigned only allows positive ones with a larger range or more precision"
+  - keyName: Params_Unsigned
+    content:
+      text: Unsigned
+      tooltip: 
+  - keyName: Params_Signed
+    content:
+      text: Signed
+      tooltip: 
+  - keyName: Params_LerpDuration
+    content:
+      text: Lerp Duration
+      tooltip: "Custom time synced value changes take to interpolate to the new value"
+  - keyName: Params_LerpDefault
+    content:
+      text: Default
+      tooltip: 
+  - keyName: Params_LerpCustom
+    content:
+      text: Custom
+      tooltip: 
+  - keyName: Params_LerpSeconds
+    content:
+      text: "Duration in seconds (0-300)"
+      tooltip: 
+  - keyName: Params_Range
+    content:
+      text: Range
+      tooltip: 
+  - keyName: Params_Precision
+    content:
+      text: Precision
+      tooltip: 
+  - keyName: Params_ResetAdvanced
+    content:
+      text: "Reset"
+      tooltip: "Reset all advanced options of this parameter to their defaults"

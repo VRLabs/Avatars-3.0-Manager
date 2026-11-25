@@ -136,7 +136,7 @@ namespace VRLabs.AV3Manager
 			else
 			{
 				if ((descriptor.expressionParameters.CalcTotalCost() +
-				     VRCExpressionParameters.TypeCost(parameter.valueType)) >
+				     (parameter.networkSynced ? parameter.GetBitWidthByType() : 0)) >
 				    VRCExpressionParameters.MAX_PARAMETER_COST)
 				{
 					Debug.LogError("Couldn't add parameter '" + parameter.name +
@@ -265,18 +265,46 @@ namespace VRLabs.AV3Manager
 			newParam.defaultValue = parameter.defaultValue;
 			newParam.saved = parameter.saved;
 			newParam.networkSynced = parameter.networkSynced;
+			newParam.CopyAdvancedSettingsFrom(parameter);
 
 			return newParam;
 		}
+
+		/// <summary>
+		/// Copies the advanced parameters settings from another parameter into this parameter
+		/// </summary>
+		public static void CopyAdvancedSettingsFrom(this VRCExpressionParameters.Parameter target,
+			VRCExpressionParameters.Parameter source)
+		{
+			target.bitWidth = source.bitWidth;
+			target.flippedRepresentation = source.flippedRepresentation;
+			target.useCustomLerpDuration = source.useCustomLerpDuration;
+			target.customLerpDuration = source.customLerpDuration;
+		}
+
+		/// <summary>
+		/// Sets the advanced parameters settings back to the defaults of the parameter's type
+		/// </summary>
+		public static void ResetAdvancedSettings(this VRCExpressionParameters.Parameter parameter)
+		{
+			parameter.CopyAdvancedSettingsFrom(new VRCExpressionParameters.Parameter { valueType = parameter.valueType });
+			parameter.bitWidth = (byte)GetDefaultBitWidth(parameter.valueType);
+		}
+
+		/// <summary>
+		/// Default synced bit cost of a parameter
+		/// </summary>
+		public static int GetDefaultBitWidth(VRCExpressionParameters.ValueType valueType) =>
+			new VRCExpressionParameters.Parameter { valueType = valueType }.GetBitWidthByType();
 
 		public static int GetCost(this IEnumerable<VRCExpressionParameters.Parameter> parameters,
 			IEnumerable<VRCExpressionParameters.Parameter> blackList = null)
 		{
 			return blackList == null
 				? parameters.Where(parameter => parameter.networkSynced)
-					.Sum(parameter => VRCExpressionParameters.TypeCost(parameter.valueType))
+					.Sum(parameter => parameter.GetBitWidthByType())
 				: parameters.Where(x => !blackList.Any(y => y.name.Equals(x.name)) && x.networkSynced)
-					.Sum(parameter => VRCExpressionParameters.TypeCost(parameter.valueType));
+					.Sum(parameter => parameter.GetBitWidthByType());
 		}
 
 		/// <summary>
@@ -621,6 +649,24 @@ namespace VRLabs.AV3Manager
 			}
 
 			return false;
+		}
+
+		/// <summary>
+		/// Gets the states with a different "Write defaults" setting than expected: different from the one requested by
+		/// their name, or from the majority of the states that don't request one.
+		/// </summary>
+		/// <param name="states">States to check.</param>
+		/// <returns>The states with an unexpected "Write defaults" setting.</returns>
+		public static List<WDState> GetProblematicStates(this List<WDState> states)
+		{
+			// Only use states that request a setting when there are no others.
+			var majorityStates = states.Where(state => !state.HasDefault).ToList();
+			if (majorityStates.Count == 0) majorityStates = states;
+			int balance = majorityStates.Sum(state => state.IsOn ? 1 : -1);
+
+			// Without a majority, every state could be the problematic one.
+			return states.Where(state =>
+				balance == 0 || state.IsOn != balance > 0 || (state.HasDefault && state.IsOn != state.IsDefaultOn)).ToList();
 		}
 
 		/// <summary>

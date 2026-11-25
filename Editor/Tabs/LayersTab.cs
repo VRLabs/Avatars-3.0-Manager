@@ -21,9 +21,9 @@ namespace VRLabs.AV3Manager
 		public string TabName { get; set; }
 		public Texture2D TabIcon { get; set; }
 
-		private Label _label;
-
 		public LocalizationHandler<AV3ManagerLocalization> LocalizationHandler = AV3Manager.LocalizationHandler;
+
+		private readonly HashSet<int> _expandedLayers = new HashSet<int>();
 
 		public LayersTab()
 		{
@@ -33,6 +33,8 @@ namespace VRLabs.AV3Manager
 			TabIcon = EditorGUIUtility.IconContent("AnimatorController Icon").image as Texture2D;
 		}
 
+		public void OnAvatarChanged(VRCAvatarDescriptor newAvatar) => _expandedLayers.Clear();
+
 		public void UpdateTab(VRCAvatarDescriptor avatar)
 		{
 			TabContainer = null;
@@ -40,25 +42,21 @@ namespace VRLabs.AV3Manager
 
 			TabContainer = new VisualElement();
 
-			_label = new Label()
-				.WithClass("bordered-container", "margin-normal")
-				.WithFontSize(10)
-				.ChildOf(TabContainer);
-
-			for (int i = 0; i < avatar.baseAnimationLayers.Length; i++)
-				TabContainer.Add(new AnimatorLayerTabElement(new VrcAnimationLayer(avatar, i), this));
+			int baseCount = avatar.baseAnimationLayers.Length;
+			for (int i = 0; i < baseCount; i++)
+				TabContainer.Add(new AnimatorLayerTabElement(new VrcAnimationLayer(avatar, i), this, i));
 
 			for (int i = 0; i < avatar.specialAnimationLayers.Length; i++)
-				TabContainer.Add(new AnimatorLayerTabElement(new VrcAnimationLayer(avatar, i, true), this));
-
-			UpdateLabel(avatar.expressionParameters.CalcTotalCost());
+				TabContainer.Add(new AnimatorLayerTabElement(new VrcAnimationLayer(avatar, i, true), this,
+					baseCount + i));
 		}
 
-		public void UpdateLabel(int currentCount)
+		internal bool IsLayerExpanded(int layerIndex) => _expandedLayers.Contains(layerIndex);
+
+		internal void SetLayerExpanded(int layerIndex, bool expanded)
 		{
-			if (_label == null) return;
-			_label.text =
-				$"{LocalizationHandler.Get(Layers_UsedParamMemory).text}: {currentCount}/{VRCExpressionParameters.MAX_PARAMETER_COST}";
+			if (expanded) _expandedLayers.Add(layerIndex);
+			else _expandedLayers.Remove(layerIndex);
 		}
 	}
 
@@ -70,9 +68,7 @@ namespace VRLabs.AV3Manager
 		private readonly LocalizationHandler<AV3ManagerLocalization> LocalizationHandler =
 			AV3Manager.LocalizationHandler;
 
-		private bool _isTabOpen;
-
-		public AnimatorLayerTabElement(VrcAnimationLayer layer, LayersTab tab)
+		public AnimatorLayerTabElement(VrcAnimationLayer layer, LayersTab tab, int layerIndex)
 		{
 			var titleTab = new Button().WithClass("layer-tab-header");
 			titleTab.style.flexDirection = FlexDirection.Row;
@@ -82,9 +78,16 @@ namespace VRLabs.AV3Manager
 			var title = new Label(layer.Layer.type.ToString()).WithClass("layer-tab-title");
 			titleTab.Add(title);
 			Add(titleTab);
-			var content = new VisualElement().WithClass("layer-tab-content")
-				.WithDisplay(_isTabOpen ? DisplayStyle.Flex : DisplayStyle.None);
+			var content = new VisualElement().WithClass("layer-tab-content");
 			Add(content);
+
+			void ApplyOpenState(bool isOpen)
+			{
+				arrow.EnableInClassList("layer-tab-arrow-on", isOpen);
+				content.style.display = isOpen ? DisplayStyle.Flex : DisplayStyle.None;
+			}
+
+			ApplyOpenState(tab.IsLayerExpanded(layerIndex));
 
 			var defaultLayerArea = new VisualElement()
 				.WithFlexDirection(FlexDirection.Row);
@@ -141,9 +144,7 @@ namespace VRLabs.AV3Manager
 						.WithAlignItems(Align.Center);
 					var syncedCheckbox = FluentUIElements.NewToggle(parameter.IsSynced).ChildOf(syncedCheckboxDiv);
 					int totalCostIfExpressionAndSynced = layer.ExpressionParametersCost +
-					                                     VRCExpressionParameters.TypeCost(
-						                                     AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(
-							                                     parameter.Parameter.type));
+					                                     layer.GetSyncCost(parameter);
 
 					bool canExpressionAndSync =
 						totalCostIfExpressionAndSynced <= VRCExpressionParameters.MAX_PARAMETER_COST;
@@ -151,7 +152,6 @@ namespace VRLabs.AV3Manager
 					{
 						layer.ToggleParameterSync(parameter, x.newValue, parameter.IsSynced);
 						UpdateParams();
-						tab.UpdateLabel(layer.ExpressionParametersCost);
 					});
 
 					syncedCheckbox.SetEnabled(parameter.IsExpression && (canExpressionAndSync || parameter.IsSynced));
@@ -159,7 +159,6 @@ namespace VRLabs.AV3Manager
 					{
 						layer.ToggleParameterSync(parameter, parameter.IsExpression, x.newValue);
 						UpdateParams();
-						tab.UpdateLabel(layer.ExpressionParametersCost);
 					});
 				}
 			}
@@ -233,17 +232,9 @@ namespace VRLabs.AV3Manager
 
 			titleTab.clicked += () =>
 			{
-				_isTabOpen = !_isTabOpen;
-				if (_isTabOpen)
-				{
-					arrow.AddToClassList("layer-tab-arrow-on");
-					content.style.display = DisplayStyle.Flex;
-				}
-				else
-				{
-					arrow.RemoveFromClassList("layer-tab-arrow-on");
-					content.style.display = DisplayStyle.None;
-				}
+				bool isOpen = !tab.IsLayerExpanded(layerIndex);
+				tab.SetLayerExpanded(layerIndex, isOpen);
+				ApplyOpenState(isOpen);
 			};
 
 			animatorToMergeButton.clicked += () =>
@@ -309,6 +300,20 @@ namespace VRLabs.AV3Manager
 			UpdateParameters();
 		}
 
+		/// <summary>
+		/// Cost in Bits for a parameter: if it's already an expression parameter, the cost comes from its settings, otherwise the default cost is taken
+		/// </summary>
+		public int GetSyncCost(SyncedParameter parameter)
+		{
+			var expParam = _expressionParameters != null
+				? _expressionParameters.FindParameter(parameter.Parameter.name)
+				: null;
+			return expParam != null
+				? expParam.GetBitWidthByType()
+				: AV3ManagerFunctions.GetDefaultBitWidth(
+					AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(parameter.Parameter.type));
+		}
+
 		public void SetDefault(bool value)
 		{
 			_layerArray[_index].isDefault = value;
@@ -342,8 +347,8 @@ namespace VRLabs.AV3Manager
 			var paramType = AV3ManagerFunctions.GetValueTypeFromAnimatorParameterType(parameter.Parameter.type);
 
 			if (parameter.IsExpression &&
-			    _expressionParameters.CalcTotalCost() + VRCExpressionParameters.TypeCost(paramType) <=
-			    VRCExpressionParameters.MAX_PARAMETER_COST || !parameter.IsSynced)
+			    (_expressionParameters.CalcTotalCost() + GetSyncCost(parameter) <=
+			     VRCExpressionParameters.MAX_PARAMETER_COST || !parameter.IsSynced))
 			{
 				// Add parameter if it doesnt exist.
 				if (expParam == null)

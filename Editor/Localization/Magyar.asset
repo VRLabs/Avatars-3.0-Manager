@@ -139,6 +139,47 @@ MonoBehaviour:
     content:
       text: "Anim\xE1ci\xF3k Cser\xE9je"
       tooltip: "Anim\xE1ci\xF3k cser\xE9je a jelenlegi anim\xE1torban."
+  - keyName: Params_BitWidth
+    content:
+      text: Bitek
+      tooltip: "A param\xE9ter \xE1ltal haszn\xE1lt bit mennyis\xE9g. T\xF6bb bit
+        haszn\xE1lat\xE1val nagyobb \xE9rt\xE9k s\xE1v lefedetts\xE9g j\xE1r, vagy
+        nagyobb pontoss\xE1g, a param\xE9ter t\xEDpus\xE1t\xF3l f\xFCgg\u0151en"
+  - keyName: Params_LerpDuration
+    content:
+      text: "Interpol\xE1ci\xF3 hossza"
+      tooltip: "Testreszabhat\xF3 id\u0151tartam ami alatt az \xE9rt\xE9k egy m\xE1sikra
+        v\xE1ltozik"
+  - keyName: Params_LerpDefault
+    content:
+      text: "Alap\xE9rtelmezett"
+      tooltip: 
+  - keyName: Params_LerpCustom
+    content:
+      text: "Egy\xE9ni"
+      tooltip: 
+  - keyName: Params_LerpSeconds
+    content:
+      text: "Id\u0151tartam m\xE1sodpercben (0-300)"
+      tooltip: 
+  - keyName: Params_Precision
+    content:
+      text: "Pontoss\xE1g"
+      tooltip: 
+  - keyName: Params_Representation
+    content:
+      text: "Reprezent\xE1ci\xF3"
+      tooltip: "Az el\u0151jelezett m\xF3d negat\xEDv \xE9rt\xE9keket is enged, a
+        nem el\u0151jelezett csak pozit\xEDvakat enged nagyobb \xE9rt\xE9k s\xE1vval
+        vagy nagyobb pontoss\xE1ggal"
+  - keyName: Params_ResetAdvanced
+    content:
+      text: Alaphelyzet
+      tooltip: "A halad\xF3 param\xE9ter \xE9rt\xE9kek alaphelyzetbe \xE1ll\xEDt\xE1sa"
+  - keyName: Params_Range
+    content:
+      text: "S\xE1v"
+      tooltip: 
   - keyName: Params_Params
     content:
       text: "Param\xE9terek"
@@ -184,6 +225,11 @@ MonoBehaviour:
       text: "Param\xE9terek m\xE1sol\xE1sa"
       tooltip: "\xC1tm\xE1solja a param\xE9tereket a jelenlegi asset-be. Ha a param\xE9ter
         m\xE1r szerepel, a be\xE1ll\xEDt\xE1sai ker\xFClnek m\xE1sol\xE1sra."
+  - keyName: Params_OverParamMemoryWarning
+    content:
+      text: "A szinkroniz\xE1lt param\xE9terek t\xFAl sok mem\xF3ri\xE1t haszn\xE1lnak,
+        ez\xE9rt az avat\xE1rt nem lehet felt\xF6lteni"
+      tooltip: 
   - keyName: Params_UnusedExprParamWarning
     content:
       text: "Ez a param\xE9ter egy anim\xE1torban sincsen haszn\xE1lva. T\xF6r\xF6ld,
@@ -203,9 +249,17 @@ MonoBehaviour:
     content:
       text: "Extra k\xF6lts\xE9g"
       tooltip: 
+  - keyName: Params_Signed
+    content:
+      text: "El\u0151jelezett"
+      tooltip: 
   - keyName: Params_TotalParamMemoryAfterMerge
     content:
       text: "Teljes k\xF6lts\xE9g egyes\xEDt\xE9s ut\xE1n"
+      tooltip: 
+  - keyName: Params_Unsigned
+    content:
+      text: "Nem el\u0151jelezett"
       tooltip: 
   - keyName: Params_MergeWouldSurpassParamMemoryWarning
     content:
@@ -318,6 +372,15 @@ MonoBehaviour:
     content:
       text: "Megn\xE9z"
       tooltip: 
+  - keyName: WD_OnlyProblematic
+    content:
+      text: "Csak k\xFCl\xF6nb\xF6z\u0151 state-ek megjelen\xEDt\xE9se"
+      tooltip: "Csak olyan state-ek megjelen\xEDt\xE9se, amelyen m\xE1s Write Defaults
+        be\xE1ll\xEDt\xE1st hasn\xE1lnak mint a t\xF6bbs\xE9g"
+  - keyName: WD_NoProblematicStates
+    content:
+      text: "Nincsenek k\xFCl\xF6nb\xF6z\u0151 state-ek"
+      tooltip: 
   - keyName: Settings_Settings
     content:
       text: "Be\xE1ll\xEDt\xE1sok"
@@ -328,5 +391,6 @@ MonoBehaviour:
       tooltip: 
   - keyName: Settings_HelpMessage
     content:
-      text: Want to help with the translation? Join our server at https://discord.vrlabs.dev.
+      text: "Szeretn\xE9l seg\xEDteni a ford\xEDt\xE1sban? Csatlakozz a szerver\xFCnkh\xF6z:
+        https://discord.vrlabs.dev."
       tooltip: 

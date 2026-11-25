@@ -34,6 +34,7 @@ namespace VRLabs.AV3Manager
 		private readonly Toggle _dbtToggle;
 		private bool hasWDDefaultOn;
 		private bool hasWDDefaultOff;
+		private bool _onlyProblematic;
 
 
 		public WDTab()
@@ -139,6 +140,18 @@ namespace VRLabs.AV3Manager
 				.WithMargin(5, 0)
 				.ChildOf(TabContainer);
 
+			_onlyProblematic = EditorPrefs.GetBool("AV3MOnlyProblematicWD", false);
+			var onlyProblematicToggle = FluentUIElements.NewToggle(LocalizationHandler.Get(WD_OnlyProblematic).text, _onlyProblematic)
+				.WithMargin(5, 10, 0, 4)
+				.ChildOf(TabContainer);
+			onlyProblematicToggle.tooltip = LocalizationHandler.Get(WD_OnlyProblematic).tooltip;
+			onlyProblematicToggle.RegisterValueChangedCallback(evt =>
+			{
+				_onlyProblematic = evt.newValue;
+				EditorPrefs.SetBool("AV3MOnlyProblematicWD", _onlyProblematic);
+				if (_avatar != null) UpdateWDList();
+			});
+
 			_statesListContainer = new VisualElement().WithMargin(5, 0).ChildOf(TabContainer);
 		}
 
@@ -187,6 +200,13 @@ namespace VRLabs.AV3Manager
 			{
 				_dbtWarningLabel.AddToClassList("hidden");
 				_dbtToggle.AddToClassList("hidden");
+			}
+
+			if (_onlyProblematic)
+			{
+				states = states.GetProblematicStates();
+				if (states.Count == 0)
+					new Label(LocalizationHandler.Get(WD_NoProblematicStates).text).ChildOf(_statesListContainer);
 			}
 
 			string oldName = "";

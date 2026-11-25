@@ -334,8 +334,70 @@ MonoBehaviour:
   - keyName: Settings_HelpMessage
     content:
       text: Vuoi autare a migliorare le traduzioni? Unisciti al nostro server https://discord.vrlabs.dev.
-      tooltip:
+      tooltip: 
   - keyName: Settings_IgnoreParamLimit
     content:
       text: Ignora il limite della memoria dei parametri
+      tooltip: 
+  - keyName: Params_OverParamMemoryWarning
+    content:
+      text: "I parametri sincronizzati usano pi\xF9 memoria del massimo consentito,
+        l'avatar non potr\xE0 essere caricato"
+      tooltip: 
+  - keyName: Params_BitWidth
+    content:
+      text: Bit
+      tooltip: "Quantit\xE0 di bit usati dal parametro, con pi\xF9 bit ottieni una
+        precisione o un raggio maggiore in base al tipo di parametro"
+  - keyName: Params_Representation
+    content:
+      text: Rappresentazione
+      tooltip: Con segno permette valori negativi, senza segno permette solo valori
+        positivi con un raggio o precisione maggiori
+  - keyName: Params_Unsigned
+    content:
+      text: Senza segno
+      tooltip: 
+  - keyName: Params_Signed
+    content:
+      text: Con Segno
+      tooltip: 
+  - keyName: Params_LerpDuration
+    content:
+      text: Durata Lerp
+      tooltip: Tempo personalizzato che un valore sincronizzato impiega per l'interpolazione
+        verso il valore nuovo
+  - keyName: Params_LerpDefault
+    content:
+      text: Default
+      tooltip: 
+  - keyName: Params_LerpCustom
+    content:
+      text: Personalizzato
+      tooltip: 
+  - keyName: Params_LerpSeconds
+    content:
+      text: Durata in secondi (0-300)
+      tooltip: 
+  - keyName: Params_Range
+    content:
+      text: Raggio
+      tooltip: 
+  - keyName: Params_Precision
+    content:
+      text: Precisione
+      tooltip: 
+  - keyName: Params_ResetAdvanced
+    content:
+      text: Resetta
+      tooltip: Resetta tutte le impostazioni avanzate di questo parametro ai loro
+        valori di default
+  - keyName: WD_OnlyProblematic
+    content:
+      text: Visualizza solo stati differenti
+      tooltip: Visualizza solo gli stati con un'impostazione "Write Defaults" diversa
+        dalla maggioranza
+  - keyName: WD_NoProblematicStates
+    content:
+      text: Nessun stato problematico trovato
       tooltip: 

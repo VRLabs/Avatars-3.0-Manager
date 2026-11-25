@@ -2,6 +2,31 @@
     flex-direction: row;
 }
 
+.memory-area {
+    margin: 0 6px 8px 6px;
+}
+
+.memory-bar {
+    margin: 0;
+}
+
+.memory-bar .unity-progress-bar__background {
+    height: 14px;
+    min-height: 14px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.memory-bar .unity-progress-bar__progress {
+    border-radius: 7px;
+}
+
+.memory-bar .unity-progress-bar__title {
+    font-size: 9px;
+    padding: 0;
+    margin: 0;
+}
+
 .refresh-button {
     background-image: resource("Refresh@2X");
     background-color: transparent;
@@ -151,14 +176,38 @@ AnimatorLayerTabElement {
     margin: 0 10px 10px 10px;
 }
 
+.changed-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 4px;
+    background-color: rgb(77, 179, 255);
+}
+
 .delete-button {
-    background-image: resource("d_winbtn_win_close@2x");
     background-color: transparent;
     border-width: 0;
-    width: 18px;
-    height: 18px;
-    max-width: 18px;
-    max-height: 18px;
+    width: 16px;
+    height: 16px;
+    max-width: 16px;
+    max-height: 16px;
+}
+
+/* Mirrored so the refresh arrow turns counter-clockwise, reading as "revert". */
+.reset-icon-button {
+    background-image: resource("Refresh@2X");
+    -unity-background-scale-mode: scale-to-fit;
+    background-color: transparent;
+    border-width: 0;
+    padding: 0;
+    margin: 0 0 0 4px;
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    flex-shrink: 0;
+    align-self: center;
+    scale: -1 1;
 }
 
 TextField > Label {
