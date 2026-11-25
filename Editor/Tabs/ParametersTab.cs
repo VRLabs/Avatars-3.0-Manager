@@ -180,6 +180,8 @@ namespace VRLabs.AV3Manager
 			};
 		}
 
+		public void OnAvatarChanged(VRCAvatarDescriptor newAvatar) => _expandedParameters.Clear();
+
 		public void UpdateTab(VRCAvatarDescriptor avatar)
 		{
 			_avatar = avatar;

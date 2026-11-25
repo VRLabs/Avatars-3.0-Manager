@@ -21,6 +21,11 @@ namespace VRLabs.AV3Manager
 		string TabName { get; set; }
 		Texture2D TabIcon { get; set; }
 		void UpdateTab(VRCAvatarDescriptor avatar);
+
+		/// <summary>
+		/// Called when the selected avatar changes, before <see cref="UpdateTab"/>. Use it to reset per-avatar UI state.
+		/// </summary>
+		void OnAvatarChanged(VRCAvatarDescriptor newAvatar) { }
 	}
 
 	[AttributeUsage(AttributeTargets.Class)]
@@ -197,6 +202,9 @@ namespace VRLabs.AV3Manager
 			{
 				_avatar = (VRCAvatarDescriptor)e.newValue;
 
+				foreach (var tab in _tabs.SelectMany(x => x))
+					tab.OnAvatarChanged(_avatar);
+
 				UpdateTabs();
 			});
 		}
@@ -291,13 +299,13 @@ namespace VRLabs.AV3Manager
 
 						tabButton.AddToClassList("tab-button-selected");
 
+						tab.UpdateTab(_avatar);
+
 						_selectedTabArea.Clear();
 						_selectedTabArea.Add(tab?.TabContainer);
 						_selectedTab = tab;
 						_selectedTabIndex = tabIndex;
 						_selectedTabGroupIndex = tabGroupIndex;
-
-						tab.UpdateTab(_avatar);
 					};
 
 					tabsAreas[index].Add(tabButton);

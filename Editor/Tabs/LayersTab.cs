@@ -23,6 +23,8 @@ namespace VRLabs.AV3Manager
 
 		public LocalizationHandler<AV3ManagerLocalization> LocalizationHandler = AV3Manager.LocalizationHandler;
 
+		private readonly HashSet<int> _expandedLayers = new HashSet<int>();
+
 		public LayersTab()
 		{
 			TabContainer = new VisualElement();
@@ -31,6 +33,8 @@ namespace VRLabs.AV3Manager
 			TabIcon = EditorGUIUtility.IconContent("AnimatorController Icon").image as Texture2D;
 		}
 
+		public void OnAvatarChanged(VRCAvatarDescriptor newAvatar) => _expandedLayers.Clear();
+
 		public void UpdateTab(VRCAvatarDescriptor avatar)
 		{
 			TabContainer = null;
@@ -38,11 +42,21 @@ namespace VRLabs.AV3Manager
 
 			TabContainer = new VisualElement();
 
-			for (int i = 0; i < avatar.baseAnimationLayers.Length; i++)
-				TabContainer.Add(new AnimatorLayerTabElement(new VrcAnimationLayer(avatar, i), this));
+			int baseCount = avatar.baseAnimationLayers.Length;
+			for (int i = 0; i < baseCount; i++)
+				TabContainer.Add(new AnimatorLayerTabElement(new VrcAnimationLayer(avatar, i), this, i));
 
 			for (int i = 0; i < avatar.specialAnimationLayers.Length; i++)
-				TabContainer.Add(new AnimatorLayerTabElement(new VrcAnimationLayer(avatar, i, true), this));
+				TabContainer.Add(new AnimatorLayerTabElement(new VrcAnimationLayer(avatar, i, true), this,
+					baseCount + i));
+		}
+
+		internal bool IsLayerExpanded(int layerIndex) => _expandedLayers.Contains(layerIndex);
+
+		internal void SetLayerExpanded(int layerIndex, bool expanded)
+		{
+			if (expanded) _expandedLayers.Add(layerIndex);
+			else _expandedLayers.Remove(layerIndex);
 		}
 	}
 
@@ -54,9 +68,7 @@ namespace VRLabs.AV3Manager
 		private readonly LocalizationHandler<AV3ManagerLocalization> LocalizationHandler =
 			AV3Manager.LocalizationHandler;
 
-		private bool _isTabOpen;
-
-		public AnimatorLayerTabElement(VrcAnimationLayer layer, LayersTab tab)
+		public AnimatorLayerTabElement(VrcAnimationLayer layer, LayersTab tab, int layerIndex)
 		{
 			var titleTab = new Button().WithClass("layer-tab-header");
 			titleTab.style.flexDirection = FlexDirection.Row;
@@ -66,9 +78,16 @@ namespace VRLabs.AV3Manager
 			var title = new Label(layer.Layer.type.ToString()).WithClass("layer-tab-title");
 			titleTab.Add(title);
 			Add(titleTab);
-			var content = new VisualElement().WithClass("layer-tab-content")
-				.WithDisplay(_isTabOpen ? DisplayStyle.Flex : DisplayStyle.None);
+			var content = new VisualElement().WithClass("layer-tab-content");
 			Add(content);
+
+			void ApplyOpenState(bool isOpen)
+			{
+				arrow.EnableInClassList("layer-tab-arrow-on", isOpen);
+				content.style.display = isOpen ? DisplayStyle.Flex : DisplayStyle.None;
+			}
+
+			ApplyOpenState(tab.IsLayerExpanded(layerIndex));
 
 			var defaultLayerArea = new VisualElement()
 				.WithFlexDirection(FlexDirection.Row);
@@ -213,17 +232,9 @@ namespace VRLabs.AV3Manager
 
 			titleTab.clicked += () =>
 			{
-				_isTabOpen = !_isTabOpen;
-				if (_isTabOpen)
-				{
-					arrow.AddToClassList("layer-tab-arrow-on");
-					content.style.display = DisplayStyle.Flex;
-				}
-				else
-				{
-					arrow.RemoveFromClassList("layer-tab-arrow-on");
-					content.style.display = DisplayStyle.None;
-				}
+				bool isOpen = !tab.IsLayerExpanded(layerIndex);
+				tab.SetLayerExpanded(layerIndex, isOpen);
+				ApplyOpenState(isOpen);
 			};
 
 			animatorToMergeButton.clicked += () =>
