@@ -18,6 +18,11 @@
       "name": "com.dreadscripts.localization",
       "expression": "",
       "define": "DREADSCRIPTS_LOCALIZATION"
+    },
+    {
+      "name": "dev.vrlabs.unity-localization-core",
+      "expression": "",
+      "define": "DREADSCRIPTS_LOCALIZATION"
     }
   ],
   "noEngineReferences": false
