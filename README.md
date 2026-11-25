@@ -12,7 +12,7 @@
 
 A tool for managing playable layers and parameters for Avatars 3.0.
 
-![Manager](https://github.com/VRLabs/Avatars-3.0-Manager/assets/101019309/db3769b4-2782-4fe6-8e83-b34e7fdd2fa6)
+![Manager](https://github.com/VRLabs/Avatars-3.0-Manager/blob/feat/dynamic-parameter-bit-widths/Media/Web/Preview.webp?raw=true)
 
 ### ⬇️ [Download Latest Version](https://github.com/VRLabs/Avatars-3.0-Manager/releases/latest)
 
