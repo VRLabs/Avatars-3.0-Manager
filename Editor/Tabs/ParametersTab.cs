@@ -338,8 +338,14 @@ namespace VRLabs.AV3Manager
 				.WithUnityTextAlign(TextAnchor.MiddleRight)
 				.WithMargin(3, 1, 3, 1);
 
+			// Small square on the foldout's arrow, shown when any of the settings differ from their defaults.
+			var changedIndicator = new VisualElement { pickingMode = PickingMode.Ignore }
+				.WithClass("changed-indicator")
+				.ChildOf(foldout.Q(className: Toggle.checkmarkUssClassName));
+
 			void UpdateSummary()
 			{
+				changedIndicator.EnableInClassList("hidden", !HasChangedAdvancedSettings(parameter));
 				foldout.text = GetAdvancedSettingsSummary(parameter);
 				rangeLabel.text = GetRangeText(parameter);
 			}
@@ -421,6 +427,10 @@ namespace VRLabs.AV3Manager
 
 			return foldout;
 		}
+
+		private static bool HasChangedAdvancedSettings(Parameter parameter) =>
+			parameter.GetBitWidthByType() != AV3ManagerFunctions.GetDefaultBitWidth(parameter.valueType) ||
+			parameter.flippedRepresentation || parameter.useCustomLerpDuration;
 
 		private string GetAdvancedSettingsSummary(Parameter parameter)
 		{

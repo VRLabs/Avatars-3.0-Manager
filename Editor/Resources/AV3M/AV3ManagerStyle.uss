@@ -176,8 +176,16 @@ AnimatorLayerTabElement {
     margin: 0 10px 10px 10px;
 }
 
+.changed-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 4px;
+    height: 4px;
+    background-color: rgb(77, 179, 255);
+}
+
 .delete-button {
-    background-image: resource("d_close@2x");
     background-color: transparent;
     border-width: 0;
     width: 18px;

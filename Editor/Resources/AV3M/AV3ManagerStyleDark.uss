@@ -55,3 +55,7 @@
 .layer-tab-arrow-on {
     background-image: resource("builtin skins/darkskin/images/in foldout on.png");
 }
+
+.delete-button {
+    background-image: resource("AV3M/CrossDark");
+}
