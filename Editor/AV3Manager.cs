@@ -238,7 +238,7 @@ namespace VRLabs.AV3Manager
 			}
 
 			Refresh();
-			memoryArea.schedule.Execute(Refresh).Every(300);
+			memoryArea.schedule.Execute(Refresh).Every(500);
 		}
 
 		private void LoadTabs(List<VisualElement> tabsAreas)

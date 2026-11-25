@@ -283,6 +283,15 @@ namespace VRLabs.AV3Manager
 		}
 
 		/// <summary>
+		/// Sets the advanced parameters settings back to the defaults of the parameter's type
+		/// </summary>
+		public static void ResetAdvancedSettings(this VRCExpressionParameters.Parameter parameter)
+		{
+			parameter.CopyAdvancedSettingsFrom(new VRCExpressionParameters.Parameter { valueType = parameter.valueType });
+			parameter.bitWidth = (byte)GetDefaultBitWidth(parameter.valueType);
+		}
+
+		/// <summary>
 		/// Default synced bit cost of a parameter
 		/// </summary>
 		public static int GetDefaultBitWidth(VRCExpressionParameters.ValueType valueType) =>
@@ -640,6 +649,24 @@ namespace VRLabs.AV3Manager
 			}
 
 			return false;
+		}
+
+		/// <summary>
+		/// Gets the states with a different "Write defaults" setting than expected: different from the one requested by
+		/// their name, or from the majority of the states that don't request one.
+		/// </summary>
+		/// <param name="states">States to check.</param>
+		/// <returns>The states with an unexpected "Write defaults" setting.</returns>
+		public static List<WDState> GetProblematicStates(this List<WDState> states)
+		{
+			// Only use states that request a setting when there are no others.
+			var majorityStates = states.Where(state => !state.HasDefault).ToList();
+			if (majorityStates.Count == 0) majorityStates = states;
+			int balance = majorityStates.Sum(state => state.IsOn ? 1 : -1);
+
+			// Without a majority, every state could be the problematic one.
+			return states.Where(state =>
+				balance == 0 || state.IsOn != balance > 0 || (state.HasDefault && state.IsOn != state.IsDefaultOn)).ToList();
 		}
 
 		/// <summary>

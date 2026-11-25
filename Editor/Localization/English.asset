@@ -281,6 +281,14 @@ MonoBehaviour:
     content:
       text: Write Defaults List
       tooltip: 
+  - keyName: WD_OnlyProblematic
+    content:
+      text: Only show states that differ
+      tooltip: "Only show states with a different Write Defaults setting than the majority"
+  - keyName: WD_NoProblematicStates
+    content:
+      text: No problematic states found
+      tooltip:
   - keyName: WD_State
     content:
       text: State
@@ -374,3 +382,7 @@ MonoBehaviour:
     content:
       text: Precision
       tooltip: 
+  - keyName: Params_ResetAdvanced
+    content:
+      text: "Reset"
+      tooltip: "Reset all advanced options of this parameter to their defaults"

@@ -336,7 +336,20 @@ namespace VRLabs.AV3Manager
 
 			var rangeLabel = new Label()
 				.WithUnityTextAlign(TextAnchor.MiddleRight)
-				.WithMargin(3, 1, 3, 1);
+				.WithMargin(3, 1, 3, 1)
+				.WithFlexGrow(1);
+
+			var resetButton = FluentUIElements.NewButton(LocalizationHandler.Get(Params_ResetAdvanced).text,
+				LocalizationHandler.Get(Params_ResetAdvanced).tooltip,
+				() =>
+				{
+					EditParameters("Reset Advanced Parameter Settings", () =>
+					{
+						parameter.ResetAdvancedSettings();
+						refreshDefault?.Invoke();
+					});
+					UpdateParameters();
+				});
 
 			// Small square on the foldout's arrow to show settings different from the default state.
 			var changedIndicator = new VisualElement { pickingMode = PickingMode.Ignore }
@@ -345,7 +358,9 @@ namespace VRLabs.AV3Manager
 
 			void UpdateSummary()
 			{
-				changedIndicator.EnableInClassList("hidden", !HasChangedAdvancedSettings(parameter));
+				bool changed = HasChangedAdvancedSettings(parameter);
+				changedIndicator.EnableInClassList("hidden", !changed);
+				resetButton.SetEnabled(changed);
 				foldout.text = GetAdvancedSettingsSummary(parameter);
 				rangeLabel.text = GetRangeText(parameter);
 			}
@@ -422,7 +437,9 @@ namespace VRLabs.AV3Manager
 				UpdateSummary();
 			});
 
-			rangeLabel.ChildOf(foldout);
+			var bottomRow = new VisualElement().WithFlexDirection(FlexDirection.Row).ChildOf(foldout);
+			resetButton.ChildOf(bottomRow);
+			rangeLabel.ChildOf(bottomRow);
 			UpdateSummary();
 
 			return foldout;
