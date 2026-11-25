@@ -287,7 +287,7 @@ MonoBehaviour:
       tooltip: "Only show states with a different Write Defaults setting than the majority"
   - keyName: WD_NoProblematicStates
     content:
-      text: No problematic states found
+      text: No states found that differ from the majority
       tooltip:
   - keyName: WD_State
     content:
